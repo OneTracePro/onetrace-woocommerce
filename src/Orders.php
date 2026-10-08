@@ -201,12 +201,12 @@ final class Orders
      */
     public static function paidStatuses(\WC_Order $order): array
     {
-        $statuses = $order->get_payment_method() === 'cod' ? ['completed'] : array_values(wc_get_is_paid_statuses());
+        $statuses = $order->get_payment_method() === 'cod' ? ['completed'] : wc_get_is_paid_statuses();
 
         /**
          * Order statuses that mean the order is paid (order_paid).
          *
-         * @param list<string> $statuses
+         * @param array<string> $statuses
          * @param \WC_Order $order
          */
         return array_values((array) apply_filters('onetrace_woocommerce_paid_statuses', $statuses, $order));
