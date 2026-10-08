@@ -2,6 +2,10 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.0.2 — 2026-10-08
+
+- Errors that did not come from the platform (database, building catalog items) are retried with pauses instead of dropping the queued data.
+
 ## 1.0.1 — 2026-10-08
 
 - readme.txt links to the terms of service and the privacy policy of OneTrace.pro, as wordpress.org requires for external services.

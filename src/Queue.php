@@ -263,7 +263,8 @@ final class Queue
     {
         global $wpdb;
 
-        $decision = Retry::decide($error);
+        // Errors outside the platform's answers (database, a bug while building items) are retried, not dropped.
+        $decision = $error instanceof \OneTrace\Exception\OneTraceException ? Retry::decide($error) : Retry::RETRY;
         $message = mb_substr(\get_class($error) . ': ' . $error->getMessage(), 0, 1000);
 
         if ($decision === Retry::SETTINGS) {

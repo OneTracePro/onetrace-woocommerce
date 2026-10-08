@@ -33,6 +33,16 @@ final class QueueTest extends TestCase
         self::assertSame(['waiting' => 0, 'retrying' => 0], Queue::stats());
     }
 
+    public function testRetriesErrorsThatDidNotComeFromThePlatform(): void
+    {
+        Queue::event(['type' => 'track', 'userId' => '1', 'event' => 'x']);
+        $this->platform->responder = static function (): ?Response {
+            throw new \RuntimeException('database is gone');
+        };
+
+        self::assertSame(['sent' => 0, 'retried' => 1, 'dropped' => 0], $this->flush());
+    }
+
     public function testPausesSendingWhenTheKeyIsRejected(): void
     {
         Queue::event(['type' => 'track', 'userId' => '1', 'event' => 'x']);
