@@ -2,6 +2,10 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.0.1 — 2026-10-08
+
+- readme.txt links to the terms of service and the privacy policy of OneTrace.pro, as wordpress.org requires for external services.
+
 ## 1.0.0 — 2026-10-08
 
 First release.
