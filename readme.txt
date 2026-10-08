@@ -1,5 +1,5 @@
 === OneTrace for WooCommerce ===
-Contributors: onetracepro
+Contributors: onetrace
 Tags: woocommerce, cdp, marketing automation, abandoned cart, recommendations
 Requires at least: 6.6
 Tested up to: 7.1
