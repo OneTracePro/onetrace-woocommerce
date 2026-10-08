@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  integration:
+    name: WordPress ${{ matrix.wp }} · WooCommerce ${{ matrix.wc || 'latest' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { wp: '6.8', tag: '6.8-php8.1-apache', wc: '9.9.5' }
+          - { wp: 'latest', tag: 'php8.3-apache', wc: '' }
+          - { wp: 'latest', tag: 'php8.4-apache', wc: '' }
+    steps:
+      - uses: actions/checkout@v5
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+      - run: composer install --no-interaction --no-progress
+      - name: Integration tests
+        run: tests/env/run.sh
+        env:
+          WP_TAG: ${{ matrix.tag }}
+          WC_VERSION: ${{ matrix.wc }}
+
+  static-analysis:
+    name: PHPStan and PHP 7.4 syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+      - run: composer validate --strict
+      - run: composer install --no-interaction --no-progress
+      - run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress
+      - name: PHP 7.4 syntax
+        run: docker run --rm -v "$PWD":/app -w /app php:7.4-cli sh -c 'for f in onetrace-woocommerce.php uninstall.php src/*.php; do php -l "$f" >/dev/null || exit 1; done'
+
+  build:
+    name: Build and smoke test
+    runs-on: ubuntu-latest
+    needs: [integration, static-analysis]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+      - run: composer install --no-interaction --no-progress
+      - run: php bin/build.php
+      - run: tests/env/run.sh >/dev/null && tests/env/smoke.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: onetrace-woocommerce
+          path: dist/onetrace-woocommerce.zip
+      - name: Attach the zip to the release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${GITHUB_REF_NAME}" dist/onetrace-woocommerce.zip --clobber

@@ -1,0 +1,265 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: OneTrace for WooCommerce 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/OneTracePro/onetrace-woocommerce/issues\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-08T17:53:43+00:00\n"
+"PO-Revision-Date: 2026-10-08T17:53:43+00:00\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Domain: onetrace-woocommerce\n"
+
+#. Plugin Name of the plugin
+#: onetrace-woocommerce.php
+msgid "OneTrace for WooCommerce"
+msgstr "OneTrace для WooCommerce"
+
+#. Plugin URI of the plugin
+#: onetrace-woocommerce.php
+msgid "https://github.com/OneTracePro/onetrace-woocommerce"
+msgstr "https://github.com/OneTracePro/onetrace-woocommerce"
+
+#. Description of the plugin
+#: onetrace-woocommerce.php
+msgid "Connects the store to OneTrace.pro, the customer data platform: orders, customers and consents from the server, the website tracker, the product catalog, recommendation widgets and Web Push."
+msgstr "Подключает магазин к CDP OneTrace.pro: заказы, покупатели и согласия с сервера, трекер сайта, каталог товаров, виджеты рекомендаций и Web Push."
+
+#. Author of the plugin
+#: onetrace-woocommerce.php
+msgid "OneTrace.pro"
+msgstr "OneTrace.pro"
+
+#. Author URI of the plugin
+#: onetrace-woocommerce.php
+msgid "https://onetrace.pro"
+msgstr "https://onetrace.pro"
+
+#: src/Admin.php:45
+#: src/Admin.php:219
+msgid "Settings"
+msgstr "Настройки"
+
+#: src/Admin.php:60
+msgid "Set in wp-config.php."
+msgstr "Задано в wp-config.php."
+
+#: src/Admin.php:73
+msgid "Connection"
+msgstr "Подключение"
+
+#: src/Admin.php:73
+msgid "Keys are in the \"API keys\" section of your OneTrace project."
+msgstr "Ключи — в разделе «Ключи API» вашего проекта OneTrace."
+
+#: src/Admin.php:74
+msgid "Platform address"
+msgstr "Адрес платформы"
+
+#: src/Admin.php:74
+msgid "The address you open the platform at: the domain of your brand."
+msgstr "Адрес, по которому вы открываете платформу: домен вашего бренда."
+
+#: src/Admin.php:75
+#: src/Admin.php:173
+msgid "Write key"
+msgstr "Ключ записи"
+
+#: src/Admin.php:75
+msgid "For the tracker on the storefront."
+msgstr "Для трекера на витрине."
+
+#: src/Admin.php:76
+#: src/Admin.php:173
+msgid "Secret key"
+msgstr "Секретный ключ"
+
+#: src/Admin.php:76
+msgid "For orders, customers and the catalog; needs the products.write permission."
+msgstr "Для заказов, покупателей и каталога; нужно право products.write."
+
+#: src/Admin.php:79
+msgid "What to send"
+msgstr "Что передавать"
+
+#: src/Admin.php:80
+msgid "Tracker"
+msgstr "Трекер"
+
+#: src/Admin.php:80
+msgid "Page and product views on the storefront"
+msgstr "Просмотры страниц и товаров на витрине"
+
+#: src/Admin.php:81
+msgid "Cookie consent"
+msgstr "Согласие на cookie"
+
+#: src/Admin.php:81
+msgid "Load the tracker after the visitor agrees to statistics cookies (with a consent plugin that supports the WP Consent API)"
+msgstr "Загружать трекер после согласия посетителя на статистические cookie (с плагином согласия, который поддерживает WP Consent API)"
+
+#: src/Admin.php:82
+msgid "Orders"
+msgstr "Заказы"
+
+#: src/Admin.php:82
+msgid "Placed, paid, cancelled and refunded orders with the customer data"
+msgstr "Оформленные, оплаченные, отменённые заказы и возвраты с данными покупателя"
+
+#: src/Admin.php:83
+msgid "Cart"
+msgstr "Корзина"
+
+#: src/Admin.php:83
+msgid "Adding to and removing from the cart, opening the checkout — for abandoned cart journeys"
+msgstr "Добавление в корзину и удаление из неё, переход к оформлению — для цепочек брошенной корзины"
+
+#: src/Admin.php:84
+msgid "Product catalog"
+msgstr "Каталог товаров"
+
+#: src/Admin.php:84
+msgid "Products and categories for recommendations and emails, updated when products change and daily"
+msgstr "Товары и категории для рекомендаций и писем: при изменении товаров и раз в сутки"
+
+#: src/Admin.php:87
+msgid "Newsletter consent"
+msgstr "Согласие на рассылку"
+
+#: src/Admin.php:87
+msgid "A checkbox subscribes the customer to marketing emails in OneTrace. Without it no consent is sent."
+msgstr "Галочка подписывает покупателя на рекламные письма в OneTrace. Без неё согласие не передаётся."
+
+#: src/Admin.php:88
+msgid "Checkout"
+msgstr "Оформление заказа"
+
+#: src/Admin.php:88
+msgid "Checkbox at checkout (classic and block)"
+msgstr "Галочка при оформлении заказа (классическом и блочном)"
+
+#: src/Admin.php:89
+msgid "Registration"
+msgstr "Регистрация"
+
+#: src/Admin.php:89
+msgid "Checkbox in the registration form"
+msgstr "Галочка в форме регистрации"
+
+#: src/Admin.php:90
+msgid "Account"
+msgstr "Личный кабинет"
+
+#: src/Admin.php:90
+msgid "Subscribe and unsubscribe on the account details page"
+msgstr "Подписка и отписка на странице данных аккаунта"
+
+#: src/Admin.php:91
+msgid "Checkbox text"
+msgstr "Текст галочки"
+
+#: src/Admin.php:91
+#: src/Settings.php:85
+msgid "Send me news and special offers by email"
+msgstr "Присылать новости и специальные предложения по email"
+
+#: src/Admin.php:92
+msgid "Subscription topic"
+msgstr "Тема подписки"
+
+#: src/Admin.php:92
+msgid "Empty — the whole email channel."
+msgstr "Пусто — весь канал email."
+
+#: src/Admin.php:95
+msgid "Recommendations and Web Push"
+msgstr "Рекомендации и Web Push"
+
+#: src/Admin.php:95
+msgid "Widget ids are in the \"Site → Widgets\" section of the platform. Anywhere else use the [onetrace_widget id=\"…\"] shortcode."
+msgstr "Идентификаторы виджетов — в разделе «Сайт → Виджеты» платформы. В любом другом месте используйте шорткод [onetrace_widget id=\"…\"]."
+
+#: src/Admin.php:96
+msgid "Widget on the product page"
+msgstr "Виджет на странице товара"
+
+#: src/Admin.php:97
+msgid "Widget in the cart"
+msgstr "Виджет в корзине"
+
+#: src/Admin.php:98
+msgid "Web Push"
+msgstr "Web Push"
+
+#: src/Admin.php:98
+msgid "Serve /cdp-sw.js from the store root; put the [onetrace_push_button] shortcode where visitors subscribe"
+msgstr "Отдавать /cdp-sw.js с корня магазина; шорткод [onetrace_push_button] поставьте там, где посетители подписываются"
+
+#: src/Admin.php:113
+msgid "Saved — enter a new key to replace it"
+msgstr "Сохранён — введите новый ключ, чтобы заменить"
+
+#: src/Admin.php:170
+msgid "The key has no products.write permission: the catalog will not be uploaded."
+msgstr "У ключа нет права products.write: каталог не будет выгружаться."
+
+#: src/Admin.php:178
+msgid "Enter the platform address and the keys first."
+msgstr "Сначала укажите адрес платформы и ключи."
+
+#: src/Admin.php:195
+msgid "The catalog upload has started; it runs in the background."
+msgstr "Выгрузка каталога началась, она идёт в фоне."
+
+#: src/Admin.php:217
+msgid "OneTrace: sending is paused because the platform rejected the key. Check the keys and save the settings."
+msgstr "OneTrace: отправка приостановлена — платформа отклонила ключ. Проверьте ключи и сохраните настройки."
+
+#: src/Admin.php:230
+msgid "Status"
+msgstr "Состояние"
+
+#: src/Admin.php:233
+msgid "Queue"
+msgstr "Очередь"
+
+#. translators: 1: items waiting, 2: items waiting for a retry
+#: src/Admin.php:236
+#, php-format
+msgid "%1$d waiting, %2$d of them after an error"
+msgstr "Ждут отправки: %1$d, из них после ошибки: %2$d"
+
+#: src/Admin.php:243
+msgid "Last error"
+msgstr "Последняя ошибка"
+
+#: src/Admin.php:247
+msgid "Test connection"
+msgstr "Проверить подключение"
+
+#: src/Admin.php:249
+msgid "Upload the whole catalog"
+msgstr "Выгрузить весь каталог"
+
+#: src/Admin.php:264
+msgid "You are not allowed to do this."
+msgstr "У вас нет прав на это действие."
+
+#: src/Storefront.php:131
+msgid "Get notifications"
+msgstr "Получать уведомления"
+
+#. translators: %s: project name
+#: src/Admin.php:166
+#, php-format
+msgid "Write key: project \"%s\"."
+msgstr "Ключ записи: проект «%s»."
+
+#. translators: %s: project name
+#: src/Admin.php:168
+#, php-format
+msgid "Secret key: project \"%s\"."
+msgstr "Секретный ключ: проект «%s»."

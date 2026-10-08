@@ -1,0 +1,25 @@
+# Test WordPress with WooCommerce: integration tests run inside the "wordpress" container (tests/env/run.sh).
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: wordpress
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect"]
+      interval: 2s
+      retries: 30
+  wordpress:
+    image: wordpress:${WP_TAG:-php8.3-apache}
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: root
+      WORDPRESS_DB_NAME: wordpress
+    ports:
+      - "${WP_PORT:-8890}:80"
+    volumes:
+      - ../..:/var/www/html/wp-content/plugins/onetrace-woocommerce
