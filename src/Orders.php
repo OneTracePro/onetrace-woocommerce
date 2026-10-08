@@ -180,12 +180,13 @@ final class Orders
             }
 
             $product = $item->get_product();
+            $variation = $item->get_variation_id() ? wc_get_product($item->get_variation_id()) : null;
             $lines[] = new LineItem(
-                $item->get_product_id(),
+                Products::id($item->get_product_id()) ?: (string) $item->get_product_id(),
                 $item->get_name(),
                 $total / max(1, $quantity),
                 max(1, $quantity),
-                $item->get_variation_id() ?: null,
+                $variation instanceof \WC_Product ? Products::variantId($variation) : ($item->get_variation_id() ?: null),
                 $product instanceof \WC_Product ? Catalog::categoryId($product) : null
             );
         }

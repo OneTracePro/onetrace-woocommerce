@@ -86,7 +86,7 @@ final class Storefront
         }
 
         $properties = array_filter([
-            'product_id' => (string) $product->get_id(),
+            'product_id' => Products::id($product),
             'product_name' => $product->get_name(),
             'price' => (float) wc_get_price_to_display($product),
             'currency' => get_woocommerce_currency(),
@@ -163,12 +163,12 @@ final class Storefront
         $exclude = [];
 
         if ($items === '' && is_product()) {
-            $items = (string) get_queried_object_id();
+            $items = Products::id(get_queried_object_id());
         }
 
         if (WC()->cart !== null && (is_cart() || is_checkout())) {
             $cart = array_values(array_unique(array_map(static function (array $item): string {
-                return (string) $item['product_id'];
+                return Products::id((int) $item['product_id']);
             }, WC()->cart->get_cart())));
             $items = $items !== '' ? $items : implode(',', $cart);
             $exclude = $cart;

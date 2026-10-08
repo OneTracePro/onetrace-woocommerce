@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: OneTrace for WooCommerce 1.0.0\n"
-"Report-Msgid-Bugs-To: https://github.com/OneTracePro/onetrace-woocommerce/issues\n"
+"Project-Id-Version: OneTrace for WooCommerce 1.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/onetrace-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-08T17:53:43+00:00\n"
+"POT-Creation-Date: 2026-10-08T19:18:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: onetrace-woocommerce\n"
@@ -40,7 +40,7 @@ msgid "https://onetrace.pro"
 msgstr ""
 
 #: src/Admin.php:45
-#: src/Admin.php:219
+#: src/Admin.php:220
 msgid "Settings"
 msgstr ""
 
@@ -65,7 +65,7 @@ msgid "The address you open the platform at: the domain of your brand."
 msgstr ""
 
 #: src/Admin.php:75
-#: src/Admin.php:173
+#: src/Admin.php:174
 msgid "Write key"
 msgstr ""
 
@@ -74,7 +74,7 @@ msgid "For the tracker on the storefront."
 msgstr ""
 
 #: src/Admin.php:76
-#: src/Admin.php:173
+#: src/Admin.php:174
 msgid "Secret key"
 msgstr ""
 
@@ -126,138 +126,154 @@ msgstr ""
 msgid "Products and categories for recommendations and emails, updated when products change and daily"
 msgstr ""
 
-#: src/Admin.php:87
+#: src/Admin.php:85
+msgid "Product id"
+msgstr ""
+
+#: src/Admin.php:85
+msgid "Post ID"
+msgstr ""
+
+#: src/Admin.php:85
+msgid "SKU (the post ID for products without a SKU)"
+msgstr ""
+
+#: src/Admin.php:85
+msgid "Choose SKU if your OneTrace project already has the catalog and history under SKUs, e.g. after moving from another platform."
+msgstr ""
+
+#: src/Admin.php:88
 msgid "Newsletter consent"
 msgstr ""
 
-#: src/Admin.php:87
+#: src/Admin.php:88
 msgid "A checkbox subscribes the customer to marketing emails in OneTrace. Without it no consent is sent."
 msgstr ""
 
-#: src/Admin.php:88
+#: src/Admin.php:89
 msgid "Checkout"
 msgstr ""
 
-#: src/Admin.php:88
+#: src/Admin.php:89
 msgid "Checkbox at checkout (classic and block)"
 msgstr ""
 
-#: src/Admin.php:89
+#: src/Admin.php:90
 msgid "Registration"
 msgstr ""
 
-#: src/Admin.php:89
+#: src/Admin.php:90
 msgid "Checkbox in the registration form"
 msgstr ""
 
-#: src/Admin.php:90
+#: src/Admin.php:91
 msgid "Account"
 msgstr ""
 
-#: src/Admin.php:90
+#: src/Admin.php:91
 msgid "Subscribe and unsubscribe on the account details page"
 msgstr ""
 
-#: src/Admin.php:91
+#: src/Admin.php:92
 msgid "Checkbox text"
 msgstr ""
 
-#: src/Admin.php:91
-#: src/Settings.php:85
+#: src/Admin.php:92
+#: src/Settings.php:86
 msgid "Send me news and special offers by email"
 msgstr ""
 
-#: src/Admin.php:92
+#: src/Admin.php:93
 msgid "Subscription topic"
 msgstr ""
 
-#: src/Admin.php:92
+#: src/Admin.php:93
 msgid "Empty — the whole email channel."
 msgstr ""
 
-#: src/Admin.php:95
+#: src/Admin.php:96
 msgid "Recommendations and Web Push"
 msgstr ""
 
-#: src/Admin.php:95
+#: src/Admin.php:96
 msgid "Widget ids are in the \"Site → Widgets\" section of the platform. Anywhere else use the [onetrace_widget id=\"…\"] shortcode."
 msgstr ""
 
-#: src/Admin.php:96
+#: src/Admin.php:97
 msgid "Widget on the product page"
 msgstr ""
 
-#: src/Admin.php:97
+#: src/Admin.php:98
 msgid "Widget in the cart"
 msgstr ""
 
-#: src/Admin.php:98
+#: src/Admin.php:99
 msgid "Web Push"
 msgstr ""
 
-#: src/Admin.php:98
+#: src/Admin.php:99
 msgid "Serve /cdp-sw.js from the store root; put the [onetrace_push_button] shortcode where visitors subscribe"
 msgstr ""
 
-#: src/Admin.php:113
+#: src/Admin.php:114
 msgid "Saved — enter a new key to replace it"
 msgstr ""
 
 #. translators: %s: project name
-#: src/Admin.php:166
+#: src/Admin.php:167
 #, php-format
 msgid "Write key: project \"%s\"."
 msgstr ""
 
 #. translators: %s: project name
-#: src/Admin.php:168
+#: src/Admin.php:169
 #, php-format
 msgid "Secret key: project \"%s\"."
 msgstr ""
 
-#: src/Admin.php:170
+#: src/Admin.php:171
 msgid "The key has no products.write permission: the catalog will not be uploaded."
 msgstr ""
 
-#: src/Admin.php:178
+#: src/Admin.php:179
 msgid "Enter the platform address and the keys first."
 msgstr ""
 
-#: src/Admin.php:195
+#: src/Admin.php:196
 msgid "The catalog upload has started; it runs in the background."
 msgstr ""
 
-#: src/Admin.php:217
+#: src/Admin.php:218
 msgid "OneTrace: sending is paused because the platform rejected the key. Check the keys and save the settings."
 msgstr ""
 
-#: src/Admin.php:230
+#: src/Admin.php:231
 msgid "Status"
 msgstr ""
 
-#: src/Admin.php:233
+#: src/Admin.php:234
 msgid "Queue"
 msgstr ""
 
 #. translators: 1: items waiting, 2: items waiting for a retry
-#: src/Admin.php:236
+#: src/Admin.php:237
 #, php-format
 msgid "%1$d waiting, %2$d of them after an error"
 msgstr ""
 
-#: src/Admin.php:243
+#: src/Admin.php:244
 msgid "Last error"
 msgstr ""
 
-#: src/Admin.php:247
+#: src/Admin.php:248
 msgid "Test connection"
 msgstr ""
 
-#: src/Admin.php:249
+#: src/Admin.php:250
 msgid "Upload the whole catalog"
 msgstr ""
 
-#: src/Admin.php:264
+#: src/Admin.php:265
 msgid "You are not allowed to do this."
 msgstr ""
 

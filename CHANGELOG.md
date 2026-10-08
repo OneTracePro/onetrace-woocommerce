@@ -2,6 +2,10 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.1.0 — 2026-10-08
+
+- Setting "Product id": the SKU instead of the post ID in events, cart and order lines, the catalog, deletions and widgets — for stores whose OneTrace catalog and history already use SKUs (e.g. after moving from another platform). Variations send their own SKU as variant_id; products without a SKU fall back to the post ID.
+
 ## 1.0.2 — 2026-10-08
 
 - Errors that did not come from the platform (database, building catalog items) are retried with pauses instead of dropping the queued data.

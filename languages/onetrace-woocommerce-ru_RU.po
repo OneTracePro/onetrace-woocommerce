@@ -39,7 +39,7 @@ msgid "https://onetrace.pro"
 msgstr "https://onetrace.pro"
 
 #: src/Admin.php:45
-#: src/Admin.php:219
+#: src/Admin.php:220
 msgid "Settings"
 msgstr "Настройки"
 
@@ -64,7 +64,7 @@ msgid "The address you open the platform at: the domain of your brand."
 msgstr "Адрес, по которому вы открываете платформу: домен вашего бренда."
 
 #: src/Admin.php:75
-#: src/Admin.php:173
+#: src/Admin.php:174
 msgid "Write key"
 msgstr "Ключ записи"
 
@@ -73,7 +73,7 @@ msgid "For the tracker on the storefront."
 msgstr "Для трекера на витрине."
 
 #: src/Admin.php:76
-#: src/Admin.php:173
+#: src/Admin.php:174
 msgid "Secret key"
 msgstr "Секретный ключ"
 
@@ -125,126 +125,126 @@ msgstr "Каталог товаров"
 msgid "Products and categories for recommendations and emails, updated when products change and daily"
 msgstr "Товары и категории для рекомендаций и писем: при изменении товаров и раз в сутки"
 
-#: src/Admin.php:87
+#: src/Admin.php:88
 msgid "Newsletter consent"
 msgstr "Согласие на рассылку"
 
-#: src/Admin.php:87
+#: src/Admin.php:88
 msgid "A checkbox subscribes the customer to marketing emails in OneTrace. Without it no consent is sent."
 msgstr "Галочка подписывает покупателя на рекламные письма в OneTrace. Без неё согласие не передаётся."
 
-#: src/Admin.php:88
+#: src/Admin.php:89
 msgid "Checkout"
 msgstr "Оформление заказа"
 
-#: src/Admin.php:88
+#: src/Admin.php:89
 msgid "Checkbox at checkout (classic and block)"
 msgstr "Галочка при оформлении заказа (классическом и блочном)"
 
-#: src/Admin.php:89
+#: src/Admin.php:90
 msgid "Registration"
 msgstr "Регистрация"
 
-#: src/Admin.php:89
+#: src/Admin.php:90
 msgid "Checkbox in the registration form"
 msgstr "Галочка в форме регистрации"
 
-#: src/Admin.php:90
+#: src/Admin.php:91
 msgid "Account"
 msgstr "Личный кабинет"
 
-#: src/Admin.php:90
+#: src/Admin.php:91
 msgid "Subscribe and unsubscribe on the account details page"
 msgstr "Подписка и отписка на странице данных аккаунта"
 
-#: src/Admin.php:91
+#: src/Admin.php:92
 msgid "Checkbox text"
 msgstr "Текст галочки"
 
-#: src/Admin.php:91
-#: src/Settings.php:85
+#: src/Admin.php:92
+#: src/Settings.php:86
 msgid "Send me news and special offers by email"
 msgstr "Присылать новости и специальные предложения по email"
 
-#: src/Admin.php:92
+#: src/Admin.php:93
 msgid "Subscription topic"
 msgstr "Тема подписки"
 
-#: src/Admin.php:92
+#: src/Admin.php:93
 msgid "Empty — the whole email channel."
 msgstr "Пусто — весь канал email."
 
-#: src/Admin.php:95
+#: src/Admin.php:96
 msgid "Recommendations and Web Push"
 msgstr "Рекомендации и Web Push"
 
-#: src/Admin.php:95
+#: src/Admin.php:96
 msgid "Widget ids are in the \"Site → Widgets\" section of the platform. Anywhere else use the [onetrace_widget id=\"…\"] shortcode."
 msgstr "Идентификаторы виджетов — в разделе «Сайт → Виджеты» платформы. В любом другом месте используйте шорткод [onetrace_widget id=\"…\"]."
 
-#: src/Admin.php:96
+#: src/Admin.php:97
 msgid "Widget on the product page"
 msgstr "Виджет на странице товара"
 
-#: src/Admin.php:97
+#: src/Admin.php:98
 msgid "Widget in the cart"
 msgstr "Виджет в корзине"
 
-#: src/Admin.php:98
+#: src/Admin.php:99
 msgid "Web Push"
 msgstr "Web Push"
 
-#: src/Admin.php:98
+#: src/Admin.php:99
 msgid "Serve /cdp-sw.js from the store root; put the [onetrace_push_button] shortcode where visitors subscribe"
 msgstr "Отдавать /cdp-sw.js с корня магазина; шорткод [onetrace_push_button] поставьте там, где посетители подписываются"
 
-#: src/Admin.php:113
+#: src/Admin.php:114
 msgid "Saved — enter a new key to replace it"
 msgstr "Сохранён — введите новый ключ, чтобы заменить"
 
-#: src/Admin.php:170
+#: src/Admin.php:171
 msgid "The key has no products.write permission: the catalog will not be uploaded."
 msgstr "У ключа нет права products.write: каталог не будет выгружаться."
 
-#: src/Admin.php:178
+#: src/Admin.php:179
 msgid "Enter the platform address and the keys first."
 msgstr "Сначала укажите адрес платформы и ключи."
 
-#: src/Admin.php:195
+#: src/Admin.php:196
 msgid "The catalog upload has started; it runs in the background."
 msgstr "Выгрузка каталога началась, она идёт в фоне."
 
-#: src/Admin.php:217
+#: src/Admin.php:218
 msgid "OneTrace: sending is paused because the platform rejected the key. Check the keys and save the settings."
 msgstr "OneTrace: отправка приостановлена — платформа отклонила ключ. Проверьте ключи и сохраните настройки."
 
-#: src/Admin.php:230
+#: src/Admin.php:231
 msgid "Status"
 msgstr "Состояние"
 
-#: src/Admin.php:233
+#: src/Admin.php:234
 msgid "Queue"
 msgstr "Очередь"
 
 #. translators: 1: items waiting, 2: items waiting for a retry
-#: src/Admin.php:236
+#: src/Admin.php:237
 #, php-format
 msgid "%1$d waiting, %2$d of them after an error"
 msgstr "Ждут отправки: %1$d, из них после ошибки: %2$d"
 
-#: src/Admin.php:243
+#: src/Admin.php:244
 msgid "Last error"
 msgstr "Последняя ошибка"
 
-#: src/Admin.php:247
+#: src/Admin.php:248
 msgid "Test connection"
 msgstr "Проверить подключение"
 
-#: src/Admin.php:249
+#: src/Admin.php:250
 msgid "Upload the whole catalog"
 msgstr "Выгрузить весь каталог"
 
-#: src/Admin.php:264
+#: src/Admin.php:265
 msgid "You are not allowed to do this."
 msgstr "У вас нет прав на это действие."
 
@@ -253,13 +253,29 @@ msgid "Get notifications"
 msgstr "Получать уведомления"
 
 #. translators: %s: project name
-#: src/Admin.php:166
+#: src/Admin.php:167
 #, php-format
 msgid "Write key: project \"%s\"."
 msgstr "Ключ записи: проект «%s»."
 
 #. translators: %s: project name
-#: src/Admin.php:168
+#: src/Admin.php:169
 #, php-format
 msgid "Secret key: project \"%s\"."
 msgstr "Секретный ключ: проект «%s»."
+
+#: src/Admin.php:85
+msgid "Product id"
+msgstr "ID товара"
+
+#: src/Admin.php:85
+msgid "Post ID"
+msgstr "ID записи"
+
+#: src/Admin.php:85
+msgid "SKU (the post ID for products without a SKU)"
+msgstr "Артикул (ID записи, если артикула нет)"
+
+#: src/Admin.php:85
+msgid "Choose SKU if your OneTrace project already has the catalog and history under SKUs, e.g. after moving from another platform."
+msgstr "Выберите артикул, если каталог и история проекта OneTrace уже ведутся по артикулам, например после переезда с другой платформы."

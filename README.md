@@ -24,6 +24,8 @@ Connects a WooCommerce store to [OneTrace.pro](https://onetrace.pro), the custom
 
 Guest orders without the tracker cookie are linked by email: the identify and the order events of a guest land in one profile.
 
+By default `product_id` is the post ID. If the catalog and history of your project already use SKUs (for example after moving from another platform), set **Product id → SKU**: events, orders, the catalog and widgets then use the SKU (the post ID for products without one).
+
 ## Installation
 
 1. Download `onetrace-woocommerce.zip` from the [latest release](https://github.com/OneTracePro/onetrace-woocommerce/releases/latest) and upload it in **Plugins → Add New → Upload Plugin**.

@@ -82,6 +82,7 @@ final class Admin
             $field('orders', ['type' => 'checkbox', 'title' => __('Orders', 'onetrace-woocommerce'), 'desc' => __('Placed, paid, cancelled and refunded orders with the customer data', 'onetrace-woocommerce')]),
             $field('cart', ['type' => 'checkbox', 'title' => __('Cart', 'onetrace-woocommerce'), 'desc' => __('Adding to and removing from the cart, opening the checkout — for abandoned cart journeys', 'onetrace-woocommerce')]),
             $field('catalog', ['type' => 'checkbox', 'title' => __('Product catalog', 'onetrace-woocommerce'), 'desc' => __('Products and categories for recommendations and emails, updated when products change and daily', 'onetrace-woocommerce')]),
+            $field('product_id', ['type' => 'select', 'title' => __('Product id', 'onetrace-woocommerce'), 'options' => ['id' => __('Post ID', 'onetrace-woocommerce'), 'sku' => __('SKU (the post ID for products without a SKU)', 'onetrace-woocommerce')], 'desc_tip' => __('Choose SKU if your OneTrace project already has the catalog and history under SKUs, e.g. after moving from another platform.', 'onetrace-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_parts'],
 
             ['type' => 'title', 'id' => 'onetrace_consent', 'title' => __('Newsletter consent', 'onetrace-woocommerce'), 'desc' => __('A checkbox subscribes the customer to marketing emails in OneTrace. Without it no consent is sent.', 'onetrace-woocommerce')],

@@ -30,6 +30,7 @@ final class Settings
         'widget_product' => '',
         'widget_cart' => '',
         'push' => 'no',
+        'product_id' => 'id',
     ];
 
     /**

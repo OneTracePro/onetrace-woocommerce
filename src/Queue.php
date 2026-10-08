@@ -85,12 +85,12 @@ final class Queue
     }
 
     /**
-     * Product to delete from the catalog.
+     * Product to delete from the catalog, by its post id (one waiting change per product) and its catalog id.
      */
-    public static function delete(int $productId): void
+    public static function delete(int $postId, string $catalogId): void
     {
-        if (Settings::server() && Settings::enabled('catalog')) {
-            self::push(self::DELETE, 'p' . $productId, (string) $productId, true);
+        if (Settings::server() && Settings::enabled('catalog') && $catalogId !== '') {
+            self::push(self::DELETE, 'p' . $postId, $catalogId, true);
         }
     }
 

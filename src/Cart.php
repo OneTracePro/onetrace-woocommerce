@@ -112,11 +112,11 @@ final class Cart
         $parent = $product->get_parent_id() ? wc_get_product($product->get_parent_id()) : null;
 
         return new LineItem(
-            $productId ?: $product->get_id(),
+            Products::id($productId ?: $product),
             $parent instanceof \WC_Product ? $parent->get_name() : $product->get_name(),
             $price ?? (float) wc_get_price_to_display($product),
             max(1, $quantity),
-            $product->get_parent_id() ? $product->get_id() : null,
+            $product->get_parent_id() ? Products::variantId($product) : null,
             Catalog::categoryId($product)
         );
     }

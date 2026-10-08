@@ -68,7 +68,7 @@ final class Catalog
     public static function postRemoved($postId): void
     {
         if (get_post_type((int) $postId) === 'product') {
-            Queue::delete((int) $postId);
+            Queue::delete((int) $postId, Products::id((int) $postId));
         }
     }
 
@@ -119,7 +119,10 @@ final class Catalog
             $product = wc_get_product($id);
 
             if (!$product instanceof \WC_Product || $product->is_type('variation')) {
-                $missing[] = (string) $id;
+                // By SKU the id of a product that is gone is unknown: its deletion was sent when it was deleted.
+                if (!Products::bySku()) {
+                    $missing[] = (string) $id;
+                }
 
                 continue;
             }
@@ -144,7 +147,7 @@ final class Catalog
         $published = $product->get_status() === 'publish' && $product->get_catalog_visibility() !== 'hidden';
 
         return CatalogItem::make(
-            $product->get_id(),
+            Products::id($product),
             $product->get_name(),
             (string) get_permalink($product->get_id()),
             \is_string($image) ? $image : null,
