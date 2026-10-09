@@ -5,6 +5,9 @@ on:
     branches: [main]
     tags: ['v*']
   pull_request:
+  schedule:
+    # Weekly: new releases of WordPress, WooCommerce and TranslatePress reach the matrix before users do.
+    - cron: '0 6 * * 1'
   workflow_dispatch:
 
 permissions:
@@ -19,10 +22,11 @@ jobs:
       matrix:
         include:
           - { wp: '6.8', tag: '6.8-php8.1-apache', wc: '9.9.5' }
+          - { wp: '7.0', tag: '7.0-php8.2-apache', wc: '10.9.4' }
           - { wp: 'latest', tag: 'php8.3-apache', wc: '' }
-          - { wp: 'latest', tag: 'php8.4-apache', wc: '' }
+          - { wp: 'latest', tag: 'php8.5-apache', wc: '' }
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
@@ -39,7 +43,7 @@ jobs:
     name: PHPStan and PHP 7.4 syntax
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
@@ -56,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [integration, static-analysis]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
@@ -65,7 +69,7 @@ jobs:
       - run: composer install --no-interaction --no-progress
       - run: php bin/build.php
       - run: tests/env/run.sh >/dev/null && tests/env/smoke.sh
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: onetrace-woocommerce
           path: dist/onetrace-woocommerce.zip
