@@ -17,15 +17,17 @@ final class Connection
 
     /**
      * Client of the server part: the secret key only — server events carry consents, which the platform accepts
-     * only with it. client('write') checks the write key of the storefront.
+     * only with it. client('write') checks the write key of the storefront, client('search') — the product search.
      */
     public static function client(string $key = 'secret'): Client
     {
         if (!isset(self::$clients[$key])) {
+            // search: the results page waits for the platform — a short timeout, then the usual WordPress search.
+            $write = $key === 'write' || $key === 'search';
             $options = [
-                $key === 'write' ? 'write_key' : 'secret_key' => (string) Settings::get($key === 'write' ? 'write_key' : 'secret_key') ?: null,
-                'timeout' => 10.0,
-                'connect_timeout' => 5.0,
+                $write ? 'write_key' : 'secret_key' => (string) Settings::get($write ? 'write_key' : 'secret_key') ?: null,
+                'timeout' => $key === 'search' ? 3.0 : 10.0,
+                'connect_timeout' => $key === 'search' ? 1.0 : 5.0,
                 // The queue retries with long pauses; the client must not hold the request.
                 'max_retries' => 0,
                 'user_agent' => sprintf('onetrace-woocommerce/%s WooCommerce/%s', ONETRACE_WC_VERSION, \defined('WC_VERSION') ? WC_VERSION : '?'),

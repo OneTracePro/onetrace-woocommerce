@@ -31,6 +31,35 @@ final class Products
     }
 
     /**
+     * Post ids of catalog ids, in the same order: in the SKU mode by the SKU (a variation SKU → its parent), a
+     * numeric id without a matching SKU — a post id; ids of products that are gone are skipped.
+     *
+     * @param list<string> $ids
+     *
+     * @return list<int>
+     */
+    public static function postIds(array $ids): array
+    {
+        $posts = [];
+
+        foreach ($ids as $id) {
+            $postId = self::bySku() ? (int) wc_get_product_id_by_sku($id) : 0;
+
+            if ($postId === 0 && ctype_digit($id)) {
+                $postId = (int) $id;
+            }
+
+            $product = $postId > 0 ? wc_get_product($postId) : null;
+
+            if ($product instanceof \WC_Product) {
+                $posts[] = $product->get_parent_id() ?: $product->get_id();
+            }
+        }
+
+        return array_values(array_unique($posts));
+    }
+
+    /**
      * variant_id of a variation: its SKU in the SKU mode, otherwise its post id.
      */
     public static function variantId(\WC_Product $variation): string

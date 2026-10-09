@@ -2,6 +2,11 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.2.0 — 2026-10-09
+
+- Product search from OneTrace (the "Product search" setting, off by default): the store search results keep the theme template but take the products, their order and the number of pages from the platform (word forms, typos, the wrong keyboard layout, the visitor's interests); the search boxes of the theme and the blocks get suggestions while typing; the results page sends the `search` event. Any API error falls back to the WordPress search.
+- Requires onetrace-php 1.3.
+
 ## 1.1.1 — 2026-10-09
 
 - The newsletter checkbox of the classic checkout is under the billing fields: in the order review, which WooCommerce redraws on every change of the country or the email, it lost the customer's tick.

@@ -40,9 +40,10 @@ define('ONETRACE_WRITE_KEY', 'cdp_wk_…');
 define('ONETRACE_SECRET_KEY', 'cdp_sk_…');
 ```
 
-## Recommendations and Web Push
+## Recommendations, search and Web Push
 
 - Widgets from **Site → Widgets** of the platform: set their ids for the product page and the cart in the settings, or put `[onetrace_widget id="k3x9…"]` anywhere. On product, category and cart pages the current products are passed to the widget.
+- Product search: turn on "Product search" (the plan of the OneTrace project must include it). The product search of the store (`?s=…&post_type=product`, the search box of the theme and the product search block) keeps the theme template, but its products, their order and the number of pages come from OneTrace: word forms, typos, the wrong keyboard layout, the visitor's interests. The search boxes get suggestions while typing (products, categories, popular queries). The results page sends the `search` event from the server. On any API error or after 3 seconds the usual WordPress search runs.
 - Web Push: turn it on in the settings — the plugin serves `/cdp-sw.js` from the store root (pretty permalinks are required) — and put `[onetrace_push_button]` where visitors subscribe.
 
 ## Privacy

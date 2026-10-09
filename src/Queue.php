@@ -340,7 +340,7 @@ final class Queue
         return \is_string($next) ? (int) strtotime($next . ' UTC') : null;
     }
 
-    private static function log(string $message): void
+    public static function log(string $message): void
     {
         // A broken log (unwritable directory, filesystem over FTP) must not stop the queue.
         try {

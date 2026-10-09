@@ -175,8 +175,8 @@ msgid "Empty — the whole email channel."
 msgstr "Пусто — весь канал email."
 
 #: src/Admin.php:96
-msgid "Recommendations and Web Push"
-msgstr "Рекомендации и Web Push"
+msgid "Recommendations, search and Web Push"
+msgstr "Рекомендации, поиск и Web Push"
 
 #: src/Admin.php:96
 msgid "Widget ids are in the \"Site → Widgets\" section of the platform. Anywhere else use the [onetrace_widget id=\"…\"] shortcode."
@@ -193,6 +193,12 @@ msgstr "Виджет в корзине"
 #: src/Admin.php:99
 msgid "Web Push"
 msgstr "Web Push"
+
+msgid "Product search"
+msgstr "Поиск по товарам"
+
+msgid "Results of the store search and suggestions while typing come from OneTrace (the plan of the project must include product search); on an error — the usual WordPress search"
+msgstr "Результаты поиска магазина и подсказки при вводе — из OneTrace (поиск по товарам должен быть в тарифе проекта); при ошибке — обычный поиск WordPress"
 
 #: src/Admin.php:99
 msgid "Serve /cdp-sw.js from the store root; put the [onetrace_push_button] shortcode where visitors subscribe"

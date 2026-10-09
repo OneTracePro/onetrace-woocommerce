@@ -93,10 +93,11 @@ final class Admin
             $field('consent_topic', ['type' => 'text', 'title' => __('Subscription topic', 'onetrace-woocommerce'), 'placeholder' => 'news', 'desc_tip' => __('Empty — the whole email channel.', 'onetrace-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_consent'],
 
-            ['type' => 'title', 'id' => 'onetrace_widgets', 'title' => __('Recommendations and Web Push', 'onetrace-woocommerce'), 'desc' => __('Widget ids are in the "Site → Widgets" section of the platform. Anywhere else use the [onetrace_widget id="…"] shortcode.', 'onetrace-woocommerce')],
+            ['type' => 'title', 'id' => 'onetrace_widgets', 'title' => __('Recommendations, search and Web Push', 'onetrace-woocommerce'), 'desc' => __('Widget ids are in the "Site → Widgets" section of the platform. Anywhere else use the [onetrace_widget id="…"] shortcode.', 'onetrace-woocommerce')],
             $field('widget_product', ['type' => 'text', 'title' => __('Widget on the product page', 'onetrace-woocommerce'), 'placeholder' => 'k3x9…']),
             $field('widget_cart', ['type' => 'text', 'title' => __('Widget in the cart', 'onetrace-woocommerce'), 'placeholder' => 'k3x9…']),
             $field('push', ['type' => 'checkbox', 'title' => __('Web Push', 'onetrace-woocommerce'), 'desc' => __('Serve /cdp-sw.js from the store root; put the [onetrace_push_button] shortcode where visitors subscribe', 'onetrace-woocommerce')]),
+            $field('search', ['type' => 'checkbox', 'title' => __('Product search', 'onetrace-woocommerce'), 'desc' => __('Results of the store search and suggestions while typing come from OneTrace (the plan of the project must include product search); on an error — the usual WordPress search', 'onetrace-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_widgets'],
         ];
     }

@@ -192,7 +192,7 @@ msgid "Empty — the whole email channel."
 msgstr ""
 
 #: src/Admin.php:96
-msgid "Recommendations and Web Push"
+msgid "Recommendations, search and Web Push"
 msgstr ""
 
 #: src/Admin.php:96
@@ -209,6 +209,12 @@ msgstr ""
 
 #: src/Admin.php:99
 msgid "Web Push"
+msgstr ""
+
+msgid "Product search"
+msgstr ""
+
+msgid "Results of the store search and suggestions while typing come from OneTrace (the plan of the project must include product search); on an error — the usual WordPress search"
 msgstr ""
 
 #: src/Admin.php:99
