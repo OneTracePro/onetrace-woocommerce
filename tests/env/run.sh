@@ -11,6 +11,8 @@ run 'wp --allow-root core is-installed 2>/dev/null || wp --allow-root core insta
 run 'wp --allow-root config set FS_METHOD direct >/dev/null'
 run "wp --allow-root plugin is-installed woocommerce || wp --allow-root plugin install woocommerce ${WC_VERSION:+--version=$WC_VERSION}"
 run 'wp --allow-root plugin is-installed translatepress-multilingual || wp --allow-root plugin install translatepress-multilingual'
-run 'wp --allow-root plugin activate woocommerce translatepress-multilingual onetrace-woocommerce >/dev/null'
+run 'wp --allow-root plugin activate woocommerce onetrace-woocommerce >/dev/null'
+# Separately: on activation TranslatePress redirects to its settings, which ends the wp-cli command.
+run 'wp --allow-root plugin is-active translatepress-multilingual || wp --allow-root plugin activate translatepress-multilingual >/dev/null 2>&1 || true'
 run 'wp --allow-root eval-file wp-content/plugins/onetrace-woocommerce/tests/env/translatepress.php'
 run 'cd wp-content/plugins/onetrace-woocommerce && php vendor/bin/phpunit'
