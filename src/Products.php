@@ -27,6 +27,13 @@ final class Products
             $product = $parent instanceof \WC_Product ? $parent : $product;
         }
 
+        // A translated copy (WPML, Polylang) is the product of the default language: one id in the catalog and in events.
+        $original = Translations::original($product->get_id());
+
+        if ($original !== $product->get_id()) {
+            $product = wc_get_product($original) ?: $product;
+        }
+
         return self::own($product);
     }
 
@@ -52,7 +59,7 @@ final class Products
             $product = $postId > 0 ? wc_get_product($postId) : null;
 
             if ($product instanceof \WC_Product) {
-                $posts[] = $product->get_parent_id() ?: $product->get_id();
+                $posts[] = Translations::current($product->get_parent_id() ?: $product->get_id());
             }
         }
 

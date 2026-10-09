@@ -60,6 +60,8 @@ final class Search
                 'per_page' => $perPage,
                 'sort' => self::sort(self::orderby($query)),
                 'anonymousId' => Connection::anonymousId(),
+                // The page language (TranslatePress, WPML, Polylang): names and links of the catalog translations.
+                'language' => get_locale(),
             ]));
         } catch (\Throwable $e) {
             Queue::log('Search fell back to WordPress: ' . $e->getMessage());

@@ -72,6 +72,7 @@ final class SearchTest extends TestCase
         self::assertStringContainsString('q=lnen%20dres', $this->urls[0]);
         self::assertStringContainsString('per_page=2', $this->urls[0]);
         self::assertStringContainsString('anonymousId=browser-1', $this->urls[0]);
+        self::assertStringContainsString('language=' . get_locale(), $this->urls[0]);
         self::assertCount(1, $search);
         self::assertSame(['query' => 'lnen dres', 'results' => 7, 'request_id' => 'req-1'], $search[0]['properties']);
         self::assertContract($search[0]);

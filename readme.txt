@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,7 @@ This plugin connects your WooCommerce store:
 * The product catalog for recommendations and emails.
 * Recommendation widgets and Web Push.
 * Product search: the store search results and suggestions while typing come from OneTrace — word forms, typos, the wrong keyboard layout and the visitor's interests; the usual search on any error.
+* Catalog languages from TranslatePress, WPML and Polylang: recommendations, search and emails in the visitor's language.
 
 HPOS and the Cart and Checkout blocks are supported.
 
@@ -49,6 +50,9 @@ Yes, a OneTrace.pro project (or a project at a brand that runs the platform).
 Messages wait in the plugin's queue and are sent later; checkout is never slowed down.
 
 == Changelog ==
+
+= 1.3.0 =
+* Catalog languages: with TranslatePress, WPML or Polylang the catalog carries the translated names, links, categories and attributes, so recommendations, search and emails show the visitor's language.
 
 = 1.2.0 =
 * Product search from OneTrace (the "Product search" setting, off by default): the results of the store search keep the theme template but take the products and their order from the platform; the search box gets suggestions while typing. On any error of the platform the usual WordPress search runs.

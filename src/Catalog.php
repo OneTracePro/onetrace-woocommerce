@@ -67,9 +67,20 @@ final class Catalog
      */
     public static function postRemoved($postId): void
     {
-        if (get_post_type((int) $postId) === 'product') {
-            Queue::delete((int) $postId, Products::id((int) $postId));
+        if (get_post_type((int) $postId) !== 'product') {
+            return;
         }
+
+        $original = Translations::original((int) $postId);
+
+        // A translated copy goes away: the product stays, its translations are uploaded again.
+        if ($original !== (int) $postId) {
+            Queue::product($original);
+
+            return;
+        }
+
+        Queue::delete((int) $postId, Products::id((int) $postId));
     }
 
     /**
@@ -107,15 +118,17 @@ final class Catalog
      *
      * @param list<int> $productIds
      *
-     * @return array{0: list<array<string, mixed>>, 1: list<array<string, string>>, 2: list<string>}
+     * @return array{0: list<array<string, mixed>>, 1: list<array<string, mixed>>, 2: list<string>}
      */
     public static function items(array $productIds): array
     {
         $items = [];
+        $products = [];
         $categoryIds = [];
         $missing = [];
 
-        foreach ($productIds as $id) {
+        // Translated copies (WPML, Polylang) upload the product of the default language with their translations.
+        foreach (array_unique(array_map([Translations::class, 'original'], $productIds)) as $id) {
             $product = wc_get_product($id);
 
             if (!$product instanceof \WC_Product || $product->is_type('variation')) {
@@ -129,10 +142,14 @@ final class Catalog
 
             $categories = self::categoryIds($product);
             $categoryIds = array_merge($categoryIds, $categories);
-            $items[] = self::item($product, $categories);
+            $item = self::item($product, $categories);
+            $items[] = $item;
+            $products[(string) $item['id']] = $product;
         }
 
-        return [$items, self::categories(array_unique($categoryIds)), $missing];
+        [$items, $categories] = Translations::apply($items, $products, self::categories(array_unique($categoryIds)));
+
+        return [$items, $categories, $missing];
     }
 
     /**
@@ -166,7 +183,9 @@ final class Catalog
      */
     public static function categoryId(\WC_Product $product): ?string
     {
-        $categories = self::categoryIds($product->get_parent_id() ? (wc_get_product($product->get_parent_id()) ?: $product) : $product);
+        $product = $product->get_parent_id() ? (wc_get_product($product->get_parent_id()) ?: $product) : $product;
+        $original = Translations::original($product->get_id());
+        $categories = self::categoryIds($original !== $product->get_id() ? (wc_get_product($original) ?: $product) : $product);
 
         return $categories !== [] ? (string) $categories[0] : null;
     }

@@ -2,6 +2,12 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.3.0 — 2026-10-09
+
+- Catalog languages: with TranslatePress, WPML or Polylang the catalog upload carries the names, links, category names and attribute values of the other store languages, so recommendations, widgets, search and emails show the visitor's language. WPML and Polylang copies of a product are one product of the platform (the default language id in the catalog and in events); deleting a copy uploads the product again instead of removing it.
+- Search results take the page language and link to the product copy of that language.
+- Requires onetrace-php 1.4.
+
 ## 1.2.0 — 2026-10-09
 
 - Product search from OneTrace (the "Product search" setting, off by default): the store search results keep the theme template but take the products, their order and the number of pages from the platform (word forms, typos, the wrong keyboard layout, the visitor's interests); the search boxes of the theme and the blocks get suggestions while typing; the results page sends the `search` event. Any API error falls back to the WordPress search.

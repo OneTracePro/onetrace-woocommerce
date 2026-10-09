@@ -10,5 +10,7 @@ run '[ -x /usr/local/bin/wp ] || (curl -sS -o /usr/local/bin/wp https://raw.gith
 run 'wp --allow-root core is-installed 2>/dev/null || wp --allow-root core install --url=http://localhost --title=Shop --admin_user=admin --admin_password=admin --admin_email=admin@example.com --skip-email'
 run 'wp --allow-root config set FS_METHOD direct >/dev/null'
 run "wp --allow-root plugin is-installed woocommerce || wp --allow-root plugin install woocommerce ${WC_VERSION:+--version=$WC_VERSION}"
-run 'wp --allow-root plugin activate woocommerce onetrace-woocommerce >/dev/null'
+run 'wp --allow-root plugin is-installed translatepress-multilingual || wp --allow-root plugin install translatepress-multilingual'
+run 'wp --allow-root plugin activate woocommerce translatepress-multilingual onetrace-woocommerce >/dev/null'
+run 'wp --allow-root eval-file wp-content/plugins/onetrace-woocommerce/tests/env/translatepress.php'
 run 'cd wp-content/plugins/onetrace-woocommerce && php vendor/bin/phpunit'
