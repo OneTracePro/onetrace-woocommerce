@@ -2,6 +2,10 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.4.0 — 2026-10-09
+
+- Search redirects: a query with a redirect rule (Site → Search of the platform, e.g. "delivery" → the delivery page) opens that page instead of the search results.
+
 ## 1.3.1 — 2026-10-09
 
 - Search on other languages of TranslatePress (/ru/): TranslatePress emptied the query for its own dictionary search, so the results came from WordPress (often a single product, which WooCommerce opens directly). The plugin searches the visitor's text from the original query.

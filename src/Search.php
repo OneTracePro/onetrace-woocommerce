@@ -10,6 +10,7 @@ use OneTrace\Commerce\Customer;
  * Product search of the store from OneTrace: the results page keeps the theme template, but its products and their
  * order come from the platform (word forms, typos, the wrong keyboard layout, the visitor's interests); the search
  * box gets suggestions of the tracker (data-cdp-search). Any API error falls back to the usual WordPress search.
+ * A query with a redirect rule (Site → Search of the platform) opens its page instead of the results.
  */
 final class Search
 {
@@ -17,6 +18,9 @@ final class Search
     public const CATEGORY_PARAM = 'onetrace_category';
 
     private const MAX_PER_PAGE = 48;
+
+    /** @var string|null the page of a redirect rule for the current search */
+    private static $redirect;
 
     public static function register(): void
     {
@@ -29,6 +33,7 @@ final class Search
         add_filter('get_search_form', [self::class, 'form']);
         add_filter('render_block', [self::class, 'block'], 10, 2);
         add_action('template_redirect', [self::class, 'category']);
+        add_action('template_redirect', [self::class, 'redirect']);
     }
 
     /**
@@ -82,6 +87,10 @@ final class Search
             self::track($text, $query->found_posts, (string) ($result['request_id'] ?? ''));
         }
 
+        // Only http(s) pages: esc_url_raw() drops other schemes.
+        $redirect = esc_url_raw((string) ($result['redirect'] ?? ''), ['http', 'https']);
+        self::$redirect = $redirect !== '' ? $redirect : null;
+
         if ($ids === []) {
             return [];
         }
@@ -109,6 +118,28 @@ final class Search
     public static function block(string $html, array $block): string
     {
         return \in_array($block['blockName'] ?? '', ['core/search', 'woocommerce/product-search'], true) ? self::form($html) : $html;
+    }
+
+    /**
+     * The page of a redirect rule of the query, set by the store owner on the platform.
+     */
+    public static function redirect(): void
+    {
+        $url = self::pendingRedirect();
+
+        if ($url !== null) {
+            // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- the rule may lead to another site of the store.
+            wp_redirect($url, 302, 'OneTrace');
+            exit;
+        }
+    }
+
+    /**
+     * The redirect the search of this request asks for.
+     */
+    public static function pendingRedirect(): ?string
+    {
+        return self::$redirect;
     }
 
     public static function category(): void

@@ -106,6 +106,21 @@ final class SearchTest extends TestCase
         self::assertStringContainsString('q=' . rawurlencode('платье'), $this->urls[0]);
     }
 
+    public function testOpensThePageOfARedirectRuleInsteadOfTheResults(): void
+    {
+        $dress = $this->product(['name' => 'Linen Dress']);
+        $this->respond(200, ['total' => 1, 'items' => [['id' => (string) $dress->get_id()]], 'redirect' => 'https://shop.example.com/delivery']);
+
+        $this->searchPage(['s' => 'delivery']);
+
+        self::assertSame('https://shop.example.com/delivery', Search::pendingRedirect());
+
+        $this->respond(200, ['total' => 1, 'items' => [['id' => (string) $dress->get_id()]], 'redirect' => 'javascript:alert(1)']);
+        $this->searchPage(['s' => 'linen']);
+
+        self::assertNull(Search::pendingRedirect());
+    }
+
     public function testFallsBackToTheWordPressSearchWhenThePlatformFails(): void
     {
         $dress = $this->product(['name' => 'Linen Dress']);
