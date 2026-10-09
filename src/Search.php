@@ -44,7 +44,9 @@ final class Search
             return $posts;
         }
 
-        $text = trim((string) $query->get('s'));
+        // TranslatePress empties "s" on other languages and searches its own dictionary: the visitor's text stays in
+        // the original query.
+        $text = trim((string) ($query->get('s') ?: ($query->query['s'] ?? '')));
 
         if ($text === '') {
             return null;

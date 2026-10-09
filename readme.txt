@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,9 @@ Yes, a OneTrace.pro project (or a project at a brand that runs the platform).
 Messages wait in the plugin's queue and are sent later; checkout is never slowed down.
 
 == Changelog ==
+
+= 1.3.1 =
+* Search on the other languages of TranslatePress uses OneTrace too: TranslatePress emptied the query for its own search.
 
 = 1.3.0 =
 * Catalog languages: with TranslatePress, WPML or Polylang the catalog carries the translated names, links, categories and attributes, so recommendations, search and emails show the visitor's language.

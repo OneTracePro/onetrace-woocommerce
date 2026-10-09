@@ -2,6 +2,10 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.3.1 — 2026-10-09
+
+- Search on other languages of TranslatePress (/ru/): TranslatePress emptied the query for its own dictionary search, so the results came from WordPress (often a single product, which WooCommerce opens directly). The plugin searches the visitor's text from the original query.
+
 ## 1.3.0 — 2026-10-09
 
 - Catalog languages: with TranslatePress, WPML or Polylang the catalog upload carries the names, links, category names and attribute values of the other store languages, so recommendations, widgets, search and emails show the visitor's language. WPML and Polylang copies of a product are one product of the platform (the default language id in the catalog and in events); deleting a copy uploads the product again instead of removing it.

@@ -88,6 +88,24 @@ final class SearchTest extends TestCase
         self::assertCount(1, $this->platform->events('search'));
     }
 
+    public function testSearchesTheVisitorsTextWhenATranslationPluginEmptiedTheQuery(): void
+    {
+        $dress = $this->product(['name' => 'Linen Dress']);
+        $this->respond(200, ['total' => 1, 'items' => [['id' => (string) $dress->get_id()]]]);
+        // TranslatePress on /ru/: "s" is emptied, the posts of its dictionary search go to post__in.
+        $translatePress = static function (\WP_Query $query): void {
+            $query->set('s', '');
+            $query->set('post__in', [PHP_INT_MAX]);
+        };
+        add_action('pre_get_posts', $translatePress, 99999999);
+
+        $query = $this->searchPage(['s' => 'платье']);
+        remove_action('pre_get_posts', $translatePress, 99999999);
+
+        self::assertSame([$dress->get_id()], wp_list_pluck($query->posts, 'ID'));
+        self::assertStringContainsString('q=' . rawurlencode('платье'), $this->urls[0]);
+    }
+
     public function testFallsBackToTheWordPressSearchWhenThePlatformFails(): void
     {
         $dress = $this->product(['name' => 'Linen Dress']);
