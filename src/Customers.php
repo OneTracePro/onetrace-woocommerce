@@ -39,7 +39,9 @@ final class Customers
         }
 
         if (Settings::enabled('consent_checkout')) {
-            add_action('woocommerce_review_order_before_submit', [self::class, 'classicCheckbox']);
+            // Under the billing fields: the order review with the payment methods is redrawn on every change of
+            // the country or the email, and a checkbox there would lose the customer's tick.
+            add_action('woocommerce_after_checkout_billing_form', [self::class, 'classicCheckbox']);
             add_action('woocommerce_checkout_create_order', [self::class, 'classicSaved']);
             add_action('woocommerce_init', [self::class, 'blockField']);
         }

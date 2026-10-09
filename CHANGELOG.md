@@ -2,6 +2,10 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.1.1 — 2026-10-09
+
+- The newsletter checkbox of the classic checkout is under the billing fields: in the order review, which WooCommerce redraws on every change of the country or the email, it lost the customer's tick.
+
 ## 1.1.0 — 2026-10-08
 
 - Setting "Product id": the SKU instead of the post ID in events, cart and order lines, the catalog, deletions and widgets — for stores whose OneTrace catalog and history already use SKUs (e.g. after moving from another platform). Variations send their own SKU as variant_id; products without a SKU fall back to the post ID.

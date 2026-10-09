@@ -46,6 +46,19 @@ final class StorefrontTest extends TestCase
         self::assertSame('', Storefront::widgetShortcode(['id' => '"><script>']));
     }
 
+    public function testShowsTheConsentCheckboxOfTheClassicCheckoutOutsideTheRedrawnOrderReview(): void
+    {
+        ob_start();
+        do_action('woocommerce_after_checkout_billing_form', WC()->checkout());
+        $billing = (string) ob_get_clean();
+        ob_start();
+        do_action('woocommerce_review_order_before_submit');
+        $review = (string) ob_get_clean();
+
+        self::assertStringContainsString('name="onetrace_marketing_consent"', $billing);
+        self::assertStringNotContainsString('onetrace_marketing_consent', $review);
+    }
+
     public function testRegistersTheConsentCheckboxOfTheCheckoutBlock(): void
     {
         $fields = \Automattic\WooCommerce\Blocks\Package::container()->get(\Automattic\WooCommerce\Blocks\Domain\Services\CheckoutFields::class);
