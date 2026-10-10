@@ -12,13 +12,25 @@ final class Plugin
     /** @var self|null */
     private static $instance;
 
+    /** @var bool */
+    private $booted = false;
+
     public static function instance(): self
     {
         return self::$instance ?? self::$instance = new self();
     }
 
+    /**
+     * Once per request: an older copy of the plugin without the second-copy check (1.4.0 and earlier, a zip from
+     * GitHub) boots the same classes again from its own plugins_loaded callback.
+     */
     public function boot(): void
     {
+        if ($this->booted) {
+            return;
+        }
+
+        $this->booted = true;
         load_plugin_textdomain('onetrace-for-woocommerce', false, \dirname(plugin_basename(ONETRACE_WC_FILE)) . '/languages');
 
         if (get_option('onetrace_db_version') !== ONETRACE_WC_VERSION) {

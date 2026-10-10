@@ -2,6 +2,10 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.5.1 — 2026-10-10
+
+- The plugin starts once per request: an older copy without the second-copy check (1.4.0 and earlier, a zip from GitHub in the `onetrace-woocommerce` folder) booted the same classes again from its own callback. Hooks are static methods, so nothing ran twice, but this no longer depends on it.
+
 ## 1.5.0 — 2026-10-10
 
 - Published on wordpress.org: https://wordpress.org/plugins/onetrace-for-woocommerce/ — the plugin folder, the release zip (`onetrace-for-woocommerce.zip`) and the text domain are `onetrace-for-woocommerce`, so the zip from GitHub and the directory version are the same plugin and update from the WordPress admin.

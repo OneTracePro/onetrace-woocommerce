@@ -3,7 +3,7 @@
  * Plugin Name:          OneTrace for WooCommerce
  * Plugin URI:           https://wordpress.org/plugins/onetrace-for-woocommerce/
  * Description:          Connects the store to OneTrace.pro, the customer data platform: orders, customers and consents from the server, the website tracker, the product catalog, recommendation widgets and Web Push.
- * Version:              1.5.0
+ * Version:              1.5.1
  * Requires at least:    6.6
  * Requires PHP:         7.4
  * Requires Plugins:     woocommerce
@@ -42,7 +42,7 @@ if (defined('ONETRACE_WC_FILE')) {
     return;
 }
 
-define('ONETRACE_WC_VERSION', '1.5.0');
+define('ONETRACE_WC_VERSION', '1.5.1');
 define('ONETRACE_WC_FILE', __FILE__);
 
 require_once __DIR__ . '/vendor/autoload.php';

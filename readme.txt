@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 
 == Changelog ==
 
+= 1.5.1 =
+* With an older copy of the plugin still active (a zip from GitHub, 1.4.0 and earlier), the plugin starts once: the older copy no longer boots it again.
+
 = 1.5.0 =
 * Published on wordpress.org as onetrace-for-woocommerce: the plugin folder and the text domain are onetrace-for-woocommerce, updates come from the plugin directory.
 * Installed twice (this copy and an older zip from GitHub in the onetrace-woocommerce folder), the second copy stays off and asks to delete it; settings are shared.
@@ -90,6 +93,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 * First release.
 
 == Upgrade Notice ==
+
+= 1.5.1 =
+If an older copy from GitHub (folder onetrace-woocommerce) is still active, the plugin starts once; deactivate and delete that copy.
 
 = 1.5.0 =
 The plugin now comes from wordpress.org (folder onetrace-for-woocommerce). If you installed a zip from GitHub before, deactivate and delete that copy (folder onetrace-woocommerce) after installing this one: settings and the queue are kept.
