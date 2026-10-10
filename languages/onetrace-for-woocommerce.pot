@@ -12,7 +12,7 @@ msgstr ""
 "POT-Creation-Date: 2026-10-08T19:18:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
-"X-Domain: onetrace-woocommerce\n"
+"X-Domain: onetrace-for-woocommerce\n"
 
 #. Plugin Name of the plugin
 #: onetrace-woocommerce.php
@@ -285,4 +285,10 @@ msgstr ""
 
 #: src/Storefront.php:131
 msgid "Get notifications"
+msgstr ""
+
+#. translators: 1: folder of the active copy, 2: folder of the inactive copy
+#: onetrace-woocommerce.php
+#, php-format
+msgid "OneTrace for WooCommerce is installed twice: the copy in the %1$s folder works, the copy in the %2$s folder is not loaded. Deactivate and delete the copy in %2$s — settings stay."
 msgstr ""

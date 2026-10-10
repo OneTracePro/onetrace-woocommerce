@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,7 @@ The plugin sends data to the OneTrace.pro platform at the address you enter in t
 
 == Installation ==
 
-1. Install and activate the plugin.
+1. In Plugins → Add New Plugin search for "OneTrace for WooCommerce", install and activate it.
 2. In your OneTrace project create a write key and a secret key with the products.write permission (API keys section).
 3. Go to WooCommerce → Settings → OneTrace, enter the platform address and both keys, click "Test connection".
 
@@ -49,7 +49,18 @@ Yes, a OneTrace.pro project (or a project at a brand that runs the platform).
 
 Messages wait in the plugin's queue and are sent later; checkout is never slowed down.
 
+== Screenshots ==
+
+1. Settings: the platform address, the keys and what the store sends to OneTrace.
+2. Recommendation blocks from OneTrace on the product page: viewed together and similar products.
+3. Product search: suggestions while typing, with typos and synonyms handled by the platform.
+4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
+
 == Changelog ==
+
+= 1.5.0 =
+* Published on wordpress.org as onetrace-for-woocommerce: the plugin folder and the text domain are onetrace-for-woocommerce, updates come from the plugin directory.
+* Installed twice (this copy and an older zip from GitHub in the onetrace-woocommerce folder), the second copy stays off and asks to delete it; settings are shared.
 
 = 1.4.0 =
 * Search redirects: a query with a redirect rule set on the platform opens its page instead of the results.
@@ -77,3 +88,8 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 
 = 1.0.0 =
 * First release.
+
+== Upgrade Notice ==
+
+= 1.5.0 =
+The plugin now comes from wordpress.org (folder onetrace-for-woocommerce). If you installed a zip from GitHub before, deactivate and delete that copy (folder onetrace-woocommerce) after installing this one: settings and the queue are kept.

@@ -42,7 +42,7 @@ final class Admin
      */
     public static function links(array $links): array
     {
-        array_unshift($links, sprintf('<a href="%s">%s</a>', esc_url(self::url()), esc_html__('Settings', 'onetrace-woocommerce')));
+        array_unshift($links, sprintf('<a href="%s">%s</a>', esc_url(self::url()), esc_html__('Settings', 'onetrace-for-woocommerce')));
 
         return $links;
     }
@@ -57,7 +57,7 @@ final class Admin
      */
     public static function fields(): array
     {
-        $constant = __('Set in wp-config.php.', 'onetrace-woocommerce');
+        $constant = __('Set in wp-config.php.', 'onetrace-for-woocommerce');
         $field = static function (string $key, array $field) use ($constant): array {
             $field += ['id' => Settings::OPTION . '[' . $key . ']', 'default' => Settings::DEFAULTS[$key] ?? ''];
 
@@ -70,34 +70,34 @@ final class Admin
         };
 
         return [
-            ['type' => 'title', 'id' => 'onetrace_connection', 'title' => __('Connection', 'onetrace-woocommerce'), 'desc' => __('Keys are in the "API keys" section of your OneTrace project.', 'onetrace-woocommerce')],
-            $field('url', ['type' => 'url', 'title' => __('Platform address', 'onetrace-woocommerce'), 'placeholder' => 'https://cdp.onetrace.pro', 'desc_tip' => __('The address you open the platform at: the domain of your brand.', 'onetrace-woocommerce')]),
-            $field('write_key', ['type' => 'text', 'title' => __('Write key', 'onetrace-woocommerce'), 'placeholder' => 'cdp_wk_…', 'desc_tip' => __('For the tracker on the storefront.', 'onetrace-woocommerce')]),
-            $field('secret_key', ['type' => 'password', 'title' => __('Secret key', 'onetrace-woocommerce'), 'placeholder' => 'cdp_sk_…', 'desc_tip' => __('For orders, customers and the catalog; needs the products.write permission.', 'onetrace-woocommerce')]),
+            ['type' => 'title', 'id' => 'onetrace_connection', 'title' => __('Connection', 'onetrace-for-woocommerce'), 'desc' => __('Keys are in the "API keys" section of your OneTrace project.', 'onetrace-for-woocommerce')],
+            $field('url', ['type' => 'url', 'title' => __('Platform address', 'onetrace-for-woocommerce'), 'placeholder' => 'https://cdp.onetrace.pro', 'desc_tip' => __('The address you open the platform at: the domain of your brand.', 'onetrace-for-woocommerce')]),
+            $field('write_key', ['type' => 'text', 'title' => __('Write key', 'onetrace-for-woocommerce'), 'placeholder' => 'cdp_wk_…', 'desc_tip' => __('For the tracker on the storefront.', 'onetrace-for-woocommerce')]),
+            $field('secret_key', ['type' => 'password', 'title' => __('Secret key', 'onetrace-for-woocommerce'), 'placeholder' => 'cdp_sk_…', 'desc_tip' => __('For orders, customers and the catalog; needs the products.write permission.', 'onetrace-for-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_connection'],
 
-            ['type' => 'title', 'id' => 'onetrace_parts', 'title' => __('What to send', 'onetrace-woocommerce')],
-            $field('tracker', ['type' => 'checkbox', 'title' => __('Tracker', 'onetrace-woocommerce'), 'desc' => __('Page and product views on the storefront', 'onetrace-woocommerce')]),
-            $field('wait_for_consent', ['type' => 'checkbox', 'title' => __('Cookie consent', 'onetrace-woocommerce'), 'desc' => __('Load the tracker after the visitor agrees to statistics cookies (with a consent plugin that supports the WP Consent API)', 'onetrace-woocommerce')]),
-            $field('orders', ['type' => 'checkbox', 'title' => __('Orders', 'onetrace-woocommerce'), 'desc' => __('Placed, paid, cancelled and refunded orders with the customer data', 'onetrace-woocommerce')]),
-            $field('cart', ['type' => 'checkbox', 'title' => __('Cart', 'onetrace-woocommerce'), 'desc' => __('Adding to and removing from the cart, opening the checkout — for abandoned cart journeys', 'onetrace-woocommerce')]),
-            $field('catalog', ['type' => 'checkbox', 'title' => __('Product catalog', 'onetrace-woocommerce'), 'desc' => __('Products and categories for recommendations and emails, updated when products change and daily', 'onetrace-woocommerce')]),
-            $field('product_id', ['type' => 'select', 'title' => __('Product id', 'onetrace-woocommerce'), 'options' => ['id' => __('Post ID', 'onetrace-woocommerce'), 'sku' => __('SKU (the post ID for products without a SKU)', 'onetrace-woocommerce')], 'desc_tip' => __('Choose SKU if your OneTrace project already has the catalog and history under SKUs, e.g. after moving from another platform.', 'onetrace-woocommerce')]),
+            ['type' => 'title', 'id' => 'onetrace_parts', 'title' => __('What to send', 'onetrace-for-woocommerce')],
+            $field('tracker', ['type' => 'checkbox', 'title' => __('Tracker', 'onetrace-for-woocommerce'), 'desc' => __('Page and product views on the storefront', 'onetrace-for-woocommerce')]),
+            $field('wait_for_consent', ['type' => 'checkbox', 'title' => __('Cookie consent', 'onetrace-for-woocommerce'), 'desc' => __('Load the tracker after the visitor agrees to statistics cookies (with a consent plugin that supports the WP Consent API)', 'onetrace-for-woocommerce')]),
+            $field('orders', ['type' => 'checkbox', 'title' => __('Orders', 'onetrace-for-woocommerce'), 'desc' => __('Placed, paid, cancelled and refunded orders with the customer data', 'onetrace-for-woocommerce')]),
+            $field('cart', ['type' => 'checkbox', 'title' => __('Cart', 'onetrace-for-woocommerce'), 'desc' => __('Adding to and removing from the cart, opening the checkout — for abandoned cart journeys', 'onetrace-for-woocommerce')]),
+            $field('catalog', ['type' => 'checkbox', 'title' => __('Product catalog', 'onetrace-for-woocommerce'), 'desc' => __('Products and categories for recommendations and emails, updated when products change and daily', 'onetrace-for-woocommerce')]),
+            $field('product_id', ['type' => 'select', 'title' => __('Product id', 'onetrace-for-woocommerce'), 'options' => ['id' => __('Post ID', 'onetrace-for-woocommerce'), 'sku' => __('SKU (the post ID for products without a SKU)', 'onetrace-for-woocommerce')], 'desc_tip' => __('Choose SKU if your OneTrace project already has the catalog and history under SKUs, e.g. after moving from another platform.', 'onetrace-for-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_parts'],
 
-            ['type' => 'title', 'id' => 'onetrace_consent', 'title' => __('Newsletter consent', 'onetrace-woocommerce'), 'desc' => __('A checkbox subscribes the customer to marketing emails in OneTrace. Without it no consent is sent.', 'onetrace-woocommerce')],
-            $field('consent_checkout', ['type' => 'checkbox', 'title' => __('Checkout', 'onetrace-woocommerce'), 'desc' => __('Checkbox at checkout (classic and block)', 'onetrace-woocommerce')]),
-            $field('consent_registration', ['type' => 'checkbox', 'title' => __('Registration', 'onetrace-woocommerce'), 'desc' => __('Checkbox in the registration form', 'onetrace-woocommerce')]),
-            $field('consent_account', ['type' => 'checkbox', 'title' => __('Account', 'onetrace-woocommerce'), 'desc' => __('Subscribe and unsubscribe on the account details page', 'onetrace-woocommerce')]),
-            $field('consent_label', ['type' => 'text', 'title' => __('Checkbox text', 'onetrace-woocommerce'), 'placeholder' => __('Send me news and special offers by email', 'onetrace-woocommerce')]),
-            $field('consent_topic', ['type' => 'text', 'title' => __('Subscription topic', 'onetrace-woocommerce'), 'placeholder' => 'news', 'desc_tip' => __('Empty — the whole email channel.', 'onetrace-woocommerce')]),
+            ['type' => 'title', 'id' => 'onetrace_consent', 'title' => __('Newsletter consent', 'onetrace-for-woocommerce'), 'desc' => __('A checkbox subscribes the customer to marketing emails in OneTrace. Without it no consent is sent.', 'onetrace-for-woocommerce')],
+            $field('consent_checkout', ['type' => 'checkbox', 'title' => __('Checkout', 'onetrace-for-woocommerce'), 'desc' => __('Checkbox at checkout (classic and block)', 'onetrace-for-woocommerce')]),
+            $field('consent_registration', ['type' => 'checkbox', 'title' => __('Registration', 'onetrace-for-woocommerce'), 'desc' => __('Checkbox in the registration form', 'onetrace-for-woocommerce')]),
+            $field('consent_account', ['type' => 'checkbox', 'title' => __('Account', 'onetrace-for-woocommerce'), 'desc' => __('Subscribe and unsubscribe on the account details page', 'onetrace-for-woocommerce')]),
+            $field('consent_label', ['type' => 'text', 'title' => __('Checkbox text', 'onetrace-for-woocommerce'), 'placeholder' => __('Send me news and special offers by email', 'onetrace-for-woocommerce')]),
+            $field('consent_topic', ['type' => 'text', 'title' => __('Subscription topic', 'onetrace-for-woocommerce'), 'placeholder' => 'news', 'desc_tip' => __('Empty — the whole email channel.', 'onetrace-for-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_consent'],
 
-            ['type' => 'title', 'id' => 'onetrace_widgets', 'title' => __('Recommendations, search and Web Push', 'onetrace-woocommerce'), 'desc' => __('Widget ids are in the "Site → Widgets" section of the platform. Anywhere else use the [onetrace_widget id="…"] shortcode.', 'onetrace-woocommerce')],
-            $field('widget_product', ['type' => 'text', 'title' => __('Widget on the product page', 'onetrace-woocommerce'), 'placeholder' => 'k3x9…']),
-            $field('widget_cart', ['type' => 'text', 'title' => __('Widget in the cart', 'onetrace-woocommerce'), 'placeholder' => 'k3x9…']),
-            $field('push', ['type' => 'checkbox', 'title' => __('Web Push', 'onetrace-woocommerce'), 'desc' => __('Serve /cdp-sw.js from the store root; put the [onetrace_push_button] shortcode where visitors subscribe', 'onetrace-woocommerce')]),
-            $field('search', ['type' => 'checkbox', 'title' => __('Product search', 'onetrace-woocommerce'), 'desc' => __('Results of the store search and suggestions while typing come from OneTrace (the plan of the project must include product search); on an error — the usual WordPress search', 'onetrace-woocommerce')]),
+            ['type' => 'title', 'id' => 'onetrace_widgets', 'title' => __('Recommendations, search and Web Push', 'onetrace-for-woocommerce'), 'desc' => __('Widget ids are in the "Site → Widgets" section of the platform. Anywhere else use the [onetrace_widget id="…"] shortcode.', 'onetrace-for-woocommerce')],
+            $field('widget_product', ['type' => 'text', 'title' => __('Widget on the product page', 'onetrace-for-woocommerce'), 'placeholder' => 'k3x9…']),
+            $field('widget_cart', ['type' => 'text', 'title' => __('Widget in the cart', 'onetrace-for-woocommerce'), 'placeholder' => 'k3x9…']),
+            $field('push', ['type' => 'checkbox', 'title' => __('Web Push', 'onetrace-for-woocommerce'), 'desc' => __('Serve /cdp-sw.js from the store root; put the [onetrace_push_button] shortcode where visitors subscribe', 'onetrace-for-woocommerce')]),
+            $field('search', ['type' => 'checkbox', 'title' => __('Product search', 'onetrace-for-woocommerce'), 'desc' => __('Results of the store search and suggestions while typing come from OneTrace (the plan of the project must include product search); on an error — the usual WordPress search', 'onetrace-for-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_widgets'],
         ];
     }
@@ -112,7 +112,7 @@ final class Admin
 
             // The secret key is never printed back: an empty field keeps the stored one.
             if (($field['id'] ?? '') === Settings::OPTION . '[secret_key]') {
-                $field['placeholder'] = (string) $field['value'] !== '' ? __('Saved — enter a new key to replace it', 'onetrace-woocommerce') : 'cdp_sk_…';
+                $field['placeholder'] = (string) $field['value'] !== '' ? __('Saved — enter a new key to replace it', 'onetrace-for-woocommerce') : 'cdp_sk_…';
                 $field['value'] = '';
             }
 
@@ -165,19 +165,19 @@ final class Admin
                     sprintf(
                         $key === 'write'
                             /* translators: %s: project name */
-                            ? __('Write key: project "%s".', 'onetrace-woocommerce')
+                            ? __('Write key: project "%s".', 'onetrace-for-woocommerce')
                             /* translators: %s: project name */
-                            : __('Secret key: project "%s".', 'onetrace-woocommerce'),
+                            : __('Secret key: project "%s".', 'onetrace-for-woocommerce'),
                         (string) ($answer['project']['name'] ?? '')
-                    ) . ($missing ? ' ' . __('The key has no products.write permission: the catalog will not be uploaded.', 'onetrace-woocommerce') : ''),
+                    ) . ($missing ? ' ' . __('The key has no products.write permission: the catalog will not be uploaded.', 'onetrace-for-woocommerce') : ''),
                 ];
             } catch (\Throwable $error) {
-                $results[] = ['error', sprintf('%s: %s', $key === 'write' ? __('Write key', 'onetrace-woocommerce') : __('Secret key', 'onetrace-woocommerce'), $error->getMessage())];
+                $results[] = ['error', sprintf('%s: %s', $key === 'write' ? __('Write key', 'onetrace-for-woocommerce') : __('Secret key', 'onetrace-for-woocommerce'), $error->getMessage())];
             }
         }
 
         if ($results === []) {
-            $results[] = ['error', __('Enter the platform address and the keys first.', 'onetrace-woocommerce')];
+            $results[] = ['error', __('Enter the platform address and the keys first.', 'onetrace-for-woocommerce')];
         } elseif (!\in_array('error', array_column($results, 0), true)) {
             delete_option(Queue::PAUSED_OPTION);
             Queue::schedule();
@@ -194,7 +194,7 @@ final class Admin
         self::authorize();
         Catalog::syncAll();
         update_option('onetrace_catalog_synced', time(), false);
-        set_transient('onetrace_notice_' . get_current_user_id(), [['success', __('The catalog upload has started; it runs in the background.', 'onetrace-woocommerce')]], 60);
+        set_transient('onetrace_notice_' . get_current_user_id(), [['success', __('The catalog upload has started; it runs in the background.', 'onetrace-for-woocommerce')]], 60);
         wp_safe_redirect(self::url());
         exit;
     }
@@ -216,9 +216,9 @@ final class Admin
         if (\is_string($paused) && current_user_can('manage_woocommerce')) {
             printf(
                 '<div class="notice notice-error"><p>%s <a href="%s">%s</a></p><p><code>%s</code></p></div>',
-                esc_html__('OneTrace: sending is paused because the platform rejected the key. Check the keys and save the settings.', 'onetrace-woocommerce'),
+                esc_html__('OneTrace: sending is paused because the platform rejected the key. Check the keys and save the settings.', 'onetrace-for-woocommerce'),
                 esc_url(self::url()),
-                esc_html__('Settings', 'onetrace-woocommerce'),
+                esc_html__('Settings', 'onetrace-for-woocommerce'),
                 esc_html($paused)
             );
         }
@@ -229,26 +229,26 @@ final class Admin
         $stats = Queue::stats();
         $error = Queue::lastError();
 
-        echo '<h2>' . esc_html__('Status', 'onetrace-woocommerce') . '</h2><table class="form-table"><tbody>';
+        echo '<h2>' . esc_html__('Status', 'onetrace-for-woocommerce') . '</h2><table class="form-table"><tbody>';
         printf(
             '<tr><th>%s</th><td>%s</td></tr>',
-            esc_html__('Queue', 'onetrace-woocommerce'),
+            esc_html__('Queue', 'onetrace-for-woocommerce'),
             esc_html(sprintf(
                 /* translators: 1: items waiting, 2: items waiting for a retry */
-                __('%1$d waiting, %2$d of them after an error', 'onetrace-woocommerce'),
+                __('%1$d waiting, %2$d of them after an error', 'onetrace-for-woocommerce'),
                 $stats['waiting'],
                 $stats['retrying']
             ))
         );
 
         if ($error !== null) {
-            printf('<tr><th>%s</th><td><code>%s</code></td></tr>', esc_html__('Last error', 'onetrace-woocommerce'), esc_html($error));
+            printf('<tr><th>%s</th><td><code>%s</code></td></tr>', esc_html__('Last error', 'onetrace-for-woocommerce'), esc_html($error));
         }
 
         echo '</tbody></table><p>';
-        self::button('onetrace_test', __('Test connection', 'onetrace-woocommerce'));
+        self::button('onetrace_test', __('Test connection', 'onetrace-for-woocommerce'));
         echo ' ';
-        self::button('onetrace_sync', __('Upload the whole catalog', 'onetrace-woocommerce'));
+        self::button('onetrace_sync', __('Upload the whole catalog', 'onetrace-for-woocommerce'));
         echo '</p>';
     }
 
@@ -263,7 +263,7 @@ final class Admin
     private static function authorize(): void
     {
         if (!current_user_can('manage_woocommerce')) {
-            wp_die(esc_html__('You are not allowed to do this.', 'onetrace-woocommerce'), 403);
+            wp_die(esc_html__('You are not allowed to do this.', 'onetrace-for-woocommerce'), 403);
         }
     }
 }

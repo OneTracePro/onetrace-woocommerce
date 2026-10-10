@@ -1,6 +1,7 @@
 * text=auto eol=lf
 
 /.github export-ignore
+/.wordpress-org export-ignore
 /tests export-ignore
 /bin export-ignore
 /.gitattributes export-ignore

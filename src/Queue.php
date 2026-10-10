@@ -102,7 +102,7 @@ final class Queue
 
         if ($unique) {
             // A newer change of the same product replaces the waiting one (upload ⇄ delete).
-            $wpdb->query($wpdb->prepare('DELETE FROM ' . self::table() . ' WHERE item_key = %s AND attempts = 0', $key));
+            $wpdb->query($wpdb->prepare('DELETE FROM %i WHERE item_key = %s AND attempts = 0', self::table(), $key));
         }
 
         $wpdb->insert(self::table(), ['kind' => $kind, 'item_key' => $key, 'payload' => $payload, 'available_at' => $now, 'created_at' => $now]);
@@ -174,7 +174,7 @@ final class Queue
     {
         global $wpdb;
 
-        $rows = $wpdb->get_results('SELECT kind, COUNT(*) AS waiting, SUM(attempts > 0) AS retrying FROM ' . self::table() . ' GROUP BY kind', ARRAY_A) ?: [];
+        $rows = $wpdb->get_results($wpdb->prepare('SELECT kind, COUNT(*) AS waiting, SUM(attempts > 0) AS retrying FROM %i GROUP BY kind', self::table()), ARRAY_A) ?: [];
         $stats = ['waiting' => 0, 'retrying' => 0];
 
         foreach ($rows as $row) {
@@ -199,7 +199,7 @@ final class Queue
     {
         global $wpdb;
 
-        $error = $wpdb->get_var('SELECT last_error FROM ' . self::table() . ' WHERE last_error IS NOT NULL ORDER BY id DESC LIMIT 1');
+        $error = $wpdb->get_var($wpdb->prepare('SELECT last_error FROM %i WHERE last_error IS NOT NULL ORDER BY id DESC LIMIT 1', self::table()));
 
         return \is_string($error) ? $error : null;
     }
@@ -213,7 +213,8 @@ final class Queue
 
         /** @var list<array{id: string, kind: string, payload: string, attempts: string}> */
         return $wpdb->get_results($wpdb->prepare(
-            'SELECT id, kind, payload, attempts FROM ' . self::table() . ' WHERE kind = %s AND available_at <= %s ORDER BY id LIMIT %d',
+            'SELECT id, kind, payload, attempts FROM %i WHERE kind = %s AND available_at <= %s ORDER BY id LIMIT %d',
+            self::table(),
             $kind,
             gmdate('Y-m-d H:i:s'),
             $limit
@@ -327,7 +328,9 @@ final class Queue
         global $wpdb;
 
         if ($ids !== []) {
-            $wpdb->query('DELETE FROM ' . self::table() . ' WHERE id IN (' . implode(',', array_map('intval', $ids)) . ')');
+            $placeholders = implode(',', array_fill(0, \count($ids), '%d'));
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- one %d per id.
+            $wpdb->query($wpdb->prepare("DELETE FROM %i WHERE id IN ({$placeholders})", self::table(), ...array_map('intval', $ids)));
         }
     }
 
@@ -335,7 +338,7 @@ final class Queue
     {
         global $wpdb;
 
-        $next = $wpdb->get_var('SELECT MIN(available_at) FROM ' . self::table());
+        $next = $wpdb->get_var($wpdb->prepare('SELECT MIN(available_at) FROM %i', self::table()));
 
         return \is_string($next) ? (int) strtotime($next . ' UTC') : null;
     }

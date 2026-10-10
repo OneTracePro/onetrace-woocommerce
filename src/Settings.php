@@ -84,7 +84,7 @@ final class Settings
     {
         $label = trim((string) self::get('consent_label'));
 
-        return $label !== '' ? $label : __('Send me news and special offers by email', 'onetrace-woocommerce');
+        return $label !== '' ? $label : __('Send me news and special offers by email', 'onetrace-for-woocommerce');
     }
 
     /** Subscription topic of the consent checkboxes; null — the whole email channel. */

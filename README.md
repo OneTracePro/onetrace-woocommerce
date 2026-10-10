@@ -28,7 +28,7 @@ By default `product_id` is the post ID. If the catalog and history of your proje
 
 ## Installation
 
-1. Download `onetrace-woocommerce.zip` from the [latest release](https://github.com/OneTracePro/onetrace-woocommerce/releases/latest) and upload it in **Plugins → Add New → Upload Plugin**.
+1. Install **OneTrace for WooCommerce** from the WordPress plugin directory (**Plugins → Add New Plugin**, [wordpress.org/plugins/onetrace-for-woocommerce](https://wordpress.org/plugins/onetrace-for-woocommerce/)), or upload `onetrace-for-woocommerce.zip` from the [latest release](https://github.com/OneTracePro/onetrace-woocommerce/releases/latest) in **Plugins → Add New → Upload Plugin**.
 2. In your OneTrace project, open **API keys** and create a write key (for the storefront) and a secret key with the `products.write` permission (for the server).
 3. In **WooCommerce → Settings → OneTrace** enter the platform address (the domain you open OneTrace at) and both keys, then click **Test connection**.
 
@@ -74,10 +74,18 @@ composer install
 tests/env/run.sh                                            # integration tests: latest WordPress and WooCommerce in Docker
 WP_TAG=6.8-php8.1-apache WC_VERSION=9.9.5 tests/env/run.sh  # older versions
 vendor/bin/phpstan analyse
-php bin/build.php && tests/env/smoke.sh                     # dist/onetrace-woocommerce.zip and a smoke test over cURL
+php bin/build.php && tests/env/smoke.sh                     # dist/onetrace-for-woocommerce.zip and a smoke test over cURL
 ```
 
 The build bundles the onetrace-php library under the plugin's namespace (`OneTrace\WooCommerce\Vendor\OneTrace`), so another plugin with a different version of the library cannot conflict with it.
+
+## Releases
+
+The plugin is published at [wordpress.org/plugins/onetrace-for-woocommerce](https://wordpress.org/plugins/onetrace-for-woocommerce/) (SVN `plugins.svn.wordpress.org/onetrace-for-woocommerce`) by CI:
+
+1. Raise the version in the plugin header, `ONETRACE_WC_VERSION` and `Stable tag` of `readme.txt`; add the changelog to `CHANGELOG.md` and `readme.txt`.
+2. Push a tag `vX.Y.Z` and create the GitHub release. After the tests and the smoke test the build goes to `trunk` and `tags/X.Y.Z` of the wordpress.org SVN (job **Publish to wordpress.org**, environment `wordpress.org` with the secrets `SVN_USERNAME` and `SVN_PASSWORD` — the SVN password of the wordpress.org account), the zip — to the GitHub release.
+3. `readme.txt` (for example "Tested up to") and the page images in `.wordpress-org/` (banners, icons, screenshots) follow `main` without a release (workflow **wordpress.org readme and images**) once the stable version is published.
 
 ## License
 

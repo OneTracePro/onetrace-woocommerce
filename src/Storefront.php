@@ -128,7 +128,7 @@ final class Storefront
      */
     public static function pushButton($attributes): string
     {
-        $attributes = shortcode_atts(['label' => __('Get notifications', 'onetrace-woocommerce')], \is_array($attributes) ? $attributes : [], 'onetrace_push_button');
+        $attributes = shortcode_atts(['label' => __('Get notifications', 'onetrace-for-woocommerce')], \is_array($attributes) ? $attributes : [], 'onetrace_push_button');
 
         return sprintf(
             '<button type="button" class="button onetrace-push" onclick="window.cdp&&cdp.push&&cdp.push.subscribe().then(function(){this.disabled=true}.bind(this))">%s</button>',

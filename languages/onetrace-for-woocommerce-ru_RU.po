@@ -11,7 +11,7 @@ msgstr ""
 "PO-Revision-Date: 2026-10-08T17:53:43+00:00\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Domain: onetrace-woocommerce\n"
+"X-Domain: onetrace-for-woocommerce\n"
 
 #. Plugin Name of the plugin
 #: onetrace-woocommerce.php
@@ -285,3 +285,9 @@ msgstr "Артикул (ID записи, если артикула нет)"
 #: src/Admin.php:85
 msgid "Choose SKU if your OneTrace project already has the catalog and history under SKUs, e.g. after moving from another platform."
 msgstr "Выберите артикул, если каталог и история проекта OneTrace уже ведутся по артикулам, например после переезда с другой платформы."
+
+#. translators: 1: folder of the active copy, 2: folder of the inactive copy
+#: onetrace-woocommerce.php
+#, php-format
+msgid "OneTrace for WooCommerce is installed twice: the copy in the %1$s folder works, the copy in the %2$s folder is not loaded. Deactivate and delete the copy in %2$s — settings stay."
+msgstr "OneTrace для WooCommerce установлен дважды: работает копия в папке %1$s, копия в папке %2$s не загружается. Отключите и удалите копию в %2$s — настройки сохранятся."

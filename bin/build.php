@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Builds dist/onetrace-woocommerce.zip for WordPress: production files only, the onetrace-php library inside the
+ * Builds dist/onetrace-for-woocommerce.zip for WordPress (the folder is the wordpress.org slug): production files only, the onetrace-php library inside the
  * plugin under its own namespace (OneTrace\WooCommerce\Vendor\OneTrace) so another plugin with a different
  * version of the library cannot conflict with it, and a small autoloader instead of Composer's.
  *
@@ -11,7 +11,7 @@
 declare(strict_types=1);
 
 $root = dirname(__DIR__);
-$build = $root . '/build/onetrace-woocommerce';
+$build = $root . '/build/onetrace-for-woocommerce';
 $library = $root . '/vendor/onetracepro/onetrace-php';
 $prefix = 'OneTrace\\WooCommerce\\Vendor\\';
 
@@ -110,14 +110,14 @@ foreach ($files as $file) {
 }
 
 @mkdir($root . '/dist');
-$zipPath = $root . '/dist/onetrace-woocommerce.zip';
+$zipPath = $root . '/dist/onetrace-for-woocommerce.zip';
 @unlink($zipPath);
 $zip = new ZipArchive();
 $zip->open($zipPath, ZipArchive::CREATE);
 
 foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($build, FilesystemIterator::SKIP_DOTS)) as $file) {
-    $zip->addFile($file->getPathname(), 'onetrace-woocommerce/' . substr($file->getPathname(), strlen($build) + 1));
+    $zip->addFile($file->getPathname(), 'onetrace-for-woocommerce/' . substr($file->getPathname(), strlen($build) + 1));
 }
 
 $zip->close();
-echo "dist/onetrace-woocommerce.zip\n";
+echo "dist/onetrace-for-woocommerce.zip\n";

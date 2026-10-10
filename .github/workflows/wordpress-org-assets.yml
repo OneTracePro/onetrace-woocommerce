@@ -1,0 +1,44 @@
+name: wordpress.org readme and images
+
+# The plugin page between releases: "Tested up to", texts, screenshots and banners from main. Code goes to wordpress.org
+# only with a version tag (CI → Publish to wordpress.org).
+on:
+  push:
+    branches: [main]
+    paths:
+      - readme.txt
+      - .wordpress-org/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  assets:
+    name: Update readme and images
+    runs-on: ubuntu-latest
+    environment:
+      name: wordpress.org
+      url: https://wordpress.org/plugins/onetrace-for-woocommerce/
+    concurrency: wordpress-org
+    steps:
+      - uses: actions/checkout@v7
+      # Stable tag of the new version before its tag is published: the release job brings the readme with the code.
+      - name: Is the stable version published?
+        id: stable
+        run: |
+          stable=$(grep -m1 -E '^Stable tag:' readme.txt | awk '{print $NF}')
+          if svn info "https://plugins.svn.wordpress.org/onetrace-for-woocommerce/tags/${stable}" >/dev/null 2>&1; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Version ${stable} is not on wordpress.org yet: the release job will publish the readme"
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.stable.outputs.publish == 'true'
+        uses: 10up/action-wordpress-plugin-asset-update@2480306f6f693672726d08b5917ea114cb2825f7 # 2.2.0
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: onetrace-for-woocommerce
+          ASSETS_DIR: .wordpress-org
+          IGNORE_OTHER_FILES: true

@@ -25,7 +25,7 @@
 
 ## Установка
 
-1. Скачайте `onetrace-woocommerce.zip` из [последнего релиза](https://github.com/OneTracePro/onetrace-woocommerce/releases/latest) и загрузите в **Плагины → Добавить новый → Загрузить плагин**.
+1. Установите **OneTrace для WooCommerce** из каталога плагинов WordPress (**Плагины → Добавить новый**, [wordpress.org/plugins/onetrace-for-woocommerce](https://wordpress.org/plugins/onetrace-for-woocommerce/)) или загрузите `onetrace-for-woocommerce.zip` из [последнего релиза](https://github.com/OneTracePro/onetrace-woocommerce/releases/latest) в **Плагины → Добавить новый → Загрузить плагин**.
 2. В проекте OneTrace откройте **Ключи API** и создайте ключ записи (для витрины) и секретный ключ с правом `products.write` (для сервера).
 3. В **WooCommerce → Настройки → OneTrace** укажите адрес платформы (домен, по которому вы открываете OneTrace) и оба ключа, нажмите **Проверить подключение**.
 
@@ -64,8 +64,12 @@ composer install
 tests/env/run.sh                                            # интеграционные тесты: свежие WordPress и WooCommerce в Docker
 WP_TAG=6.8-php8.1-apache WC_VERSION=9.9.5 tests/env/run.sh  # старые версии
 vendor/bin/phpstan analyse
-php bin/build.php && tests/env/smoke.sh                     # dist/onetrace-woocommerce.zip и проверка через cURL
+php bin/build.php && tests/env/smoke.sh                     # dist/onetrace-for-woocommerce.zip и проверка через cURL
 ```
+
+## Выпуск
+
+Плагин публикуется на [wordpress.org/plugins/onetrace-for-woocommerce](https://wordpress.org/plugins/onetrace-for-woocommerce/) из CI: версия в заголовке плагина, `ONETRACE_WC_VERSION` и `Stable tag` в `readme.txt`, изменения в `CHANGELOG.md` и `readme.txt` → тег `vX.Y.Z` и релиз на GitHub. После тестов сборка уходит в `trunk` и `tags/X.Y.Z` SVN wordpress.org (окружение `wordpress.org`, секреты `SVN_USERNAME` и `SVN_PASSWORD`), zip — в релиз GitHub. `readme.txt` и картинки страницы из `.wordpress-org/` обновляются из `main` без релиза.
 
 ## Лицензия
 

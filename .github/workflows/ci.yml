@@ -71,10 +71,43 @@ jobs:
       - run: tests/env/run.sh >/dev/null && tests/env/smoke.sh
       - uses: actions/upload-artifact@v7
         with:
-          name: onetrace-woocommerce
-          path: dist/onetrace-woocommerce.zip
+          name: onetrace-for-woocommerce
+          path: dist/onetrace-for-woocommerce.zip
       - name: Attach the zip to the release
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${GITHUB_REF_NAME}" dist/onetrace-woocommerce.zip --clobber
+        run: gh release upload "${GITHUB_REF_NAME}" dist/onetrace-for-woocommerce.zip --clobber
+
+  wordpress-org:
+    name: Publish to wordpress.org
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: startsWith(github.ref, 'refs/tags/v')
+    # Secrets SVN_USERNAME and SVN_PASSWORD (SVN password of the wordpress.org account) — in this environment only.
+    environment:
+      name: wordpress.org
+      url: https://wordpress.org/plugins/onetrace-for-woocommerce/
+    concurrency: wordpress-org
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v7
+        with:
+          name: onetrace-for-woocommerce
+          path: dist
+      - name: Unpack the tested build and check the versions
+        run: |
+          unzip -q dist/onetrace-for-woocommerce.zip -d build
+          version="${GITHUB_REF_NAME#v}"
+          plugin=build/onetrace-for-woocommerce
+          grep -Eq "^ \* Version: +${version}$" "$plugin/onetrace-woocommerce.php" || { echo "Version in the plugin header is not ${version}"; exit 1; }
+          grep -q "define('ONETRACE_WC_VERSION', '${version}');" "$plugin/onetrace-woocommerce.php" || { echo "ONETRACE_WC_VERSION is not ${version}"; exit 1; }
+          grep -Eq "^Stable tag: ${version}$" "$plugin/readme.txt" || { echo "Stable tag in readme.txt is not ${version}"; exit 1; }
+      # trunk = the tested build, tags/<version>, directory images from .wordpress-org.
+      - uses: 10up/action-wordpress-plugin-deploy@54bd289b8525fd23a5c365ec369185f2966529c2 # 2.3.0
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: onetrace-for-woocommerce
+          BUILD_DIR: build/onetrace-for-woocommerce
+          ASSETS_DIR: .wordpress-org

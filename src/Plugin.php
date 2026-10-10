@@ -19,7 +19,7 @@ final class Plugin
 
     public function boot(): void
     {
-        load_plugin_textdomain('onetrace-woocommerce', false, \dirname(plugin_basename(ONETRACE_WC_FILE)) . '/languages');
+        load_plugin_textdomain('onetrace-for-woocommerce', false, \dirname(plugin_basename(ONETRACE_WC_FILE)) . '/languages');
 
         if (get_option('onetrace_db_version') !== ONETRACE_WC_VERSION) {
             Queue::install();

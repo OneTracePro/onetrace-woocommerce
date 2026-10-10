@@ -2,6 +2,12 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.5.0 — 2026-10-10
+
+- Published on wordpress.org: https://wordpress.org/plugins/onetrace-for-woocommerce/ — the plugin folder, the release zip (`onetrace-for-woocommerce.zip`) and the text domain are `onetrace-for-woocommerce`, so the zip from GitHub and the directory version are the same plugin and update from the WordPress admin.
+- A second copy of the plugin (an older zip from GitHub in the `onetrace-woocommerce` folder) is not loaded: it shows an admin notice to deactivate and delete it. Settings and the queue are shared.
+- Releases are published to wordpress.org by CI from the version tag; readme and directory images follow the main branch.
+
 ## 1.4.0 — 2026-10-09
 
 - Search redirects: a query with a redirect rule (Site → Search of the platform, e.g. "delivery" → the delivery page) opens that page instead of the search results.
