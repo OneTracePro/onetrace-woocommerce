@@ -32,6 +32,7 @@ final class Settings
         'push' => 'no',
         'search' => 'no',
         'product_id' => 'id',
+        'loyalty' => 'no',
     ];
 
     /**

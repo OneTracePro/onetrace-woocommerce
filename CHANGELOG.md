@@ -2,6 +2,13 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.6.0 — 2026-10-13
+
+- Bonus points of the OneTrace loyalty program: signed-in customers see their balance and pay for part of the order with points in the cart and at checkout — classic pages and the Cart and Checkout blocks. The points are held for 30 minutes (a negative fee in the totals), confirmed with the order number when the order is placed (retried from Action Scheduler if the platform is unavailable) and returned by the platform when the order is cancelled or refunded.
+- My account → Bonus points: the balance, points waiting for the return period, the tier, points expiring soon and the latest operations; the "Join the program" button for programs with explicit enrollment.
+- Settings → OneTrace → Loyalty program; "Test connection" checks the loyalty.read and loyalty.write permissions of the secret key.
+- Requires onetrace-php 1.6.
+
 ## 1.5.1 — 2026-10-10
 
 - The plugin starts once per request: an older copy without the second-copy check (1.4.0 and earlier, a zip from GitHub in the `onetrace-woocommerce` folder) booted the same classes again from its own callback. Hooks are static methods, so nothing ran twice, but this no longer depends on it.

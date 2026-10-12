@@ -99,6 +99,10 @@ final class Admin
             $field('push', ['type' => 'checkbox', 'title' => __('Web Push', 'onetrace-for-woocommerce'), 'desc' => __('Serve /cdp-sw.js from the store root; put the [onetrace_push_button] shortcode where visitors subscribe', 'onetrace-for-woocommerce')]),
             $field('search', ['type' => 'checkbox', 'title' => __('Product search', 'onetrace-for-woocommerce'), 'desc' => __('Results of the store search and suggestions while typing come from OneTrace (the plan of the project must include product search); on an error — the usual WordPress search', 'onetrace-for-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_widgets'],
+
+            ['type' => 'title', 'id' => 'onetrace_loyalty', 'title' => __('Loyalty program', 'onetrace-for-woocommerce'), 'desc' => __('The program is set up in the "Loyalty" section of the platform. Signed-in customers pay for part of the order with points in the cart and at checkout and see their points in My account → Bonus points.', 'onetrace-for-woocommerce')],
+            $field('loyalty', ['type' => 'checkbox', 'title' => __('Bonus points', 'onetrace-for-woocommerce'), 'desc' => __('Show the balance and use points in the cart and at checkout (the secret key needs the loyalty.read and loyalty.write permissions)', 'onetrace-for-woocommerce')]),
+            ['type' => 'sectionend', 'id' => 'onetrace_loyalty'],
         ];
     }
 
@@ -160,8 +164,9 @@ final class Admin
             try {
                 $answer = Connection::client($key)->checkKey($key);
                 $missing = $key === 'secret' && !\in_array('products.write', $answer['scopes'], true) && Settings::enabled('catalog');
+                $loyalty = $key === 'secret' && Settings::enabled('loyalty') && array_diff(['loyalty.read', 'loyalty.write'], $answer['scopes']) !== [];
                 $results[] = [
-                    $answer['type'] === $key && !$missing ? 'success' : 'warning',
+                    $answer['type'] === $key && !$missing && !$loyalty ? 'success' : 'warning',
                     sprintf(
                         $key === 'write'
                             /* translators: %s: project name */
@@ -169,7 +174,8 @@ final class Admin
                             /* translators: %s: project name */
                             : __('Secret key: project "%s".', 'onetrace-for-woocommerce'),
                         (string) ($answer['project']['name'] ?? '')
-                    ) . ($missing ? ' ' . __('The key has no products.write permission: the catalog will not be uploaded.', 'onetrace-for-woocommerce') : ''),
+                    ) . ($missing ? ' ' . __('The key has no products.write permission: the catalog will not be uploaded.', 'onetrace-for-woocommerce') : '')
+                    . ($loyalty ? ' ' . __('The key has no loyalty.read and loyalty.write permissions: bonus points will not work.', 'onetrace-for-woocommerce') : ''),
                 ];
             } catch (\Throwable $error) {
                 $results[] = ['error', sprintf('%s: %s', $key === 'write' ? __('Write key', 'onetrace-for-woocommerce') : __('Secret key', 'onetrace-for-woocommerce'), $error->getMessage())];

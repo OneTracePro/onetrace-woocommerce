@@ -58,7 +58,7 @@ $scope = static function (string $code) use ($prefix): string {
 $remove($root . '/build');
 @mkdir($build . '/vendor/onetrace-php', 0777, true);
 
-foreach (['onetrace-woocommerce.php', 'uninstall.php', 'readme.txt', 'LICENSE', 'src', 'languages'] as $entry) {
+foreach (['onetrace-woocommerce.php', 'uninstall.php', 'readme.txt', 'LICENSE', 'src', 'languages', 'assets'] as $entry) {
     $copy($root . '/' . $entry, $build . '/' . $entry);
 }
 

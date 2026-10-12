@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.5.1
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,12 +26,13 @@ This plugin connects your WooCommerce store:
 * Recommendation widgets and Web Push.
 * Product search: the store search results and suggestions while typing come from OneTrace — word forms, typos, the wrong keyboard layout and the visitor's interests; the usual search on any error.
 * Catalog languages from TranslatePress, WPML and Polylang: recommendations, search and emails in the visitor's language.
+* Loyalty program: signed-in customers pay with bonus points in the cart and at checkout and see their points in My account.
 
 HPOS and the Cart and Checkout blocks are supported.
 
 = External service =
 
-The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders, cart events and the product catalog from the server; page and product views from the visitor's browser. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
+The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders, cart events and the product catalog from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points; page and product views from the visitor's browser. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
 
 == Installation ==
 
@@ -57,6 +58,10 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
 
 == Changelog ==
+
+= 1.6.0 =
+* Bonus points of the OneTrace loyalty program: the balance and paying for part of the order with points in the cart and at checkout (classic and block), confirmed with the order number; returned when the order is cancelled or refunded.
+* My account → Bonus points: balance, pending points, tier, points expiring soon and the history; joining the program.
 
 = 1.5.1 =
 * With an older copy of the plugin still active (a zip from GitHub, 1.4.0 and earlier), the plugin starts once: the older copy no longer boots it again.

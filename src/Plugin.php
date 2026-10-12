@@ -48,6 +48,7 @@ final class Plugin
         Catalog::register();
         Storefront::register();
         Search::register();
+        Loyalty::register();
 
         if (is_admin()) {
             Admin::register();

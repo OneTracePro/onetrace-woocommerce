@@ -46,6 +46,16 @@ define('ONETRACE_SECRET_KEY', 'cdp_sk_…');
 - Product search: turn on "Product search" (the plan of the OneTrace project must include it). The product search of the store (`?s=…&post_type=product`, the search box of the theme and the product search block) keeps the theme template, but its products, their order and the number of pages come from OneTrace: word forms, typos, the wrong keyboard layout, the visitor's interests. The search boxes get suggestions while typing (products, categories, popular queries). The results page sends the `search` event from the server. On any API error or after 3 seconds the usual WordPress search runs.
 - Web Push: turn it on in the settings — the plugin serves `/cdp-sw.js` from the store root (pretty permalinks are required) — and put `[onetrace_push_button]` where visitors subscribe.
 
+## Loyalty program
+
+Turn on "Bonus points" in **Settings → OneTrace → Loyalty program**; the program itself (earning, tiers, the share of an order payable with points) is set up in the **Loyalty** section of the platform, and the secret key needs the `loyalty.read` and `loyalty.write` permissions.
+
+- **Cart and checkout** (classic pages and the Cart and Checkout blocks): a signed-in customer sees the balance, how many points the cart can take and the points for the order, enters the points and clicks "Use points". The points are held on the platform for 30 minutes and the discount is a negative fee in the totals; when the cart changes, the points are held again within the allowed share. Guests see a hint to sign in.
+- **Order:** the hold is confirmed with the order number when the order is placed; if the platform is unavailable, Action Scheduler retries. Cancelled and refunded orders return the points on the platform (the order events).
+- **My account → Bonus points:** the balance, points waiting for the return period, the tier, points expiring soon and the latest operations; "Join the program" for programs with explicit enrollment.
+
+Customers are found on the platform by `user_id` (the WordPress user id), like in the order events.
+
 ## Privacy
 
 - With a consent plugin that supports the [WP Consent API](https://wordpress.org/plugins/wp-consent-api/), the tracker loads after the visitor agrees to statistics cookies (can be turned off in the settings).
