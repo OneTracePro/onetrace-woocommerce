@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: OneTrace for WooCommerce 1.5.1\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/onetrace-for-woocommerce\n"
+"Project-Id-Version: OneTrace for WooCommerce 1.6.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/onetrace-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-12T20:51:25+00:00\n"
+"POT-Creation-Date: 2026-10-13T10:48:20+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: onetrace-for-woocommerce\n"
@@ -46,7 +46,7 @@ msgid "OneTrace for WooCommerce is installed twice: the copy in the %1$s folder 
 msgstr ""
 
 #: src/Admin.php:45
-#: src/Admin.php:227
+#: src/Admin.php:235
 msgid "Settings"
 msgstr ""
 
@@ -71,7 +71,7 @@ msgid "The address you open the platform at: the domain of your brand."
 msgstr ""
 
 #: src/Admin.php:75
-#: src/Admin.php:181
+#: src/Admin.php:189
 msgid "Write key"
 msgstr ""
 
@@ -80,7 +80,7 @@ msgid "For the tracker on the storefront."
 msgstr ""
 
 #: src/Admin.php:76
-#: src/Admin.php:181
+#: src/Admin.php:189
 msgid "Secret key"
 msgstr ""
 
@@ -185,7 +185,7 @@ msgid "Checkbox text"
 msgstr ""
 
 #: src/Admin.php:92
-#: src/Settings.php:88
+#: src/Settings.php:90
 msgid "Send me news and special offers by email"
 msgstr ""
 
@@ -238,7 +238,7 @@ msgid "The program is set up in the \"Loyalty\" section of the platform. Signed-
 msgstr ""
 
 #: src/Admin.php:104
-#: src/LoyaltyAccount.php:72
+#: src/LoyaltyAccount.php:73
 #: src/LoyaltyBlocks.php:78
 #: src/LoyaltyCart.php:52
 #: src/LoyaltyCart.php:53
@@ -249,115 +249,143 @@ msgstr ""
 msgid "Show the balance and use points in the cart and at checkout (the secret key needs the loyalty.read and loyalty.write permissions)"
 msgstr ""
 
-#: src/Admin.php:119
+#: src/Admin.php:105
+msgid "Referrals"
+msgstr ""
+
+#: src/Admin.php:105
+msgid "The \"Friend's code\" field in the registration form. Without it the code of a referral link (?ref=) still counts: the tracker keeps it in a cookie."
+msgstr ""
+
+#: src/Admin.php:108
+msgid "Promo codes"
+msgstr ""
+
+#: src/Admin.php:108
+msgid "Unique codes of OneTrace promo code pools become WooCommerce coupons every 5 minutes: with the discount, restrictions and expiry of a template coupon, one use each. Create the template coupon in Marketing → Coupons and bind it to the pool key from the \"Promo codes\" section of the platform."
+msgstr ""
+
+#: src/Admin.php:109
+msgid "Pools and template coupons"
+msgstr ""
+
+#: src/Admin.php:109
+msgid "One per line: pool key = template coupon code. The secret key needs the promo.read permission."
+msgstr ""
+
+#: src/Admin.php:124
 msgid "Saved — enter a new key to replace it"
 msgstr ""
 
 #. translators: %s: project name
-#: src/Admin.php:173
+#: src/Admin.php:180
 #, php-format
 msgid "Write key: project \"%s\"."
 msgstr ""
 
 #. translators: %s: project name
-#: src/Admin.php:175
+#: src/Admin.php:182
 #, php-format
 msgid "Secret key: project \"%s\"."
 msgstr ""
 
-#: src/Admin.php:177
+#: src/Admin.php:184
 msgid "The key has no products.write permission: the catalog will not be uploaded."
 msgstr ""
 
-#: src/Admin.php:178
+#: src/Admin.php:185
 msgid "The key has no loyalty.read and loyalty.write permissions: bonus points will not work."
 msgstr ""
 
 #: src/Admin.php:186
+msgid "The key has no promo.read permission: promo codes will not become coupons."
+msgstr ""
+
+#: src/Admin.php:194
 msgid "Enter the platform address and the keys first."
 msgstr ""
 
-#: src/Admin.php:203
+#: src/Admin.php:211
 msgid "The catalog upload has started; it runs in the background."
 msgstr ""
 
-#: src/Admin.php:225
+#: src/Admin.php:233
 msgid "OneTrace: sending is paused because the platform rejected the key. Check the keys and save the settings."
 msgstr ""
 
-#: src/Admin.php:238
+#: src/Admin.php:246
 msgid "Status"
 msgstr ""
 
-#: src/Admin.php:241
+#: src/Admin.php:249
 msgid "Queue"
 msgstr ""
 
 #. translators: 1: items waiting, 2: items waiting for a retry
-#: src/Admin.php:244
+#: src/Admin.php:252
 #, php-format
 msgid "%1$d waiting, %2$d of them after an error"
 msgstr ""
 
-#: src/Admin.php:251
+#: src/Admin.php:259
 msgid "Last error"
 msgstr ""
 
-#: src/Admin.php:255
+#: src/Admin.php:263
 msgid "Test connection"
 msgstr ""
 
-#: src/Admin.php:257
+#: src/Admin.php:265
 msgid "Upload the whole catalog"
 msgstr ""
 
-#: src/Admin.php:272
+#: src/Admin.php:280
 msgid "You are not allowed to do this."
 msgstr ""
 
-#: src/Loyalty.php:154
+#: src/Loyalty.php:155
 msgid "Sign in to use your points."
 msgstr ""
 
 #. translators: %s: number of points
-#: src/Loyalty.php:227
+#: src/Loyalty.php:234
 #, php-format
 msgid "Bonus points (%s)"
 msgid_plural "Bonus points (%s)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/LoyaltyAccount.php:91
+#: src/LoyaltyAccount.php:92
 msgid "Bonus points are not available right now. Please try again later."
 msgstr ""
 
-#: src/LoyaltyAccount.php:99
+#: src/LoyaltyAccount.php:98
 msgid "Join the loyalty program: collect points for orders and pay for part of your next orders with them."
 msgstr ""
 
-#: src/LoyaltyAccount.php:102
+#: src/LoyaltyAccount.php:100
 msgid "Join the program"
 msgstr ""
 
-#: src/LoyaltyAccount.php:109
+#: src/LoyaltyAccount.php:106
 msgid "Available"
 msgstr ""
 
-#: src/LoyaltyAccount.php:110
+#: src/LoyaltyAccount.php:107
 msgid "Pending (available after the return period)"
 msgstr ""
 
-#: src/LoyaltyAccount.php:114
+#: src/LoyaltyAccount.php:111
 msgid "Tier"
 msgstr ""
 
 #. translators: 1: number of points, 2: date
-#: src/LoyaltyAccount.php:119
+#: src/LoyaltyAccount.php:116
 msgid "Expiring soon"
 msgstr ""
 
 #. translators: 1: number of points, 2: date
-#: src/LoyaltyAccount.php:119
+#: src/LoyaltyAccount.php:116
 #, php-format
 msgid "%1$s points on %2$s"
 msgstr ""
@@ -378,35 +406,75 @@ msgstr ""
 msgid "Points"
 msgstr ""
 
-#: src/LoyaltyAccount.php:166
+#: src/LoyaltyAccount.php:140
+msgid "Joined by invitation"
+msgstr ""
+
+#: src/LoyaltyAccount.php:140
+msgid "A friend placed a first order"
+msgstr ""
+
+#: src/LoyaltyAccount.php:171
+msgid "Invite friends"
+msgstr ""
+
+#: src/LoyaltyAccount.php:172
+msgid "Share your link: a friend gets a welcome gift, and you get points for their first order."
+msgstr ""
+
+#: src/LoyaltyAccount.php:174
+msgid "Copied"
+msgstr ""
+
+#: src/LoyaltyAccount.php:175
+msgid "Copy"
+msgstr ""
+
+#. translators: 1: friends who came, 2: friends with a first order, 3: points for them
+#: src/LoyaltyAccount.php:182
+#, php-format
+msgid "Friends who came: %1$s, placed an order: %2$s, points for them: %3$s"
+msgstr ""
+
+#: src/LoyaltyAccount.php:208
+msgid "Your promo codes"
+msgstr ""
+
+#. translators: %s: date
+#: src/LoyaltyAccount.php:216
+#, php-format
+msgid "valid until %s"
+msgstr ""
+
+#: src/LoyaltyAccount.php:238
 msgid "Welcome to the loyalty program!"
 msgstr ""
 
-#: src/LoyaltyAccount.php:169
+#: src/LoyaltyAccount.php:241
 msgid "Could not join the program. Please try again later."
 msgstr ""
 
-#: src/LoyaltyAccount.php:179
+#: src/LoyaltyAccount.php:251
 msgid "Earned"
 msgstr ""
 
-#: src/LoyaltyAccount.php:180
+#: src/LoyaltyAccount.php:252
 msgid "Earning cancelled"
 msgstr ""
 
-#: src/LoyaltyAccount.php:181
+#: src/LoyaltyAccount.php:253
 msgid "Expired"
 msgstr ""
 
-#: src/LoyaltyAccount.php:182
+#: src/LoyaltyAccount.php:254
 msgid "Adjustment"
 msgstr ""
 
-#: src/LoyaltyAccount.php:183
+#: src/LoyaltyAccount.php:255
 msgid "Used in an order"
 msgstr ""
 
-#: src/LoyaltyAccount.php:184
+#: src/LoyaltyAccount.php:256
 msgid "Returned"
 msgstr ""
 
@@ -465,6 +533,14 @@ msgstr ""
 
 #: src/LoyaltyCart.php:34
 msgid "Could not apply the points. Please try again."
+msgstr ""
+
+#: src/Referrals.php:50
+msgid "Friend's code"
+msgstr ""
+
+#: src/Referrals.php:51
+msgid "(optional)"
 msgstr ""
 
 #: src/Storefront.php:131

@@ -33,6 +33,8 @@ final class Settings
         'search' => 'no',
         'product_id' => 'id',
         'loyalty' => 'no',
+        'referral_field' => 'no',
+        'promo_pools' => '',
     ];
 
     /**

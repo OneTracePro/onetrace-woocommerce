@@ -52,6 +52,7 @@ final class Loyalty
         LoyaltyCart::register();
         LoyaltyBlocks::register();
         LoyaltyAccount::register();
+        Referrals::register();
     }
 
     public static function enabled(): bool

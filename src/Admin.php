@@ -102,7 +102,12 @@ final class Admin
 
             ['type' => 'title', 'id' => 'onetrace_loyalty', 'title' => __('Loyalty program', 'onetrace-for-woocommerce'), 'desc' => __('The program is set up in the "Loyalty" section of the platform. Signed-in customers pay for part of the order with points in the cart and at checkout and see their points in My account → Bonus points.', 'onetrace-for-woocommerce')],
             $field('loyalty', ['type' => 'checkbox', 'title' => __('Bonus points', 'onetrace-for-woocommerce'), 'desc' => __('Show the balance and use points in the cart and at checkout (the secret key needs the loyalty.read and loyalty.write permissions)', 'onetrace-for-woocommerce')]),
+            $field('referral_field', ['type' => 'checkbox', 'title' => __('Referrals', 'onetrace-for-woocommerce'), 'desc' => __('The "Friend\'s code" field in the registration form. Without it the code of a referral link (?ref=) still counts: the tracker keeps it in a cookie.', 'onetrace-for-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_loyalty'],
+
+            ['type' => 'title', 'id' => 'onetrace_promo', 'title' => __('Promo codes', 'onetrace-for-woocommerce'), 'desc' => __('Unique codes of OneTrace promo code pools become WooCommerce coupons every 5 minutes: with the discount, restrictions and expiry of a template coupon, one use each. Create the template coupon in Marketing → Coupons and bind it to the pool key from the "Promo codes" section of the platform.', 'onetrace-for-woocommerce')],
+            $field('promo_pools', ['type' => 'textarea', 'title' => __('Pools and template coupons', 'onetrace-for-woocommerce'), 'placeholder' => 'welcome = WELCOME-TEMPLATE', 'css' => 'min-height:5em;font-family:monospace', 'desc' => __('One per line: pool key = template coupon code. The secret key needs the promo.read permission.', 'onetrace-for-woocommerce')]),
+            ['type' => 'sectionend', 'id' => 'onetrace_promo'],
         ];
     }
 
@@ -142,6 +147,7 @@ final class Admin
         delete_option(Queue::PAUSED_OPTION);
         Connection::reset();
         Queue::schedule();
+        PromoSync::schedule();
 
         if (Settings::server() && Settings::enabled('catalog') && !get_option('onetrace_catalog_synced')) {
             update_option('onetrace_catalog_synced', time(), false);
@@ -165,8 +171,9 @@ final class Admin
                 $answer = Connection::client($key)->checkKey($key);
                 $missing = $key === 'secret' && !\in_array('products.write', $answer['scopes'], true) && Settings::enabled('catalog');
                 $loyalty = $key === 'secret' && Settings::enabled('loyalty') && array_diff(['loyalty.read', 'loyalty.write'], $answer['scopes']) !== [];
+                $promo = $key === 'secret' && PromoSync::pools() !== [] && !\in_array('promo.read', $answer['scopes'], true);
                 $results[] = [
-                    $answer['type'] === $key && !$missing && !$loyalty ? 'success' : 'warning',
+                    $answer['type'] === $key && !$missing && !$loyalty && !$promo ? 'success' : 'warning',
                     sprintf(
                         $key === 'write'
                             /* translators: %s: project name */
@@ -175,7 +182,8 @@ final class Admin
                             : __('Secret key: project "%s".', 'onetrace-for-woocommerce'),
                         (string) ($answer['project']['name'] ?? '')
                     ) . ($missing ? ' ' . __('The key has no products.write permission: the catalog will not be uploaded.', 'onetrace-for-woocommerce') : '')
-                    . ($loyalty ? ' ' . __('The key has no loyalty.read and loyalty.write permissions: bonus points will not work.', 'onetrace-for-woocommerce') : ''),
+                    . ($loyalty ? ' ' . __('The key has no loyalty.read and loyalty.write permissions: bonus points will not work.', 'onetrace-for-woocommerce') : '')
+                    . ($promo ? ' ' . __('The key has no promo.read permission: promo codes will not become coupons.', 'onetrace-for-woocommerce') : ''),
                 ];
             } catch (\Throwable $error) {
                 $results[] = ['error', sprintf('%s: %s', $key === 'write' ? __('Write key', 'onetrace-for-woocommerce') : __('Secret key', 'onetrace-for-woocommerce'), $error->getMessage())];

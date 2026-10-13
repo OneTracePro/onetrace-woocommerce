@@ -49,6 +49,7 @@ final class Plugin
         Storefront::register();
         Search::register();
         Loyalty::register();
+        PromoSync::register();
 
         if (is_admin()) {
             Admin::register();
@@ -74,6 +75,10 @@ final class Plugin
 
         if (Settings::enabled('catalog') && !as_has_scheduled_action('onetrace_daily_catalog', null, Queue::GROUP)) {
             as_schedule_recurring_action(time() + DAY_IN_SECONDS, DAY_IN_SECONDS, 'onetrace_daily_catalog', [], Queue::GROUP);
+        }
+
+        if (PromoSync::pools() !== []) {
+            PromoSync::schedule();
         }
     }
 

@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.6.0
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,13 +26,14 @@ This plugin connects your WooCommerce store:
 * Recommendation widgets and Web Push.
 * Product search: the store search results and suggestions while typing come from OneTrace — word forms, typos, the wrong keyboard layout and the visitor's interests; the usual search on any error.
 * Catalog languages from TranslatePress, WPML and Polylang: recommendations, search and emails in the visitor's language.
-* Loyalty program: signed-in customers pay with bonus points in the cart and at checkout and see their points in My account.
+* Loyalty program: signed-in customers pay with bonus points in the cart and at checkout and see their points in My account; referral links and the friend's code on registration.
+* Promo codes: unique codes of OneTrace pools become WooCommerce coupons of a template coupon.
 
 HPOS and the Cart and Checkout blocks are supported.
 
 = External service =
 
-The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders, cart events and the product catalog from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points; page and product views from the visitor's browser. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
+The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders, cart events and the product catalog from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; page and product views from the visitor's browser. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
 
 == Installation ==
 
@@ -58,6 +59,11 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
 
 == Changelog ==
+
+= 1.7.0 =
+* Promo codes: unique codes of OneTrace promo code pools become WooCommerce coupons every 5 minutes, with the discount, restrictions and expiry of a template coupon, one use each.
+* Referrals: the friend's code from a referral link (?ref=, kept by the tracker) or from the optional "Friend's code" field goes to the platform on registration — the friend gets the welcome reward.
+* My account → Bonus points: the referral link with a copy button, friends who came by it, active promo codes of the customer.
 
 = 1.6.0 =
 * Bonus points of the OneTrace loyalty program: the balance and paying for part of the order with points in the cart and at checkout (classic and block), confirmed with the order number; returned when the order is cancelled or refunded.

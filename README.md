@@ -52,9 +52,20 @@ Turn on "Bonus points" in **Settings → OneTrace → Loyalty program**; the pro
 
 - **Cart and checkout** (classic pages and the Cart and Checkout blocks): a signed-in customer sees the balance, how many points the cart can take and the points for the order, enters the points and clicks "Use points". The points are held on the platform for 30 minutes and the discount is a negative fee in the totals; when the cart changes, the points are held again within the allowed share. Guests see a hint to sign in.
 - **Order:** the hold is confirmed with the order number when the order is placed; if the platform is unavailable, Action Scheduler retries. Cancelled and refunded orders return the points on the platform (the order events).
-- **My account → Bonus points:** the balance, points waiting for the return period, the tier, points expiring soon and the latest operations; "Join the program" for programs with explicit enrollment.
+- **My account → Bonus points:** the balance, points waiting for the return period, the tier, points expiring soon and the latest operations; "Join the program" for programs with explicit enrollment; the referral link with a copy button and the friends who came by it; active promo codes of the customer.
+- **Referrals:** turn on referrals in the platform (Loyalty → Referrals). On registration the friend's code — from a `?ref=` link (the tracker keeps it in the `cdp_ref` cookie for 30 days) or from the optional "Friend's code" field (setting "Referrals") — goes to the platform, and the friend gets the welcome reward; the member gets points for the friend's first order.
 
 Customers are found on the platform by `user_id` (the WordPress user id), like in the order events.
+
+## Promo codes
+
+Pools of promo codes are set up in the **Promo codes** section of the platform; the discount is a coupon of the store. Create a template coupon in **Marketing → Coupons** (discount, products and categories, minimum amount, individual use…) and bind it to the pool in **Settings → OneTrace → Promo codes**, one per line:
+
+```
+welcome = WELCOME-TEMPLATE
+```
+
+Every 5 minutes new and changed unique codes of the pool become coupons with the settings of the template, one use each and the expiry of the code (Action Scheduler, `onetrace_promo_sync`). Coupons of the store with the same code are not touched; pools with one shared code are not synced — create that coupon yourself. The order events carry the coupon, so the platform counts the use. The secret key needs `promo.read`.
 
 ## Privacy
 

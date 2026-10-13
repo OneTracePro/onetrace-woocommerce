@@ -8,7 +8,8 @@ use OneTrace\Exception\NotFoundException;
 
 /**
  * My account → Bonus points: the balance, points waiting for the return period, the tier, points expiring soon and
- * the latest operations; in a program with explicit enrollment — the "Join" button.
+ * the latest operations, the referral link and active promo codes; in a program with explicit enrollment — the "Join"
+ * button.
  */
 final class LoyaltyAccount
 {
@@ -123,6 +124,9 @@ final class LoyaltyAccount
 
         echo '</tbody></table>';
 
+        self::referral($account);
+        self::promoCodes($profile);
+
         if ($operations === []) {
             return;
         }
@@ -133,7 +137,9 @@ final class LoyaltyAccount
             $points = (int) ($operation['points'] ?? 0);
             // The reference of a hold is the cart of the store — not useful to the customer.
             $reference = (string) ($operation['reference'] ?? '');
-            $details = array_filter([(string) ($operation['reason'] ?? ''), (string) ($operation['rule'] ?? ''), strpos($reference, 'wc:') === 0 ? '' : $reference]);
+            $referral = ['friend' => __('Joined by invitation', 'onetrace-for-woocommerce'), 'referrer' => __('A friend placed a first order', 'onetrace-for-woocommerce')][(string) ($operation['referral'] ?? '')] ?? '';
+            // References of holds (the cart) and of referral rewards are internal.
+            $details = array_filter([(string) ($operation['reason'] ?? ''), (string) ($operation['rule'] ?? ''), $referral, preg_match('/^(wc|referral):/', $reference) === 1 ? '' : $reference]);
             printf(
                 '<tr><td>%s</td><td>%s%s</td><td>%s</td></tr>',
                 esc_html(date_i18n(wc_date_format(), (int) strtotime((string) ($operation['created_at'] ?? '')))),
@@ -144,6 +150,74 @@ final class LoyaltyAccount
         }
 
         echo '</tbody></table>';
+    }
+
+    /**
+     * The member's referral link with a copy button and the friends who came by it.
+     *
+     * @param array<string, mixed> $account
+     */
+    private static function referral(array $account): void
+    {
+        $url = \is_string($account['referral_url'] ?? null) ? $account['referral_url'] : '';
+
+        if ($url === '') {
+            return;
+        }
+
+        $referrals = \is_array($account['referrals'] ?? null) ? $account['referrals'] : [];
+        printf(
+            '<h3>%s</h3><p>%s</p><p class="onetrace-referral"><input type="text" class="input-text" readonly value="%s" style="max-width:28em" onclick="this.select()"> <button type="button" class="button" onclick="navigator.clipboard&&navigator.clipboard.writeText(this.previousElementSibling.value);this.textContent=this.dataset.done" data-done="%s">%s</button></p>',
+            esc_html__('Invite friends', 'onetrace-for-woocommerce'),
+            esc_html__('Share your link: a friend gets a welcome gift, and you get points for their first order.', 'onetrace-for-woocommerce'),
+            esc_attr($url),
+            esc_attr__('Copied', 'onetrace-for-woocommerce'),
+            esc_html__('Copy', 'onetrace-for-woocommerce')
+        );
+
+        if ((int) ($referrals['invited'] ?? 0) > 0) {
+            printf(
+                '<p><small>%s</small></p>',
+                /* translators: 1: friends who came, 2: friends with a first order, 3: points for them */
+                esc_html(sprintf(__('Friends who came: %1$s, placed an order: %2$s, points for them: %3$s', 'onetrace-for-woocommerce'), number_format_i18n((int) $referrals['invited']), number_format_i18n((int) ($referrals['rewarded'] ?? 0)), number_format_i18n((int) ($referrals['points'] ?? 0))))
+            );
+        }
+    }
+
+    /**
+     * Active promo codes issued to the customer; nothing without codes or without the promo.read permission.
+     *
+     * @param array{type: string, value: string} $profile
+     */
+    private static function promoCodes(array $profile): void
+    {
+        try {
+            $response = Connection::client()->promo()->profileCodes($profile['type'], $profile['value']);
+        } catch (\Throwable $error) {
+            return;
+        }
+
+        $codes = array_filter(\is_array($response['data'] ?? null) ? $response['data'] : [], static function ($code): bool {
+            return \is_array($code) && !empty($code['active']) && \is_string($code['code'] ?? null);
+        });
+
+        if ($codes === []) {
+            return;
+        }
+
+        printf('<h3>%s</h3><ul class="onetrace-promo-codes">', esc_html__('Your promo codes', 'onetrace-for-woocommerce'));
+
+        foreach ($codes as $code) {
+            $expires = \is_string($code['expires_at'] ?? null) ? strtotime($code['expires_at']) : false;
+            printf(
+                '<li><code>%s</code>%s</li>',
+                esc_html((string) $code['code']),
+                /* translators: %s: date */
+                $expires !== false ? ' <small>' . esc_html(sprintf(__('valid until %s', 'onetrace-for-woocommerce'), date_i18n(wc_date_format(), $expires))) . '</small>' : ''
+            );
+        }
+
+        echo '</ul>';
     }
 
     /**

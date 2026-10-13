@@ -1,18 +1,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: OneTrace for WooCommerce 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/onetrace-for-"
-"woocommerce\n"
-"POT-Creation-Date: 2026-10-12T20:51:25+00:00\n"
-"PO-Revision-Date: 2026-10-08T17:53:43+00:00\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/onetrace-for-woocommerce\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: 2026-10-12T20:51:25+00:00\n"
+"PO-Revision-Date: 2026-10-08T17:53:43+00:00\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Domain: onetrace-for-woocommerce\n"
 
 #. Plugin Name of the plugin
@@ -27,13 +25,8 @@ msgstr ""
 
 #. Description of the plugin
 #: onetrace-woocommerce.php
-msgid ""
-"Connects the store to OneTrace.pro, the customer data platform: orders, "
-"customers and consents from the server, the website tracker, the product "
-"catalog, recommendation widgets and Web Push."
-msgstr ""
-"Подключает магазин к CDP OneTrace.pro: заказы, покупатели и согласия с "
-"сервера, трекер сайта, каталог товаров, виджеты рекомендаций и Web Push."
+msgid "Connects the store to OneTrace.pro, the customer data platform: orders, customers and consents from the server, the website tracker, the product catalog, recommendation widgets and Web Push."
+msgstr "Подключает магазин к CDP OneTrace.pro: заказы, покупатели и согласия с сервера, трекер сайта, каталог товаров, виджеты рекомендаций и Web Push."
 
 #. Author of the plugin
 #: onetrace-woocommerce.php
@@ -48,16 +41,11 @@ msgstr "https://onetrace.pro"
 #. translators: 1: folder of the active copy, 2: folder of the inactive copy
 #: onetrace-woocommerce.php:35
 #, php-format
-msgid ""
-"OneTrace for WooCommerce is installed twice: the copy in the %1$s folder "
-"works, the copy in the %2$s folder is not loaded. Deactivate and delete the "
-"copy in %2$s — settings stay."
-msgstr ""
-"OneTrace для WooCommerce установлен дважды: работает копия в папке %1$s, "
-"копия в папке %2$s не загружается. Отключите и удалите копию в %2$s — "
-"настройки сохранятся."
+msgid "OneTrace for WooCommerce is installed twice: the copy in the %1$s folder works, the copy in the %2$s folder is not loaded. Deactivate and delete the copy in %2$s — settings stay."
+msgstr "OneTrace для WooCommerce установлен дважды: работает копия в папке %1$s, копия в папке %2$s не загружается. Отключите и удалите копию в %2$s — настройки сохранятся."
 
-#: src/Admin.php:45 src/Admin.php:227
+#: src/Admin.php:45
+#: src/Admin.php:235
 msgid "Settings"
 msgstr "Настройки"
 
@@ -81,7 +69,8 @@ msgstr "Адрес платформы"
 msgid "The address you open the platform at: the domain of your brand."
 msgstr "Адрес, по которому вы открываете платформу: домен вашего бренда."
 
-#: src/Admin.php:75 src/Admin.php:181
+#: src/Admin.php:75
+#: src/Admin.php:189
 msgid "Write key"
 msgstr "Ключ записи"
 
@@ -89,13 +78,13 @@ msgstr "Ключ записи"
 msgid "For the tracker on the storefront."
 msgstr "Для трекера на витрине."
 
-#: src/Admin.php:76 src/Admin.php:181
+#: src/Admin.php:76
+#: src/Admin.php:189
 msgid "Secret key"
 msgstr "Секретный ключ"
 
 #: src/Admin.php:76
-msgid ""
-"For orders, customers and the catalog; needs the products.write permission."
+msgid "For orders, customers and the catalog; needs the products.write permission."
 msgstr "Для заказов, покупателей и каталога; нужно право products.write."
 
 #: src/Admin.php:79
@@ -115,12 +104,8 @@ msgid "Cookie consent"
 msgstr "Согласие на cookie"
 
 #: src/Admin.php:81
-msgid ""
-"Load the tracker after the visitor agrees to statistics cookies (with a "
-"consent plugin that supports the WP Consent API)"
-msgstr ""
-"Загружать трекер после согласия посетителя на статистические cookie (с "
-"плагином согласия, который поддерживает WP Consent API)"
+msgid "Load the tracker after the visitor agrees to statistics cookies (with a consent plugin that supports the WP Consent API)"
+msgstr "Загружать трекер после согласия посетителя на статистические cookie (с плагином согласия, который поддерживает WP Consent API)"
 
 #: src/Admin.php:82
 msgid "Orders"
@@ -128,32 +113,23 @@ msgstr "Заказы"
 
 #: src/Admin.php:82
 msgid "Placed, paid, cancelled and refunded orders with the customer data"
-msgstr ""
-"Оформленные, оплаченные, отменённые заказы и возвраты с данными покупателя"
+msgstr "Оформленные, оплаченные, отменённые заказы и возвраты с данными покупателя"
 
 #: src/Admin.php:83
 msgid "Cart"
 msgstr "Корзина"
 
 #: src/Admin.php:83
-msgid ""
-"Adding to and removing from the cart, opening the checkout — for abandoned "
-"cart journeys"
-msgstr ""
-"Добавление в корзину и удаление из неё, переход к оформлению — для цепочек "
-"брошенной корзины"
+msgid "Adding to and removing from the cart, opening the checkout — for abandoned cart journeys"
+msgstr "Добавление в корзину и удаление из неё, переход к оформлению — для цепочек брошенной корзины"
 
 #: src/Admin.php:84
 msgid "Product catalog"
 msgstr "Каталог товаров"
 
 #: src/Admin.php:84
-msgid ""
-"Products and categories for recommendations and emails, updated when "
-"products change and daily"
-msgstr ""
-"Товары и категории для рекомендаций и писем: при изменении товаров и раз в "
-"сутки"
+msgid "Products and categories for recommendations and emails, updated when products change and daily"
+msgstr "Товары и категории для рекомендаций и писем: при изменении товаров и раз в сутки"
 
 #: src/Admin.php:85
 msgid "Product id"
@@ -168,24 +144,16 @@ msgid "SKU (the post ID for products without a SKU)"
 msgstr "Артикул (ID записи, если артикула нет)"
 
 #: src/Admin.php:85
-msgid ""
-"Choose SKU if your OneTrace project already has the catalog and history "
-"under SKUs, e.g. after moving from another platform."
-msgstr ""
-"Выберите артикул, если каталог и история проекта OneTrace уже ведутся по "
-"артикулам, например после переезда с другой платформы."
+msgid "Choose SKU if your OneTrace project already has the catalog and history under SKUs, e.g. after moving from another platform."
+msgstr "Выберите артикул, если каталог и история проекта OneTrace уже ведутся по артикулам, например после переезда с другой платформы."
 
 #: src/Admin.php:88
 msgid "Newsletter consent"
 msgstr "Согласие на рассылку"
 
 #: src/Admin.php:88
-msgid ""
-"A checkbox subscribes the customer to marketing emails in OneTrace. Without "
-"it no consent is sent."
-msgstr ""
-"Галочка подписывает покупателя на рекламные письма в OneTrace. Без неё "
-"согласие не передаётся."
+msgid "A checkbox subscribes the customer to marketing emails in OneTrace. Without it no consent is sent."
+msgstr "Галочка подписывает покупателя на рекламные письма в OneTrace. Без неё согласие не передаётся."
 
 #: src/Admin.php:89
 msgid "Checkout"
@@ -215,7 +183,8 @@ msgstr "Подписка и отписка на странице данных а
 msgid "Checkbox text"
 msgstr "Текст галочки"
 
-#: src/Admin.php:92 src/Settings.php:88
+#: src/Admin.php:92
+#: src/Settings.php:90
 msgid "Send me news and special offers by email"
 msgstr "Присылать новости и специальные предложения по email"
 
@@ -232,12 +201,8 @@ msgid "Recommendations, search and Web Push"
 msgstr "Рекомендации, поиск и Web Push"
 
 #: src/Admin.php:96
-msgid ""
-"Widget ids are in the \"Site → Widgets\" section of the platform. Anywhere "
-"else use the [onetrace_widget id=\"…\"] shortcode."
-msgstr ""
-"Идентификаторы виджетов — в разделе «Сайт → Виджеты» платформы. В любом "
-"другом месте используйте шорткод [onetrace_widget id=\"…\"]."
+msgid "Widget ids are in the \"Site → Widgets\" section of the platform. Anywhere else use the [onetrace_widget id=\"…\"] shortcode."
+msgstr "Идентификаторы виджетов — в разделе «Сайт → Виджеты» платформы. В любом другом месте используйте шорткод [onetrace_widget id=\"…\"]."
 
 #: src/Admin.php:97
 msgid "Widget on the product page"
@@ -252,25 +217,16 @@ msgid "Web Push"
 msgstr "Web Push"
 
 #: src/Admin.php:99
-msgid ""
-"Serve /cdp-sw.js from the store root; put the [onetrace_push_button] "
-"shortcode where visitors subscribe"
-msgstr ""
-"Отдавать /cdp-sw.js с корня магазина; шорткод [onetrace_push_button] "
-"поставьте там, где посетители подписываются"
+msgid "Serve /cdp-sw.js from the store root; put the [onetrace_push_button] shortcode where visitors subscribe"
+msgstr "Отдавать /cdp-sw.js с корня магазина; шорткод [onetrace_push_button] поставьте там, где посетители подписываются"
 
 #: src/Admin.php:100
 msgid "Product search"
 msgstr "Поиск по товарам"
 
 #: src/Admin.php:100
-msgid ""
-"Results of the store search and suggestions while typing come from OneTrace "
-"(the plan of the project must include product search); on an error — the "
-"usual WordPress search"
-msgstr ""
-"Результаты поиска магазина и подсказки при вводе — из OneTrace (поиск по "
-"товарам должен быть в тарифе проекта); при ошибке — обычный поиск WordPress"
+msgid "Results of the store search and suggestions while typing come from OneTrace (the plan of the project must include product search); on an error — the usual WordPress search"
+msgstr "Результаты поиска магазина и подсказки при вводе — из OneTrace (поиск по товарам должен быть в тарифе проекта); при ошибке — обычный поиск WordPress"
 
 #: src/Admin.php:103
 msgid "Loyalty program"
@@ -280,8 +236,11 @@ msgstr "Программа лояльности"
 msgid "The program is set up in the \"Loyalty\" section of the platform. Signed-in customers pay for part of the order with points in the cart and at checkout and see their points in My account → Bonus points."
 msgstr "Программа настраивается в разделе «Лояльность» платформы. Вошедшие покупатели оплачивают часть заказа баллами в корзине и при оформлении и видят баллы в «Мой аккаунт → Бонусные баллы»."
 
-#: src/Admin.php:104 src/LoyaltyAccount.php:72 src/LoyaltyBlocks.php:78
-#: src/LoyaltyCart.php:52 src/LoyaltyCart.php:53
+#: src/Admin.php:104
+#: src/LoyaltyAccount.php:73
+#: src/LoyaltyBlocks.php:78
+#: src/LoyaltyCart.php:52
+#: src/LoyaltyCart.php:53
 msgid "Bonus points"
 msgstr "Бонусные баллы"
 
@@ -289,83 +248,78 @@ msgstr "Бонусные баллы"
 msgid "Show the balance and use points in the cart and at checkout (the secret key needs the loyalty.read and loyalty.write permissions)"
 msgstr "Показывать баланс и списывать баллы в корзине и при оформлении (секретному ключу нужны права loyalty.read и loyalty.write)"
 
-#: src/Admin.php:119
+#: src/Admin.php:124
 msgid "Saved — enter a new key to replace it"
 msgstr "Сохранён — введите новый ключ, чтобы заменить"
 
 #. translators: %s: project name
-#: src/Admin.php:173
+#: src/Admin.php:180
 #, php-format
 msgid "Write key: project \"%s\"."
 msgstr "Ключ записи: проект «%s»."
 
 #. translators: %s: project name
-#: src/Admin.php:175
+#: src/Admin.php:182
 #, php-format
 msgid "Secret key: project \"%s\"."
 msgstr "Секретный ключ: проект «%s»."
 
-#: src/Admin.php:177
-msgid ""
-"The key has no products.write permission: the catalog will not be uploaded."
+#: src/Admin.php:184
+msgid "The key has no products.write permission: the catalog will not be uploaded."
 msgstr "У ключа нет права products.write: каталог не будет выгружаться."
 
-#: src/Admin.php:178
+#: src/Admin.php:185
 msgid "The key has no loyalty.read and loyalty.write permissions: bonus points will not work."
 msgstr "У ключа нет прав loyalty.read и loyalty.write: бонусные баллы работать не будут."
 
-#: src/Admin.php:186
+#: src/Admin.php:194
 msgid "Enter the platform address and the keys first."
 msgstr "Сначала укажите адрес платформы и ключи."
 
-#: src/Admin.php:203
+#: src/Admin.php:211
 msgid "The catalog upload has started; it runs in the background."
 msgstr "Выгрузка каталога началась, она идёт в фоне."
 
-#: src/Admin.php:225
-msgid ""
-"OneTrace: sending is paused because the platform rejected the key. Check the "
-"keys and save the settings."
-msgstr ""
-"OneTrace: отправка приостановлена — платформа отклонила ключ. Проверьте "
-"ключи и сохраните настройки."
+#: src/Admin.php:233
+msgid "OneTrace: sending is paused because the platform rejected the key. Check the keys and save the settings."
+msgstr "OneTrace: отправка приостановлена — платформа отклонила ключ. Проверьте ключи и сохраните настройки."
 
-#: src/Admin.php:238
+#: src/Admin.php:246
 msgid "Status"
 msgstr "Состояние"
 
-#: src/Admin.php:241
+#: src/Admin.php:249
 msgid "Queue"
 msgstr "Очередь"
 
 #. translators: 1: items waiting, 2: items waiting for a retry
-#: src/Admin.php:244
+#: src/Admin.php:252
 #, php-format
 msgid "%1$d waiting, %2$d of them after an error"
 msgstr "Ждут отправки: %1$d, из них после ошибки: %2$d"
 
-#: src/Admin.php:251
+#: src/Admin.php:259
 msgid "Last error"
 msgstr "Последняя ошибка"
 
-#: src/Admin.php:255
+#: src/Admin.php:263
 msgid "Test connection"
 msgstr "Проверить подключение"
 
-#: src/Admin.php:257
+#: src/Admin.php:265
 msgid "Upload the whole catalog"
 msgstr "Выгрузить весь каталог"
 
-#: src/Admin.php:272
+#: src/Admin.php:280
 msgid "You are not allowed to do this."
 msgstr "У вас нет прав на это действие."
 
-#: src/Loyalty.php:154
+#: src/Loyalty.php:155
 msgid "Sign in to use your points."
 msgstr "Войдите, чтобы списать баллы."
 
 #. translators: %s: number of points
-#: src/Loyalty.php:227
+#: src/Loyalty.php:234
 #, php-format
 msgid "Bonus points (%s)"
 msgid_plural "Bonus points (%s)"
@@ -373,37 +327,37 @@ msgstr[0] "Бонусные баллы (%s)"
 msgstr[1] "Бонусные баллы (%s)"
 msgstr[2] "Бонусные баллы (%s)"
 
-#: src/LoyaltyAccount.php:91
+#: src/LoyaltyAccount.php:92
 msgid "Bonus points are not available right now. Please try again later."
 msgstr "Бонусные баллы сейчас недоступны. Попробуйте позже."
 
-#: src/LoyaltyAccount.php:99
+#: src/LoyaltyAccount.php:98
 msgid "Join the loyalty program: collect points for orders and pay for part of your next orders with them."
 msgstr "Вступите в программу лояльности: копите баллы за заказы и оплачивайте ими часть следующих заказов."
 
-#: src/LoyaltyAccount.php:102
+#: src/LoyaltyAccount.php:100
 msgid "Join the program"
 msgstr "Вступить в программу"
 
-#: src/LoyaltyAccount.php:109
+#: src/LoyaltyAccount.php:106
 msgid "Available"
 msgstr "Доступно"
 
-#: src/LoyaltyAccount.php:110
+#: src/LoyaltyAccount.php:107
 msgid "Pending (available after the return period)"
 msgstr "Ожидают (станут доступны после срока возврата)"
 
-#: src/LoyaltyAccount.php:114
+#: src/LoyaltyAccount.php:111
 msgid "Tier"
 msgstr "Уровень"
 
 #. translators: 1: number of points, 2: date
-#: src/LoyaltyAccount.php:119
+#: src/LoyaltyAccount.php:116
 msgid "Expiring soon"
 msgstr "Скоро сгорят"
 
 #. translators: 1: number of points, 2: date
-#: src/LoyaltyAccount.php:119
+#: src/LoyaltyAccount.php:116
 #, php-format
 msgid "%1$s points on %2$s"
 msgstr "%1$s (до %2$s)"
@@ -424,79 +378,88 @@ msgstr "Операция"
 msgid "Points"
 msgstr "Баллы"
 
-#: src/LoyaltyAccount.php:166
+#: src/LoyaltyAccount.php:238
 msgid "Welcome to the loyalty program!"
 msgstr "Добро пожаловать в программу лояльности!"
 
-#: src/LoyaltyAccount.php:169
+#: src/LoyaltyAccount.php:241
 msgid "Could not join the program. Please try again later."
 msgstr "Не удалось вступить в программу. Попробуйте позже."
 
-#: src/LoyaltyAccount.php:179
+#: src/LoyaltyAccount.php:251
 msgid "Earned"
 msgstr "Начисление"
 
-#: src/LoyaltyAccount.php:180
+#: src/LoyaltyAccount.php:252
 msgid "Earning cancelled"
 msgstr "Отмена начисления"
 
-#: src/LoyaltyAccount.php:181
+#: src/LoyaltyAccount.php:253
 msgid "Expired"
 msgstr "Сгорание"
 
-#: src/LoyaltyAccount.php:182
+#: src/LoyaltyAccount.php:254
 msgid "Adjustment"
 msgstr "Корректировка"
 
-#: src/LoyaltyAccount.php:183
+#: src/LoyaltyAccount.php:255
 msgid "Used in an order"
 msgstr "Списание в заказе"
 
-#: src/LoyaltyAccount.php:184
+#: src/LoyaltyAccount.php:256
 msgid "Returned"
 msgstr "Возврат баллов"
 
-#: src/LoyaltyBlocks.php:81 src/LoyaltyCart.php:68
+#: src/LoyaltyBlocks.php:81
+#: src/LoyaltyCart.php:68
 msgid "Sign in to use your bonus points"
 msgstr "Войдите, чтобы списать бонусные баллы"
 
 #. translators: %s: number of points
-#: src/LoyaltyBlocks.php:91 src/LoyaltyCart.php:81
+#: src/LoyaltyBlocks.php:91
+#: src/LoyaltyCart.php:81
 #, php-format
 msgid "+%s points for this order"
 msgstr "Баллы за этот заказ: +%s"
 
-#: src/LoyaltyBlocks.php:94 src/LoyaltyCart.php:85
+#: src/LoyaltyBlocks.php:94
+#: src/LoyaltyCart.php:85
 msgid "Join the loyalty program to collect points"
 msgstr "Вступите в программу лояльности, чтобы копить баллы"
 
 #. translators: 1: number of points, 2: discount
-#: src/LoyaltyBlocks.php:103 src/LoyaltyCart.php:92
+#: src/LoyaltyBlocks.php:103
+#: src/LoyaltyCart.php:92
 #, php-format
 msgid "%1$s points applied: −%2$s"
 msgstr "Списано баллов: %1$s (−%2$s)"
 
-#: src/LoyaltyBlocks.php:104 src/LoyaltyCart.php:93
+#: src/LoyaltyBlocks.php:104
+#: src/LoyaltyCart.php:93
 msgid "Remove"
 msgstr "Убрать"
 
 #. translators: 1: number of points, 2: their value in money
-#: src/LoyaltyBlocks.php:115 src/LoyaltyCart.php:101
+#: src/LoyaltyBlocks.php:115
+#: src/LoyaltyCart.php:101
 #, php-format
 msgid "You have %1$s points (%2$s)."
 msgstr "Ваши баллы: %1$s (%2$s)."
 
 #. translators: 1: number of points, 2: discount
-#: src/LoyaltyBlocks.php:118 src/LoyaltyCart.php:114
+#: src/LoyaltyBlocks.php:118
+#: src/LoyaltyCart.php:114
 #, php-format
 msgid "Up to %1$s points (−%2$s) for this cart."
 msgstr "В этой корзине можно списать до %1$s (−%2$s)."
 
-#: src/LoyaltyBlocks.php:119 src/LoyaltyCart.php:111
+#: src/LoyaltyBlocks.php:119
+#: src/LoyaltyCart.php:111
 msgid "Points to use"
 msgstr "Сколько баллов списать"
 
-#: src/LoyaltyBlocks.php:120 src/LoyaltyCart.php:112
+#: src/LoyaltyBlocks.php:120
+#: src/LoyaltyCart.php:112
 msgid "Use points"
 msgstr "Списать баллы"
 
@@ -508,5 +471,78 @@ msgstr "Не удалось списать баллы. Попробуйте ещ
 msgid "Get notifications"
 msgstr "Получать уведомления"
 
-#~ msgid "https://github.com/OneTracePro/onetrace-woocommerce"
-#~ msgstr "https://github.com/OneTracePro/onetrace-woocommerce"
+#: src/Admin.php:105
+msgid "Referrals"
+msgstr "Приглашения"
+
+#: src/Admin.php:105
+msgid "The \"Friend's code\" field in the registration form. Without it the code of a referral link (?ref=) still counts: the tracker keeps it in a cookie."
+msgstr "Поле «Код друга» в форме регистрации. Без него код из ссылки приглашения (?ref=) всё равно засчитывается: трекер сохраняет его в cookie."
+
+#: src/Admin.php:108
+msgid "Promo codes"
+msgstr "Промокоды"
+
+#: src/Admin.php:108
+msgid "Unique codes of OneTrace promo code pools become WooCommerce coupons every 5 minutes: with the discount, restrictions and expiry of a template coupon, one use each. Create the template coupon in Marketing → Coupons and bind it to the pool key from the \"Promo codes\" section of the platform."
+msgstr "Уникальные коды пулов OneTrace каждые 5 минут становятся купонами WooCommerce — со скидкой, ограничениями и сроком купона-образца, на одно использование. Создайте купон-образец в разделе «Маркетинг → Купоны» и привяжите его к ключу пула из раздела «Промокоды» платформы."
+
+#: src/Admin.php:109
+msgid "Pools and template coupons"
+msgstr "Пулы и купоны-образцы"
+
+#: src/Admin.php:109
+msgid "One per line: pool key = template coupon code. The secret key needs the promo.read permission."
+msgstr "По одному в строке: ключ пула = код купона-образца. Секретному ключу нужно право promo.read."
+
+#: src/Admin.php:186
+msgid "The key has no promo.read permission: promo codes will not become coupons."
+msgstr "У ключа нет права promo.read: промокоды не станут купонами."
+
+#: src/LoyaltyAccount.php:140
+msgid "Joined by invitation"
+msgstr "Вступление по приглашению"
+
+#: src/LoyaltyAccount.php:140
+msgid "A friend placed a first order"
+msgstr "Друг сделал первый заказ"
+
+#: src/LoyaltyAccount.php:171
+msgid "Invite friends"
+msgstr "Пригласите друзей"
+
+#: src/LoyaltyAccount.php:172
+msgid "Share your link: a friend gets a welcome gift, and you get points for their first order."
+msgstr "Поделитесь ссылкой: друг получит приветственный подарок, а вы — баллы за его первый заказ."
+
+#: src/LoyaltyAccount.php:174
+msgid "Copied"
+msgstr "Скопировано"
+
+#: src/LoyaltyAccount.php:175
+msgid "Copy"
+msgstr "Скопировать"
+
+#. translators: 1: friends who came, 2: friends with a first order, 3: points for them
+#: src/LoyaltyAccount.php:182
+#, php-format
+msgid "Friends who came: %1$s, placed an order: %2$s, points for them: %3$s"
+msgstr "Пришло друзей: %1$s, сделали заказ: %2$s, баллов за них: %3$s"
+
+#: src/LoyaltyAccount.php:208
+msgid "Your promo codes"
+msgstr "Ваши промокоды"
+
+#. translators: %s: date
+#: src/LoyaltyAccount.php:216
+#, php-format
+msgid "valid until %s"
+msgstr "действует до %s"
+
+#: src/Referrals.php:50
+msgid "Friend's code"
+msgstr "Код друга"
+
+#: src/Referrals.php:51
+msgid "(optional)"
+msgstr "(необязательно)"
