@@ -23,11 +23,6 @@ msgstr "OneTrace для WooCommerce"
 msgid "https://wordpress.org/plugins/onetrace-for-woocommerce/"
 msgstr ""
 
-#. Description of the plugin
-#: onetrace-woocommerce.php
-msgid "Connects the store to OneTrace.pro, the customer data platform: orders, customers and consents from the server, the website tracker, the product catalog, recommendation widgets and Web Push."
-msgstr "Подключает магазин к CDP OneTrace.pro: заказы, покупатели и согласия с сервера, трекер сайта, каталог товаров, виджеты рекомендаций и Web Push."
-
 #. Author of the plugin
 #: onetrace-woocommerce.php
 msgid "OneTrace.pro"
@@ -45,7 +40,7 @@ msgid "OneTrace for WooCommerce is installed twice: the copy in the %1$s folder 
 msgstr "OneTrace для WooCommerce установлен дважды: работает копия в папке %1$s, копия в папке %2$s не загружается. Отключите и удалите копию в %2$s — настройки сохранятся."
 
 #: src/Admin.php:45
-#: src/Admin.php:235
+#: src/Admin.php:237
 msgid "Settings"
 msgstr "Настройки"
 
@@ -70,7 +65,7 @@ msgid "The address you open the platform at: the domain of your brand."
 msgstr "Адрес, по которому вы открываете платформу: домен вашего бренда."
 
 #: src/Admin.php:75
-#: src/Admin.php:189
+#: src/Admin.php:191
 msgid "Write key"
 msgstr "Ключ записи"
 
@@ -79,7 +74,7 @@ msgid "For the tracker on the storefront."
 msgstr "Для трекера на витрине."
 
 #: src/Admin.php:76
-#: src/Admin.php:189
+#: src/Admin.php:191
 msgid "Secret key"
 msgstr "Секретный ключ"
 
@@ -123,120 +118,116 @@ msgstr "Корзина"
 msgid "Adding to and removing from the cart, opening the checkout — for abandoned cart journeys"
 msgstr "Добавление в корзину и удаление из неё, переход к оформлению — для цепочек брошенной корзины"
 
-#: src/Admin.php:84
+#: src/Admin.php:85
 msgid "Product catalog"
 msgstr "Каталог товаров"
 
-#: src/Admin.php:84
-msgid "Products and categories for recommendations and emails, updated when products change and daily"
-msgstr "Товары и категории для рекомендаций и писем: при изменении товаров и раз в сутки"
-
-#: src/Admin.php:85
+#: src/Admin.php:86
 msgid "Product id"
 msgstr "ID товара"
 
-#: src/Admin.php:85
+#: src/Admin.php:86
 msgid "Post ID"
 msgstr "ID записи"
 
-#: src/Admin.php:85
+#: src/Admin.php:86
 msgid "SKU (the post ID for products without a SKU)"
 msgstr "Артикул (ID записи, если артикула нет)"
 
-#: src/Admin.php:85
+#: src/Admin.php:86
 msgid "Choose SKU if your OneTrace project already has the catalog and history under SKUs, e.g. after moving from another platform."
 msgstr "Выберите артикул, если каталог и история проекта OneTrace уже ведутся по артикулам, например после переезда с другой платформы."
 
-#: src/Admin.php:88
+#: src/Admin.php:89
 msgid "Newsletter consent"
 msgstr "Согласие на рассылку"
 
-#: src/Admin.php:88
+#: src/Admin.php:89
 msgid "A checkbox subscribes the customer to marketing emails in OneTrace. Without it no consent is sent."
 msgstr "Галочка подписывает покупателя на рекламные письма в OneTrace. Без неё согласие не передаётся."
 
-#: src/Admin.php:89
+#: src/Admin.php:90
 msgid "Checkout"
 msgstr "Оформление заказа"
 
-#: src/Admin.php:89
+#: src/Admin.php:90
 msgid "Checkbox at checkout (classic and block)"
 msgstr "Галочка при оформлении заказа (классическом и блочном)"
 
-#: src/Admin.php:90
+#: src/Admin.php:91
 msgid "Registration"
 msgstr "Регистрация"
 
-#: src/Admin.php:90
+#: src/Admin.php:91
 msgid "Checkbox in the registration form"
 msgstr "Галочка в форме регистрации"
 
-#: src/Admin.php:91
+#: src/Admin.php:92
 msgid "Account"
 msgstr "Личный кабинет"
 
-#: src/Admin.php:91
+#: src/Admin.php:92
 msgid "Subscribe and unsubscribe on the account details page"
 msgstr "Подписка и отписка на странице данных аккаунта"
 
-#: src/Admin.php:92
+#: src/Admin.php:93
 msgid "Checkbox text"
 msgstr "Текст галочки"
 
-#: src/Admin.php:92
-#: src/Settings.php:90
+#: src/Admin.php:93
+#: src/Settings.php:92
 msgid "Send me news and special offers by email"
 msgstr "Присылать новости и специальные предложения по email"
 
-#: src/Admin.php:93
+#: src/Admin.php:94
 msgid "Subscription topic"
 msgstr "Тема подписки"
 
-#: src/Admin.php:93
+#: src/Admin.php:94
 msgid "Empty — the whole email channel."
 msgstr "Пусто — весь канал email."
 
-#: src/Admin.php:96
+#: src/Admin.php:97
 msgid "Recommendations, search and Web Push"
 msgstr "Рекомендации, поиск и Web Push"
 
-#: src/Admin.php:96
+#: src/Admin.php:97
 msgid "Widget ids are in the \"Site → Widgets\" section of the platform. Anywhere else use the [onetrace_widget id=\"…\"] shortcode."
 msgstr "Идентификаторы виджетов — в разделе «Сайт → Виджеты» платформы. В любом другом месте используйте шорткод [onetrace_widget id=\"…\"]."
 
-#: src/Admin.php:97
+#: src/Admin.php:98
 msgid "Widget on the product page"
 msgstr "Виджет на странице товара"
 
-#: src/Admin.php:98
+#: src/Admin.php:99
 msgid "Widget in the cart"
 msgstr "Виджет в корзине"
 
-#: src/Admin.php:99
+#: src/Admin.php:100
 msgid "Web Push"
 msgstr "Web Push"
 
-#: src/Admin.php:99
+#: src/Admin.php:100
 msgid "Serve /cdp-sw.js from the store root; put the [onetrace_push_button] shortcode where visitors subscribe"
 msgstr "Отдавать /cdp-sw.js с корня магазина; шорткод [onetrace_push_button] поставьте там, где посетители подписываются"
 
-#: src/Admin.php:100
+#: src/Admin.php:101
 msgid "Product search"
 msgstr "Поиск по товарам"
 
-#: src/Admin.php:100
+#: src/Admin.php:101
 msgid "Results of the store search and suggestions while typing come from OneTrace (the plan of the project must include product search); on an error — the usual WordPress search"
 msgstr "Результаты поиска магазина и подсказки при вводе — из OneTrace (поиск по товарам должен быть в тарифе проекта); при ошибке — обычный поиск WordPress"
 
-#: src/Admin.php:103
+#: src/Admin.php:105
 msgid "Loyalty program"
 msgstr "Программа лояльности"
 
-#: src/Admin.php:103
+#: src/Admin.php:105
 msgid "The program is set up in the \"Loyalty\" section of the platform. Signed-in customers pay for part of the order with points in the cart and at checkout and see their points in My account → Bonus points."
 msgstr "Программа настраивается в разделе «Лояльность» платформы. Вошедшие покупатели оплачивают часть заказа баллами в корзине и при оформлении и видят баллы в «Мой аккаунт → Бонусные баллы»."
 
-#: src/Admin.php:104
+#: src/Admin.php:106
 #: src/LoyaltyAccount.php:73
 #: src/LoyaltyBlocks.php:78
 #: src/LoyaltyCart.php:52
@@ -244,73 +235,73 @@ msgstr "Программа настраивается в разделе «Лоя
 msgid "Bonus points"
 msgstr "Бонусные баллы"
 
-#: src/Admin.php:104
+#: src/Admin.php:106
 msgid "Show the balance and use points in the cart and at checkout (the secret key needs the loyalty.read and loyalty.write permissions)"
 msgstr "Показывать баланс и списывать баллы в корзине и при оформлении (секретному ключу нужны права loyalty.read и loyalty.write)"
 
-#: src/Admin.php:124
+#: src/Admin.php:126
 msgid "Saved — enter a new key to replace it"
 msgstr "Сохранён — введите новый ключ, чтобы заменить"
 
 #. translators: %s: project name
-#: src/Admin.php:180
+#: src/Admin.php:182
 #, php-format
 msgid "Write key: project \"%s\"."
 msgstr "Ключ записи: проект «%s»."
 
 #. translators: %s: project name
-#: src/Admin.php:182
+#: src/Admin.php:184
 #, php-format
 msgid "Secret key: project \"%s\"."
 msgstr "Секретный ключ: проект «%s»."
 
-#: src/Admin.php:184
+#: src/Admin.php:186
 msgid "The key has no products.write permission: the catalog will not be uploaded."
 msgstr "У ключа нет права products.write: каталог не будет выгружаться."
 
-#: src/Admin.php:185
+#: src/Admin.php:187
 msgid "The key has no loyalty.read and loyalty.write permissions: bonus points will not work."
 msgstr "У ключа нет прав loyalty.read и loyalty.write: бонусные баллы работать не будут."
 
-#: src/Admin.php:194
+#: src/Admin.php:196
 msgid "Enter the platform address and the keys first."
 msgstr "Сначала укажите адрес платформы и ключи."
 
-#: src/Admin.php:211
+#: src/Admin.php:213
 msgid "The catalog upload has started; it runs in the background."
 msgstr "Выгрузка каталога началась, она идёт в фоне."
 
-#: src/Admin.php:233
+#: src/Admin.php:235
 msgid "OneTrace: sending is paused because the platform rejected the key. Check the keys and save the settings."
 msgstr "OneTrace: отправка приостановлена — платформа отклонила ключ. Проверьте ключи и сохраните настройки."
 
-#: src/Admin.php:246
+#: src/Admin.php:248
 msgid "Status"
 msgstr "Состояние"
 
-#: src/Admin.php:249
+#: src/Admin.php:251
 msgid "Queue"
 msgstr "Очередь"
 
 #. translators: 1: items waiting, 2: items waiting for a retry
-#: src/Admin.php:252
+#: src/Admin.php:254
 #, php-format
 msgid "%1$d waiting, %2$d of them after an error"
 msgstr "Ждут отправки: %1$d, из них после ошибки: %2$d"
 
-#: src/Admin.php:259
+#: src/Admin.php:261
 msgid "Last error"
 msgstr "Последняя ошибка"
 
-#: src/Admin.php:263
+#: src/Admin.php:265
 msgid "Test connection"
 msgstr "Проверить подключение"
 
-#: src/Admin.php:265
+#: src/Admin.php:267
 msgid "Upload the whole catalog"
 msgstr "Выгрузить весь каталог"
 
-#: src/Admin.php:280
+#: src/Admin.php:282
 msgid "You are not allowed to do this."
 msgstr "У вас нет прав на это действие."
 
@@ -467,35 +458,35 @@ msgstr "Списать баллы"
 msgid "Could not apply the points. Please try again."
 msgstr "Не удалось списать баллы. Попробуйте ещё раз."
 
-#: src/Storefront.php:131
+#: src/Storefront.php:202
 msgid "Get notifications"
 msgstr "Получать уведомления"
 
-#: src/Admin.php:105
+#: src/Admin.php:107
 msgid "Referrals"
 msgstr "Приглашения"
 
-#: src/Admin.php:105
+#: src/Admin.php:107
 msgid "The \"Friend's code\" field in the registration form. Without it the code of a referral link (?ref=) still counts: the tracker keeps it in a cookie."
 msgstr "Поле «Код друга» в форме регистрации. Без него код из ссылки приглашения (?ref=) всё равно засчитывается: трекер сохраняет его в cookie."
 
-#: src/Admin.php:108
+#: src/Admin.php:110
 msgid "Promo codes"
 msgstr "Промокоды"
 
-#: src/Admin.php:108
+#: src/Admin.php:110
 msgid "Unique codes of OneTrace promo code pools become WooCommerce coupons every 5 minutes: with the discount, restrictions and expiry of a template coupon, one use each. Create the template coupon in Marketing → Coupons and bind it to the pool key from the \"Promo codes\" section of the platform."
 msgstr "Уникальные коды пулов OneTrace каждые 5 минут становятся купонами WooCommerce — со скидкой, ограничениями и сроком купона-образца, на одно использование. Создайте купон-образец в разделе «Маркетинг → Купоны» и привяжите его к ключу пула из раздела «Промокоды» платформы."
 
-#: src/Admin.php:109
+#: src/Admin.php:111
 msgid "Pools and template coupons"
 msgstr "Пулы и купоны-образцы"
 
-#: src/Admin.php:109
+#: src/Admin.php:111
 msgid "One per line: pool key = template coupon code. The secret key needs the promo.read permission."
 msgstr "По одному в строке: ключ пула = код купона-образца. Секретному ключу нужно право promo.read."
 
-#: src/Admin.php:186
+#: src/Admin.php:188
 msgid "The key has no promo.read permission: promo codes will not become coupons."
 msgstr "У ключа нет права promo.read: промокоды не станут купонами."
 
@@ -546,3 +537,32 @@ msgstr "Код друга"
 #: src/Referrals.php:51
 msgid "(optional)"
 msgstr "(необязательно)"
+
+#. Description of the plugin
+#: onetrace-woocommerce.php
+msgid "Connects the store to OneTrace.pro, the customer data platform: orders, customers and consents from the server, the website tracker, the product catalog with stock, wishlists, recommendation widgets and Web Push."
+msgstr "Подключает магазин к CDP OneTrace.pro: заказы, покупатели и согласия с сервера, трекер сайта, каталог товаров с остатками, избранное, виджеты рекомендаций и Web Push."
+
+#: src/Admin.php:84
+msgid "Wishlist"
+msgstr "Избранное"
+
+#: src/Admin.php:84
+msgid "Adding to and removing from the wishlist of YITH WooCommerce Wishlist or TI WooCommerce Wishlist — for wishlist journeys"
+msgstr "Добавление в избранное и удаление из него в YITH WooCommerce Wishlist или TI WooCommerce Wishlist — для цепочек по избранному"
+
+#: src/Admin.php:85
+msgid "Products, categories and stock for recommendations, emails and catalog journeys, updated when products or their stock change and daily"
+msgstr "Товары, категории и остатки для рекомендаций, писем и цепочек по каталогу: при изменении товаров и остатков и раз в сутки"
+
+#: src/Admin.php:102
+msgid "Notify when available"
+msgstr "Сообщить о поступлении"
+
+#: src/Admin.php:102
+msgid "Show the “Notify when available” form on the page of a product that is out of stock"
+msgstr "Показывать форму «Сообщить о поступлении» на странице товара не в наличии"
+
+#: src/Admin.php:102
+msgid "The form itself is set up in OneTrace → Site → Forms (kind “Notify when available”); without an active form of this kind nothing is shown."
+msgstr "Саму форму настраивают в OneTrace → Сайт → Формы (вид «Сообщить о поступлении»); без активной формы этого вида ничего не показывается."

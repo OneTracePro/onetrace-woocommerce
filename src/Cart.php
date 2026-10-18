@@ -107,7 +107,10 @@ final class Cart
         return $userId || $anonymousId !== null ? new Customer($userId ? (string) $userId : null, $anonymousId) : null;
     }
 
-    private static function line(\WC_Product $product, int $productId, int $quantity, ?float $price = null): LineItem
+    /**
+     * Line of a product event: the product id of the catalog, the variation as variant_id, the displayed price.
+     */
+    public static function line(\WC_Product $product, int $productId, int $quantity, ?float $price = null): LineItem
     {
         $parent = $product->get_parent_id() ? wc_get_product($product->get_parent_id()) : null;
 

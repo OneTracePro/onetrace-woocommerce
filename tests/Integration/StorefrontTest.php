@@ -6,6 +6,7 @@ namespace OneTrace\WooCommerce\Tests\Integration;
 
 use OneTrace\WooCommerce\Cart;
 use OneTrace\WooCommerce\Customers;
+use OneTrace\WooCommerce\Settings;
 use OneTrace\WooCommerce\Storefront;
 use OneTrace\WooCommerce\Tests\TestCase;
 
@@ -64,5 +65,64 @@ final class StorefrontTest extends TestCase
         $fields = \Automattic\WooCommerce\Blocks\Package::container()->get(\Automattic\WooCommerce\Blocks\Domain\Services\CheckoutFields::class);
 
         self::assertArrayHasKey(Customers::CHECKOUT_FIELD, $fields->get_additional_fields());
+    }
+
+    public function testMarksThePlaceOfTheNotifyFormOnThePageOfAProductOutOfStockOnce(): void
+    {
+        global $product;
+
+        $product = $this->product(['stock_status' => 'outofstock']);
+        ob_start();
+        Storefront::notifyForm();
+        $html = (string) ob_get_clean();
+
+        self::assertSame('<div class="onetrace-notify" data-cdp-notify="' . $product->get_id() . '"></div>', $html);
+        self::assertSame('<form></form>', Storefront::notifyBlock('<form></form>'), 'The block of the same product adds nothing again.');
+        self::assertSame('', Storefront::notify($this->product()), 'In stock.');
+        self::assertSame('', Storefront::notify($this->product(['stock_status' => 'onbackorder'])), 'On backorder.');
+
+        $GLOBALS['post'] = get_post($this->product(['stock_status' => 'outofstock'])->get_id());
+        self::assertStringContainsString('data-cdp-notify="' . $GLOBALS['post']->ID . '"', (string) Storefront::notifyBlock('<form></form>'), 'Block themes: after the add to cart block.');
+        unset($GLOBALS['post'], $product);
+    }
+
+    public function testAVariableProductNeedsAVariationInStockAndTheIdIsEscaped(): void
+    {
+        update_option(Settings::OPTION, ['product_id' => 'sku'] + (array) get_option(Settings::OPTION));
+        $product = new \WC_Product_Variable();
+        $product->set_props(['name' => 'Runner', 'status' => 'publish', 'sku' => 'R"<' . wp_rand()]);
+        $product->save();
+        $this->remember($product->get_id());
+
+        foreach (['outofstock', 'instock'] as $status) {
+            $variation = new \WC_Product_Variation();
+            $variation->set_props(['parent_id' => $product->get_id(), 'regular_price' => '59.00', 'stock_status' => $status]);
+            $variation->save();
+        }
+
+        self::assertSame('', Storefront::notify(wc_get_product($product->get_id())));
+
+        $variation->set_stock_status('outofstock');
+        $variation->save();
+
+        $html = Storefront::notify(wc_get_product($product->get_id()));
+
+        self::assertSame('<div class="onetrace-notify" data-cdp-notify="' . esc_attr($product->get_sku()) . '"></div>', $html);
+        self::assertStringContainsString('data-cdp-notify="R&quot;&lt;', $html);
+    }
+
+    public function testTheNotifySettingTurnsTheFormOff(): void
+    {
+        $callback = [Storefront::class, 'notifyForm'];
+        remove_action('woocommerce_single_product_summary', $callback, 35);
+
+        update_option(Settings::OPTION, ['notify' => 'no'] + (array) get_option(Settings::OPTION));
+        Storefront::register();
+        self::assertFalse(has_action('woocommerce_single_product_summary', $callback));
+
+        update_option(Settings::OPTION, ['notify' => 'yes'] + (array) get_option(Settings::OPTION));
+        Storefront::register();
+        self::assertSame(35, has_action('woocommerce_single_product_summary', $callback));
+        self::assertSame(10, has_filter('render_block_woocommerce/add-to-cart-form', [Storefront::class, 'notifyBlock']));
     }
 }

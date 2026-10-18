@@ -2,6 +2,14 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.8.0 — 2026-10-18
+
+- Stock: catalog items carry `stock` when WooCommerce manages the stock of the product — a simple product its quantity, a variable product the sum of its purchasable variations that manage stock (the parent's stock once for variations that inherit it); no `stock` without stock management, when a variation is in stock without it, or when backorders are allowed (the product or a variation that counts — zero stock does not mean "not available" there, the platform would take the product off sale). Stock below zero is sent as 0. Availability is unchanged: the platform uses the stock only with "Use stock levels from the API and plugins" in its catalog settings.
+- The product is uploaded again when its stock changes: `woocommerce_product_set_stock` and `woocommerce_variation_set_stock` (orders placed, cancelled and refunded, also without a product save) besides the product saves of the admin and the REST API — through the same queue, one waiting upload per product.
+- Wishlist (setting "Wishlist", on by default): `add_to_wishlist` / `remove_from_wishlist` from the server for YITH WooCommerce Wishlist (`yith_wcwl_added_to_wishlist`, `yith_wcwl_removed_from_wishlist`) and TI WooCommerce Wishlist (`tinvwl_product_added`, `tinvwl_product_removed`, `tinvwl_wishlist_product_removed_from_wishlist`), with the signed-in customer and the tracker cookie like the cart events; a variation is the product with its `variant_id`. When a shop manager changes the wishlist of another customer, only the owner's user id is sent. Themes with another wishlist use `data-cdp-wishlist` / `data-cdp-wishlist-remove` (tracker 1.13.0).
+- "Notify when available" (setting, on by default): `<div data-cdp-notify="{product id}">` on the page of a product out of stock (a variable product without a purchasable variation in stock) — after the add to cart area of classic templates (`woocommerce_single_product_summary`, priority 35) and after the "Add to cart form" / "Add to cart with options" block of block themes, once per product; the tracker (1.14.0) draws the form of the kind "Notify when available" from Site → Forms.
+- Requires onetrace-php 1.10.
+
 ## 1.7.0 — 2026-10-13
 
 - Promo codes: Settings → OneTrace → Promo codes binds a pool of OneTrace promo codes to a template coupon of the store ("pool_key = TEMPLATE-CODE" per line). Every 5 minutes (Action Scheduler) new and changed codes of the pool come by the cursor of the platform and become coupons with the discount, restrictions and limits of the template, one use each and the expiry of the code; coupons of the store with the same code are left as they are. "Test connection" checks the promo.read permission.

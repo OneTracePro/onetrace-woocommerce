@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.7.0
+Stable tag: 1.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,9 +20,10 @@ This plugin connects your WooCommerce store:
 
 * Orders and their statuses from the server, through a queue with retries — not lost to ad blockers, and the store never waits for the platform.
 * Customers and newsletter consents from registration, the account page and the checkout (classic and block).
-* Cart events for abandoned cart journeys.
+* Cart events for abandoned cart journeys; wishlist events from YITH WooCommerce Wishlist and TI WooCommerce Wishlist.
 * The website tracker with product views; waits for the statistics consent with the WP Consent API.
-* The product catalog for recommendations and emails.
+* The product catalog for recommendations and emails, with the stock of products that track it — for "back in stock" and "low stock" journeys.
+* The "Notify when available" form of OneTrace on the page of a product that is out of stock.
 * Recommendation widgets and Web Push.
 * Product search: the store search results and suggestions while typing come from OneTrace — word forms, typos, the wrong keyboard layout and the visitor's interests; the usual search on any error.
 * Catalog languages from TranslatePress, WPML and Polylang: recommendations, search and emails in the visitor's language.
@@ -33,7 +34,7 @@ HPOS and the Cart and Checkout blocks are supported.
 
 = External service =
 
-The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders, cart events and the product catalog from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; page and product views from the visitor's browser. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
+The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders, cart and wishlist events and the product catalog with stock from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; page and product views from the visitor's browser. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
 
 == Installation ==
 
@@ -42,6 +43,14 @@ The plugin sends data to the OneTrace.pro platform at the address you enter in t
 3. Go to WooCommerce → Settings → OneTrace, enter the platform address and both keys, click "Test connection".
 
 == Frequently Asked Questions ==
+
+= Which wishlist plugins are supported? =
+
+YITH WooCommerce Wishlist and TI WooCommerce Wishlist: adding and removing products is sent from the server (setting "Wishlist"). With another wishlist, put `data-cdp-wishlist="{product id}"` on the "Add to wishlist" button of the theme and `data-cdp-wishlist-remove="{product id}"` on the "Remove" button — the OneTrace tracker (1.13.0 and later) sends the events on click. The product id is the one of the catalog: the post ID, or the SKU with "Product id → SKU".
+
+= How does "Notify when available" work? =
+
+On the page of a product that is out of stock (a variable product — when no variation is in stock) the plugin puts `<div data-cdp-notify="{product id}"></div>` after the add to cart area; the tracker draws the form there. The form itself is set up in OneTrace → Site → Forms (kind "Notify when available"); without an active form of this kind nothing is shown. The setting "Notify when available" turns the place off.
 
 = Do I need an account? =
 
@@ -59,6 +68,11 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
 
 == Changelog ==
+
+= 1.8.0 =
+* Stock: the catalog carries the stock of products that track it without backorders (a variable product — the sum of its variations), and a product is uploaded again when its stock changes — orders, cancellations, refunds, the admin and the REST API. The platform uses it with "Use stock levels from the API and plugins" in its catalog settings.
+* Wishlist: adding to and removing from the wishlist of YITH WooCommerce Wishlist and TI WooCommerce Wishlist is sent from the server (add_to_wishlist, remove_from_wishlist); other wishlists — with data-cdp-wishlist attributes on the theme's buttons.
+* "Notify when available": the place of the OneTrace form on the page of a product that is out of stock (setting, on by default).
 
 = 1.7.0 =
 * Promo codes: unique codes of OneTrace promo code pools become WooCommerce coupons every 5 minutes, with the discount, restrictions and expiry of a template coupon, one use each.
@@ -104,6 +118,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 * First release.
 
 == Upgrade Notice ==
+
+= 1.8.0 =
+Stock in the catalog, wishlist events of YITH and TI wishlists, the "Notify when available" form on products out of stock.
 
 = 1.5.1 =
 If an older copy from GitHub (folder onetrace-woocommerce) is still active, the plugin starts once; deactivate and delete that copy.

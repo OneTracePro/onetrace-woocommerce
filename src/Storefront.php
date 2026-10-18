@@ -6,18 +6,30 @@ namespace OneTrace\WooCommerce;
 
 /**
  * The storefront: the tracker (after the analytics consent when the WP Consent API is in use), product views,
- * linking the browser to the signed-in customer, recommendation widgets and Web Push.
+ * linking the browser to the signed-in customer, recommendation widgets, the "Notify when available" form and
+ * Web Push.
  */
 final class Storefront
 {
     /** Methods the stub queues until cdp.js loads: the same list as in the platform's install code. */
     private const STUB_METHODS = ['init', 'page', 'track', 'identify', 'alias', 'reset', 'setLanguage', 'widgets', 'renderRecommendations'];
 
+    /** @var array<int, true> products whose "Notify when available" place is already on the page */
+    private static $notified = [];
+
     public static function register(): void
     {
         if (Settings::storefront() && Settings::enabled('tracker')) {
             add_action('wp_head', [self::class, 'tracker'], 1);
             add_action('wp_footer', [self::class, 'productView']);
+
+            if (Settings::enabled('notify')) {
+                // Classic templates: after the price, the stock and the add to cart form. Block themes: after the
+                // "Add to cart form" / "Add to cart with options" block of the single product template.
+                add_action('woocommerce_single_product_summary', [self::class, 'notifyForm'], 35);
+                add_filter('render_block_woocommerce/add-to-cart-form', [self::class, 'notifyBlock'], 10, 3);
+                add_filter('render_block_woocommerce/add-to-cart-with-options', [self::class, 'notifyBlock'], 10, 3);
+            }
         }
 
         add_shortcode('onetrace_widget', [self::class, 'widgetShortcode']);
@@ -96,6 +108,65 @@ final class Storefront
         });
 
         wp_print_inline_script_tag(sprintf("cdp.track('product_viewed', %s);", wp_json_encode($properties)), ['id' => 'onetrace-product-view']);
+    }
+
+    /**
+     * The place of the "Notify when available" form on the page of a product that is out of stock: the tracker
+     * draws the form of the kind "Notify when available" from Site → Forms of the platform into it.
+     */
+    public static function notifyForm(): void
+    {
+        global $product;
+
+        echo self::notify($product instanceof \WC_Product ? $product : wc_get_product(get_the_ID())); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in notify().
+    }
+
+    /**
+     * @param mixed $content HTML of the add to cart block
+     * @param mixed $block parsed block
+     * @param mixed $instance
+     *
+     * @return mixed
+     */
+    public static function notifyBlock($content, $block = [], $instance = null)
+    {
+        $postId = $instance instanceof \WP_Block && isset($instance->context['postId']) ? (int) $instance->context['postId'] : (int) get_the_ID();
+
+        return \is_string($content) ? $content . self::notify($postId > 0 ? wc_get_product($postId) : null) : $content;
+    }
+
+    /**
+     * `<div data-cdp-notify="{product id}">` for a product that cannot be bought now: a product out of stock, a
+     * variable product without a variation in stock. Once per product on the page.
+     *
+     * @param mixed $product
+     */
+    public static function notify($product): string
+    {
+        if (!$product instanceof \WC_Product || $product->is_type('variation') || isset(self::$notified[$product->get_id()]) || self::inStock($product)) {
+            return '';
+        }
+
+        self::$notified[$product->get_id()] = true;
+
+        return sprintf('<div class="onetrace-notify" data-cdp-notify="%s"></div>', esc_attr(Products::id($product)));
+    }
+
+    private static function inStock(\WC_Product $product): bool
+    {
+        if (!$product instanceof \WC_Product_Variable) {
+            return $product->is_in_stock();
+        }
+
+        foreach ($product->get_children() as $childId) {
+            $variation = wc_get_product($childId);
+
+            if ($variation instanceof \WC_Product && $variation->is_purchasable() && $variation->is_in_stock()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

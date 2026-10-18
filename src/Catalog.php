@@ -9,7 +9,7 @@ use OneTrace\Commerce\CatalogItem;
 /**
  * Product catalog of the store on the platform: changes go through the queue, a full upload runs daily and from
  * the settings (Action Scheduler, page by page). Variations are not separate products: their changes upload the
- * parent product.
+ * parent product. Stock changes (orders, refunds, the admin, REST) upload the product again with its stock.
  */
 final class Catalog
 {
@@ -26,6 +26,9 @@ final class Catalog
         add_action('woocommerce_update_product_variation', [self::class, 'variationChanged']);
         add_action('woocommerce_product_set_stock_status', [self::class, 'changed']);
         add_action('woocommerce_variation_set_stock_status', [self::class, 'variationChanged']);
+        // wc_update_product_stock(): orders placed, cancelled and refunded; with $updating no product save follows.
+        add_action('woocommerce_product_set_stock', [self::class, 'stockChanged']);
+        add_action('woocommerce_variation_set_stock', [self::class, 'stockChanged']);
         add_action('untrashed_post', [self::class, 'postChanged']);
         add_action('wp_trash_post', [self::class, 'postRemoved']);
         add_action('before_delete_post', [self::class, 'postRemoved']);
@@ -49,6 +52,22 @@ final class Catalog
 
         if ($parent) {
             Queue::product($parent);
+        }
+    }
+
+    /**
+     * @param mixed $product the product or the variation whose stock changed
+     */
+    public static function stockChanged($product): void
+    {
+        if (!$product instanceof \WC_Product) {
+            return;
+        }
+
+        if ($product->get_parent_id()) {
+            self::variationChanged($product->get_id());
+        } else {
+            self::changed($product->get_id());
         }
     }
 
@@ -174,8 +193,56 @@ final class Catalog
             $categories,
             $regular,
             self::brand($product),
-            self::attributes($product)
+            self::attributes($product),
+            self::stock($product)
         );
+    }
+
+    /**
+     * Units in stock when the store tracks them: a product that manages stock; a variable product — the sum of
+     * its variations that manage stock (the parent's stock once for variations that inherit it). Null when the
+     * stock is unknown: no stock management, or a variation in stock without it (the count would mislead); and
+     * with backorders allowed — zero stock does not mean "not available" there, the platform would take it off sale.
+     */
+    public static function stock(\WC_Product $product): ?int
+    {
+        if (!$product instanceof \WC_Product_Variable) {
+            return $product->managing_stock() && !$product->backorders_allowed() ? max(0, (int) $product->get_stock_quantity()) : null;
+        }
+
+        $total = 0;
+        $known = false;
+        $parentCounted = false;
+
+        foreach ($product->get_children() as $childId) {
+            $variation = wc_get_product($childId);
+
+            if (!$variation instanceof \WC_Product_Variation || !$variation->is_purchasable()) {
+                continue;
+            }
+
+            $manages = $variation->get_manage_stock();
+
+            if ($manages !== false && $variation->backorders_allowed()) {
+                return null;
+            }
+
+            if ($manages === true) {
+                $total += max(0, (int) $variation->get_stock_quantity('edit'));
+                $known = true;
+            } elseif ($manages === 'parent') {
+                $total += $parentCounted ? 0 : max(0, (int) $product->get_stock_quantity());
+                $known = $parentCounted = true;
+            } elseif ($variation->is_in_stock()) {
+                return null;
+            }
+        }
+
+        if (!$known && $product->managing_stock() && !$product->backorders_allowed()) {
+            return max(0, (int) $product->get_stock_quantity());
+        }
+
+        return $known ? $total : null;
     }
 
     /**
