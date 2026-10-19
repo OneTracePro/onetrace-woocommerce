@@ -9,6 +9,8 @@ run() { docker compose exec -T wordpress sh -c "$1"; }
 run '[ -x /usr/local/bin/wp ] || (curl -sS -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x /usr/local/bin/wp)'
 run 'wp --allow-root core is-installed 2>/dev/null || wp --allow-root core install --url=http://localhost --title=Shop --admin_user=admin --admin_password=admin --admin_email=admin@example.com --skip-email'
 run 'wp --allow-root config set FS_METHOD direct >/dev/null'
+# No background queue runners while the tests flush the queue themselves (tests/env/no-background-queue.php).
+run 'mkdir -p wp-content/mu-plugins && cp wp-content/plugins/onetrace-woocommerce/tests/env/no-background-queue.php wp-content/mu-plugins/'
 run "wp --allow-root plugin is-installed woocommerce || wp --allow-root plugin install woocommerce ${WC_VERSION:+--version=$WC_VERSION}"
 run 'wp --allow-root plugin is-installed translatepress-multilingual || wp --allow-root plugin install translatepress-multilingual'
 # Wishlist plugins whose actions the plugin follows (tests/Integration/WishlistTest.php).

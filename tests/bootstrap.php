@@ -20,3 +20,9 @@ if (!class_exists('WooCommerce') || !class_exists(\OneTrace\WooCommerce\Plugin::
     fwrite(STDERR, "WooCommerce and the plugin must be active.\n");
     exit(1);
 }
+
+// A queue runner of the web server would send the queue in the middle of a test (tests/env/no-background-queue.php).
+if (!(defined('DISABLE_WP_CRON') && DISABLE_WP_CRON) || apply_filters('action_scheduler_allow_async_request_runner', true)) {
+    fwrite(STDERR, "WP-Cron and the async request runner of Action Scheduler must be off: tests/env/no-background-queue.php.\n");
+    exit(1);
+}
