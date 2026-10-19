@@ -107,8 +107,8 @@ msgid "Orders"
 msgstr "Заказы"
 
 #: src/Admin.php:82
-msgid "Placed, paid, cancelled and refunded orders with the customer data"
-msgstr "Оформленные, оплаченные, отменённые заказы и возвраты с данными покупателя"
+msgid "Placed, paid, shipped, delivered, cancelled and refunded orders with the customer data"
+msgstr "Оформленные, оплаченные, отправленные, доставленные, отменённые заказы и возвраты с данными покупателя"
 
 #: src/Admin.php:83
 msgid "Cart"

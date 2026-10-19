@@ -2,6 +2,14 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.9.0 — 2026-10-19
+
+- Shipments: `order_shipped` with the carrier, the tracking number and the tracking link — one event per tracking item of WooCommerce Shipment Tracking, Advanced Shipment Tracking (Zorem) and TrackShip on top of them (the order meta `_wc_shipment_tracking_items`, followed through the order meta actions of WooCommerce — HPOS and posts storage — so `save()`, `save_meta_data()` and `update_post_meta()` all count). The carrier name and the link come from the provider list of the tracking plugin (a custom provider — its name and link), the time from the shipping date (today — the moment of saving); AST PRO parcels with products carry the shipped products. A second parcel of the order is a new event; repeated saves send nothing again (the order keeps the sent parcels in `_onetrace_shipped`, and the messageId of a parcel is its tracking number).
+- Without tracking: the "Completed" status (fulfilled in WooCommerce) or the "Shipped" status of tracking plugins is one `order_shipped` without tracking, only when no parcel was sent for the order and it has something to ship (not for virtual and downloadable orders). AST "mark as shipped" saves the parcel before the status, so the order gets the parcel only.
+- `order_delivered`: the "Delivered" status of AST and TrackShip, or TrackShip's shipment status "delivered" (`trackship_shipment_status_trigger`) once every tracking number of the order is delivered; once per order. WooCommerce itself has no delivered status, so nothing else sends it.
+- Other tracking plugins: the filter `onetrace_woocommerce_order_shipments` adds parcels (carrier, tracking_number, tracking_url, shipped_at, estimated_delivery, items of a partial shipment) and `do_action('onetrace_woocommerce_sync_shipments', $order)` sends the new ones after a parcel is saved; the statuses are filterable with `onetrace_woocommerce_shipped_statuses` and `onetrace_woocommerce_delivered_statuses`. All of it follows the "Orders" setting.
+- Requires onetrace-php 1.11.
+
 ## 1.8.0 — 2026-10-18
 
 - Stock: catalog items carry `stock` when WooCommerce manages the stock of the product — a simple product its quantity, a variable product the sum of its purchasable variations that manage stock (the parent's stock once for variations that inherit it); no `stock` without stock management, when a variation is in stock without it, or when backorders are allowed (the product or a variation that counts — zero stock does not mean "not available" there, the platform would take the product off sale). Stock below zero is sent as 0. Availability is unchanged: the platform uses the stock only with "Use stock levels from the API and plugins" in its catalog settings.

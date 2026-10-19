@@ -44,6 +44,7 @@ final class Plugin
 
         Customers::register();
         Orders::register();
+        Shipments::register();
         Cart::register();
         Wishlist::register();
         Catalog::register();

@@ -15,6 +15,7 @@
 | `identify` — email, телефон, имя, город, страна, язык | регистрация, вход, изменение профиля и адреса, оформление заказа | сервер, секретный ключ |
 | Согласие на рассылку | галочка при оформлении заказа (классическом и блочном), в форме регистрации и в личном кабинете | сервер, вместе с `identify` |
 | `order_completed`, `order_paid`, `order_cancelled`, `order_refunded` | заказ оформлен, оплачен (наложенный платёж — когда выполнен), отменён, возврат | сервер, один раз на событие заказа |
+| `order_shipped`, `order_delivered` | посылка с трек-номером (WooCommerce Shipment Tracking, Advanced Shipment Tracking, TrackShip) или выполненный заказ без отслеживания; статус «Доставлен» | сервер, один раз на посылку / заказ |
 | `add_to_cart`, `remove_from_cart`, `checkout_started` | изменения корзины и страница оформления — для посетителей с cookie трекера или вошедших | сервер |
 | `add_to_wishlist`, `remove_from_wishlist` | избранное YITH WooCommerce Wishlist или TI WooCommerce Wishlist — для тех же посетителей | сервер |
 | `product_viewed`, просмотры страниц | витрина | трекер в браузере |
@@ -50,6 +51,37 @@ define('ONETRACE_SECRET_KEY', 'cdp_sk_…');
 
   `123` — ID товара в каталоге: ID записи или артикул при **ID товара → Артикул**.
 - **Сообщить о поступлении:** на странице товара не в наличии (у вариативного — когда ни одной вариации нет в наличии) плагин выводит `<div data-cdp-notify="{ID товара}"></div>` после блока добавления в корзину (классические шаблоны и блочные темы). Трекер (1.14.0 и новее) рисует в нём форму; саму форму настраивают в разделе платформы **Сайт → Формы** (вид «Сообщить о поступлении»). Выключается настройкой **Сообщить о поступлении**.
+
+## Отправка и доставка
+
+Платформа показывает службу доставки, трек-номер и ссылку для отслеживания покупателю и ИИ онлайн-чата («где мой заказ?»). Своих посылок в WooCommerce нет, поэтому плагин берёт их из плагинов отслеживания:
+
+- **Плагины отслеживания** — [WooCommerce Shipment Tracking](https://woocommerce.com/products/shipment-tracking/), [Advanced Shipment Tracking](https://wordpress.org/plugins/woo-advanced-shipment-tracking/) и работающий поверх них [TrackShip](https://wordpress.org/plugins/trackship-for-woocommerce/): каждая добавленная к заказу запись отслеживания — одно `order_shipped` с `carrier` (название службы из списка плагина или своя служба), `tracking_number` и `tracking_url` (ссылка службы с номером или своя ссылка). Вторая посылка — новое событие; повторное сохранение заказа ничего не отправляет. Товары частичной отправки передаются, если плагин их хранит (AST PRO).
+- **Без отслеживания:** когда заказ становится **Выполнен** или **Отправлен** (статус плагинов отслеживания) — одно `order_shipped` без трек-номера, только если по заказу ещё не отправлялась посылка и в нём есть товары с доставкой.
+- **Доставлен:** статус **Доставлен** из AST или TrackShip — `order_delivered`; с TrackShip также его статус отправления «delivered», когда доставлены все посылки заказа. Своего статуса доставки в WooCommerce нет, без этих плагинов событие не отправляется.
+
+Другой плагин отслеживания может передать свои посылки фильтром `onetrace_woocommerce_order_shipments` и сообщить о новой посылке:
+
+```php
+add_filter('onetrace_woocommerce_order_shipments', function (array $shipments, WC_Order $order): array {
+    foreach (my_tracking_parcels($order) as $parcel) {
+        $shipments[] = [
+            'carrier' => $parcel->carrier,                // название, которое видит покупатель
+            'tracking_number' => $parcel->number,
+            'tracking_url' => $parcel->url,
+            'shipped_at' => $parcel->shipped_at,          // метка времени или DateTimeInterface
+            'estimated_delivery' => $parcel->eta,         // 'ГГГГ-ММ-ДД', необязательно
+            'items' => [$orderItemId => 1],               // частичная отправка: ID позиции заказа => количество, необязательно
+        ];
+    }
+
+    return $shipments;
+}, 10, 2);
+
+do_action('onetrace_woocommerce_sync_shipments', $order); // после сохранения посылки
+```
+
+Статусы настраиваются фильтрами `onetrace_woocommerce_shipped_statuses` (`completed`, `shipped`) и `onetrace_woocommerce_delivered_statuses` (`delivered`). Оба события подчиняются настройке **Заказы**.
 
 ## Рекомендации и Web Push
 

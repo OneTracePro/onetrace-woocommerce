@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.8.0
+Stable tag: 1.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,7 @@ OneTrace.pro is a customer data platform: it builds customer profiles from your 
 This plugin connects your WooCommerce store:
 
 * Orders and their statuses from the server, through a queue with retries — not lost to ad blockers, and the store never waits for the platform.
+* Shipments with the carrier, tracking number and link from WooCommerce Shipment Tracking, Advanced Shipment Tracking and TrackShip, and delivered orders — for "where is my order?" in the online chat and shipping journeys.
 * Customers and newsletter consents from registration, the account page and the checkout (classic and block).
 * Cart events for abandoned cart journeys; wishlist events from YITH WooCommerce Wishlist and TI WooCommerce Wishlist.
 * The website tracker with product views; waits for the statistics consent with the WP Consent API.
@@ -34,7 +35,7 @@ HPOS and the Cart and Checkout blocks are supported.
 
 = External service =
 
-The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders, cart and wishlist events and the product catalog with stock from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; page and product views from the visitor's browser. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
+The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders with their shipments (carrier, tracking number and link), cart and wishlist events and the product catalog with stock from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; page and product views from the visitor's browser. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
 
 == Installation ==
 
@@ -47,6 +48,10 @@ The plugin sends data to the OneTrace.pro platform at the address you enter in t
 = Which wishlist plugins are supported? =
 
 YITH WooCommerce Wishlist and TI WooCommerce Wishlist: adding and removing products is sent from the server (setting "Wishlist"). With another wishlist, put `data-cdp-wishlist="{product id}"` on the "Add to wishlist" button of the theme and `data-cdp-wishlist-remove="{product id}"` on the "Remove" button — the OneTrace tracker (1.13.0 and later) sends the events on click. The product id is the one of the catalog: the post ID, or the SKU with "Product id → SKU".
+
+= Which shipment tracking plugins are supported? =
+
+WooCommerce Shipment Tracking, Advanced Shipment Tracking and TrackShip: every tracking item added to the order is sent as order_shipped with the carrier, the tracking number and the link; the "Delivered" status of AST and TrackShip is order_delivered. Without a tracking plugin the "Completed" status is one order_shipped without tracking. Other tracking plugins can pass their parcels with the onetrace_woocommerce_order_shipments filter (see the README on GitHub).
 
 = How does "Notify when available" work? =
 
@@ -68,6 +73,11 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
 
 == Changelog ==
+
+= 1.9.0 =
+* Shipments: order_shipped with the carrier, tracking number and tracking link for every tracking item of WooCommerce Shipment Tracking, Advanced Shipment Tracking and TrackShip — once per parcel, a second parcel is a new event. Without tracking, the "Completed" or "Shipped" status is one order_shipped without tracking when no parcel was sent.
+* Delivered orders: order_delivered from the "Delivered" status of AST and TrackShip, or when TrackShip reports every parcel of the order delivered.
+* Other tracking plugins: the onetrace_woocommerce_order_shipments filter and the onetrace_woocommerce_sync_shipments action.
 
 = 1.8.0 =
 * Stock: the catalog carries the stock of products that track it without backorders (a variable product — the sum of its variations), and a product is uploaded again when its stock changes — orders, cancellations, refunds, the admin and the REST API. The platform uses it with "Use stock levels from the API and plugins" in its catalog settings.
@@ -118,6 +128,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 * First release.
 
 == Upgrade Notice ==
+
+= 1.9.0 =
+Shipped and delivered orders with tracking numbers from WooCommerce Shipment Tracking, Advanced Shipment Tracking and TrackShip.
 
 = 1.8.0 =
 Stock in the catalog, wishlist events of YITH and TI wishlists, the "Notify when available" form on products out of stock.

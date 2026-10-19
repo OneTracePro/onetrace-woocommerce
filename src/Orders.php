@@ -168,30 +168,42 @@ final class Orders
         $lines = [];
 
         foreach ($order->get_items() as $item) {
-            if (!$item instanceof \WC_Order_Item_Product) {
+            if (!$item instanceof \WC_Order_Item_Product || $refund && abs((float) $item->get_total()) === 0.0) {
                 continue;
             }
 
-            $quantity = abs((int) $item->get_quantity());
-            $total = abs((float) $item->get_total());
+            $line = self::line($item);
 
-            if ($quantity === 0 || $refund && $total === 0.0) {
-                continue;
+            if ($line !== null) {
+                $lines[] = $line;
             }
-
-            $product = $item->get_product();
-            $variation = $item->get_variation_id() ? wc_get_product($item->get_variation_id()) : null;
-            $lines[] = new LineItem(
-                Products::id($item->get_product_id()) ?: (string) $item->get_product_id(),
-                $item->get_name(),
-                $total / max(1, $quantity),
-                max(1, $quantity),
-                $variation instanceof \WC_Product ? Products::variantId($variation) : ($item->get_variation_id() ?: null),
-                $product instanceof \WC_Product ? Catalog::categoryId($product) : null
-            );
         }
 
         return $lines;
+    }
+
+    /**
+     * A product line of the order; $quantity — a part of it (a parcel of a partial shipment).
+     */
+    public static function line(\WC_Order_Item_Product $item, ?int $quantity = null): ?LineItem
+    {
+        $ordered = abs((int) $item->get_quantity());
+
+        if ($ordered === 0) {
+            return null;
+        }
+
+        $product = $item->get_product();
+        $variation = $item->get_variation_id() ? wc_get_product($item->get_variation_id()) : null;
+
+        return new LineItem(
+            Products::id($item->get_product_id()) ?: (string) $item->get_product_id(),
+            $item->get_name(),
+            abs((float) $item->get_total()) / $ordered,
+            $quantity !== null ? max(1, min($quantity, $ordered)) : $ordered,
+            $variation instanceof \WC_Product ? Products::variantId($variation) : ($item->get_variation_id() ?: null),
+            $product instanceof \WC_Product ? Catalog::categoryId($product) : null
+        );
     }
 
     /**

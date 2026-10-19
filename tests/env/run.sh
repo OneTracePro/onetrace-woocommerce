@@ -13,9 +13,11 @@ run "wp --allow-root plugin is-installed woocommerce || wp --allow-root plugin i
 run 'wp --allow-root plugin is-installed translatepress-multilingual || wp --allow-root plugin install translatepress-multilingual'
 # Wishlist plugins whose actions the plugin follows (tests/Integration/WishlistTest.php).
 run 'for p in yith-woocommerce-wishlist ti-woocommerce-wishlist; do wp --allow-root plugin is-installed $p || wp --allow-root plugin install $p; done'
+# Tracking plugins whose parcels the plugin sends (tests/Integration/ShipmentsTest.php).
+run 'for p in woo-advanced-shipment-tracking trackship-for-woocommerce; do wp --allow-root plugin is-installed $p || wp --allow-root plugin install $p; done'
 run 'wp --allow-root plugin activate woocommerce onetrace-woocommerce >/dev/null'
-# Their latest versions may not support an older WooCommerce of the matrix: then WishlistTest skips the plugin.
-run 'for p in yith-woocommerce-wishlist ti-woocommerce-wishlist; do wp --allow-root plugin is-active $p || wp --allow-root plugin activate $p >/dev/null 2>&1 || echo "$p is not active"; done'
+# Their latest versions may not support an older WooCommerce of the matrix: then WishlistTest and ShipmentsTest skip the plugin.
+run 'for p in yith-woocommerce-wishlist ti-woocommerce-wishlist woo-advanced-shipment-tracking trackship-for-woocommerce; do wp --allow-root plugin is-active $p || wp --allow-root plugin activate $p >/dev/null 2>&1 || echo "$p is not active"; done'
 # Separately: on activation TranslatePress redirects to its settings, which ends the wp-cli command.
 run 'wp --allow-root plugin is-active translatepress-multilingual || wp --allow-root plugin activate translatepress-multilingual >/dev/null 2>&1 || true'
 run 'wp --allow-root eval-file wp-content/plugins/onetrace-woocommerce/tests/env/translatepress.php'
