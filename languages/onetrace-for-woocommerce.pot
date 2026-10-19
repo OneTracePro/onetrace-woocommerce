@@ -26,7 +26,7 @@ msgstr ""
 
 #. Description of the plugin
 #: onetrace-woocommerce.php
-msgid "Connects the store to OneTrace.pro, the customer data platform: orders, customers and consents from the server, the website tracker, the product catalog with stock, wishlists, recommendation widgets and Web Push."
+msgid "Connects the store to OneTrace.pro, the customer data platform: orders, customers and consents from the server, the website tracker, the product catalog with stock, wishlists, recommendation widgets, Web Push and the store's emails through OneTrace."
 msgstr ""
 
 #. Author of the plugin
@@ -565,4 +565,76 @@ msgstr ""
 
 #: src/Storefront.php:202
 msgid "Get notifications"
+msgstr ""
+
+#: src/Admin.php:283
+msgid "Store emails"
+msgstr ""
+
+#: src/Admin.php:284
+msgid "Emails of WooCommerce, WordPress and other plugins can go out through the email integration of your OneTrace project, with delivery statuses and history in the customer profile; order emails — from OneTrace templates in the customer's language. This is set up in the \"Store emails\" section of the platform; the secret key needs the \"Send messages manually\" permission (messages.send). An email OneTrace does not accept is sent by the store itself."
+msgstr ""
+
+#: src/Admin.php:293
+msgid "State"
+msgstr ""
+
+#: src/Admin.php:293
+msgid "Enter the platform address and the secret key."
+msgstr ""
+
+#: src/Admin.php:296
+msgid "Not available — the store sends its emails itself."
+msgstr ""
+
+#: src/Admin.php:299
+msgid "Order placed"
+msgstr ""
+
+#: src/Admin.php:300
+msgid "Order paid"
+msgstr ""
+
+#: src/Admin.php:301
+msgid "Order shipped"
+msgstr ""
+
+#: src/Admin.php:302
+msgid "Order delivered"
+msgstr ""
+
+#: src/Admin.php:303
+msgid "Order cancelled"
+msgstr ""
+
+#: src/Admin.php:304
+msgid "Order refunded"
+msgstr ""
+
+#: src/Admin.php:308
+msgid "All store emails"
+msgstr ""
+
+#: src/Admin.php:309
+msgid "Through OneTrace: emails without a OneTrace template go out as the store makes them"
+msgstr ""
+
+#: src/Admin.php:310
+msgid "Sent by the store"
+msgstr ""
+
+#: src/Admin.php:311
+msgid "Order emails from OneTrace templates"
+msgstr ""
+
+#: src/Admin.php:311
+msgid "None"
+msgstr ""
+
+#: src/Admin.php:316
+msgid "Store emails in OneTrace"
+msgstr ""
+
+#: src/Admin.php:317
+msgid "OneTrace → Store emails"
 msgstr ""

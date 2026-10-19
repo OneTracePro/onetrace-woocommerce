@@ -20,6 +20,9 @@ use OneTrace\Commerce\LineItem;
  *
  * Every parcel is sent once: the order keeps the keys of the sent parcels ("_onetrace_shipped"), and the messageId
  * of the parcel (the tracking number) is deterministic, so a repeat is also dropped by the platform.
+ *
+ * WooCommerce has no shipped or delivered emails: with the OneTrace template of order_shipped / order_delivered on,
+ * every new parcel and the delivery also schedule the template email (OrderEmails).
  */
 final class Shipments
 {
@@ -172,11 +175,13 @@ final class Shipments
                 isset($shipment['tracking_number']) ? null : ($shipment['id'] ?? null),
                 $shipment['lines'] ?? []
             ));
+            OrderEmails::schedule($order, 'order_shipped', (string) $key);
         }
 
         if ($fulfilled && $shipments === [] && $sent === [] && self::ships($order)) {
             $new[''] = true;
             Queue::event($messages->orderShipped($model));
+            OrderEmails::schedule($order, 'order_shipped');
         }
 
         if ($new !== []) {
@@ -277,6 +282,7 @@ final class Shipments
 
         self::$delivered[$id] = true;
         Queue::event(Connection::messages()->orderDelivered($model, new \DateTimeImmutable('now', new \DateTimeZone('UTC'))));
+        OrderEmails::schedule($order, 'order_delivered');
         self::remember($order, self::DELIVERED_META, (string) time());
     }
 
@@ -421,7 +427,7 @@ final class Shipments
     /**
      * Only orders with something to ship: a virtual or downloadable order completed is not shipped.
      */
-    private static function ships(\WC_Order $order): bool
+    public static function ships(\WC_Order $order): bool
     {
         foreach ($order->get_items() as $item) {
             $product = $item instanceof \WC_Order_Item_Product ? $item->get_product() : null;

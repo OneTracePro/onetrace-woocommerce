@@ -235,7 +235,7 @@ final class Orders
     /**
      * Storefront language of the order: WPML and Polylang store it with the order.
      */
-    private static function language(\WC_Order $order): ?string
+    public static function language(\WC_Order $order): ?string
     {
         foreach (['wpml_language', 'pll_language'] as $key) {
             $value = $order->get_meta($key);

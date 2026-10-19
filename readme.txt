@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.9.0
+Stable tag: 1.10.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,12 +30,13 @@ This plugin connects your WooCommerce store:
 * Catalog languages from TranslatePress, WPML and Polylang: recommendations, search and emails in the visitor's language.
 * Loyalty program: signed-in customers pay with bonus points in the cart and at checkout and see their points in My account; referral links and the friend's code on registration.
 * Promo codes: unique codes of OneTrace pools become WooCommerce coupons of a template coupon.
+* Store emails: the emails of WooCommerce, WordPress and other plugins can go out through the email integration of the OneTrace project, with delivery statuses in the customer profile; order emails — from OneTrace templates in the customer's language, including shipped and delivered emails WooCommerce does not have. Emails to the shop owner and staff and whatever OneTrace does not accept, the store sends itself.
 
 HPOS and the Cart and Checkout blocks are supported.
 
 = External service =
 
-The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders with their shipments (carrier, tracking number and link), cart and wishlist events and the product catalog with stock from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; page and product views from the visitor's browser. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
+The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders with their shipments (carrier, tracking number and link), cart and wishlist events and the product catalog with stock from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; when store emails are turned on in the OneTrace project, the emails the store sends (recipient, subject, content, attachments, the order data of order emails, the customer's first name and language); page and product views from the visitor's browser. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
 
 == Installation ==
 
@@ -57,6 +58,10 @@ WooCommerce Shipment Tracking, Advanced Shipment Tracking and TrackShip: every t
 
 On the page of a product that is out of stock (a variable product — when no variation is in stock) the plugin puts `<div data-cdp-notify="{product id}"></div>` after the add to cart area; the tracker draws the form there. The form itself is set up in OneTrace → Site → Forms (kind "Notify when available"); without an active form of this kind nothing is shown. The setting "Notify when available" turns the place off.
 
+= Can the store's emails go through OneTrace? =
+
+Yes, in the "Store emails" section of the OneTrace project: all emails sent with wp_mail() as the store made them, and order emails (placed, paid, shipped, delivered, cancelled, refunded) from OneTrace templates in the customer's language; emails to the shop owner and staff always go out from the store. The secret key needs the "Send messages manually" permission; WooCommerce → Settings → OneTrace shows the state. If OneTrace does not accept an email (no email integration, the quota, the limit per recipient, the platform unavailable), the store sends it itself.
+
 = Do I need an account? =
 
 Yes, a OneTrace.pro project (or a project at a brand that runs the platform).
@@ -73,6 +78,11 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
 
 == Changelog ==
+
+= 1.10.0 =
+* Store emails through OneTrace: with the "Store emails" section of the OneTrace project, emails of WooCommerce, WordPress and other plugins (wp_mail) go out through the project's email integration as the store made them — subject, HTML, text, reply-to, sender name and attachments — one request per recipient; the store sends whatever OneTrace does not accept itself, only to those recipients. Emails to the shop owner and staff (admin emails, copies) are always sent by the store.
+* Order emails from OneTrace templates: order data (products with images and links, totals, addresses, tracking, refund) and the customer's language instead of the store's email; shipped and delivered emails from the shipment hooks in the background, once per parcel and per order.
+* WooCommerce → Settings → OneTrace shows the state of the store emails.
 
 = 1.9.0 =
 * Shipments: order_shipped with the carrier, tracking number and tracking link for every tracking item of WooCommerce Shipment Tracking, Advanced Shipment Tracking and TrackShip — once per parcel, a second parcel is a new event. Without tracking, the "Completed" or "Shipped" status is one order_shipped without tracking when no parcel was sent.

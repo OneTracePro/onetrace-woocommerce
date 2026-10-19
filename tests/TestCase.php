@@ -8,6 +8,8 @@ use JsonSchema\Validator;
 use OneTrace\WooCommerce\Connection;
 use OneTrace\WooCommerce\Queue;
 use OneTrace\WooCommerce\Settings;
+use OneTrace\WooCommerce\StoreEmails;
+use OneTrace\WooCommerce\Tests\Support\Mailbox;
 use OneTrace\WooCommerce\Tests\Support\RecordingTransport;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
@@ -34,6 +36,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             return ['transport' => $platform] + $options;
         });
         Connection::reset();
+        // Store emails off, as a new project has them: no settings request in every test that sends an email.
+        $this->storeEmails(false, []);
+        Mailbox::$sent = [];
         $_COOKIE = [];
         wp_set_current_user(0);
     }
@@ -69,6 +74,16 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $this->posts[] = $order->get_id();
 
         return $order;
+    }
+
+    /**
+     * Cached settings of the store emails section.
+     *
+     * @param list<string> $templates order email kinds built from OneTrace templates
+     */
+    protected function storeEmails(bool $relay, array $templates): void
+    {
+        set_transient(StoreEmails::SETTINGS_TRANSIENT, ['relay' => $relay, 'integration_id' => null, 'templates' => array_fill_keys($templates, true)], HOUR_IN_SECONDS);
     }
 
     protected function remember(int $postId): void

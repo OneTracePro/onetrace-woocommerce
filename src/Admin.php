@@ -148,6 +148,7 @@ final class Admin
 
         delete_option(Queue::PAUSED_OPTION);
         Connection::reset();
+        StoreEmails::forget();
         Queue::schedule();
         PromoSync::schedule();
 
@@ -171,6 +172,11 @@ final class Admin
 
             try {
                 $answer = Connection::client($key)->checkKey($key);
+
+                if ($key === 'secret') {
+                    set_transient(StoreEmails::PROJECT_TRANSIENT, (string) ($answer['project']['uid'] ?? ''), DAY_IN_SECONDS);
+                }
+
                 $missing = $key === 'secret' && !\in_array('products.write', $answer['scopes'], true) && Settings::enabled('catalog');
                 $loyalty = $key === 'secret' && Settings::enabled('loyalty') && array_diff(['loyalty.read', 'loyalty.write'], $answer['scopes']) !== [];
                 $promo = $key === 'secret' && PromoSync::pools() !== [] && !\in_array('promo.read', $answer['scopes'], true);
@@ -266,6 +272,79 @@ final class Admin
         echo ' ';
         self::button('onetrace_sync', __('Upload the whole catalog', 'onetrace-for-woocommerce'));
         echo '</p>';
+        self::storeEmails();
+    }
+
+    /**
+     * Read-only state of the store emails: they are set up in the "Store emails" section of the platform.
+     */
+    private static function storeEmails(): void
+    {
+        echo '<h2>' . esc_html__('Store emails', 'onetrace-for-woocommerce') . '</h2><p>'
+            . esc_html__('Emails of WooCommerce, WordPress and other plugins can go out through the email integration of your OneTrace project, with delivery statuses and history in the customer profile; order emails — from OneTrace templates in the customer\'s language. This is set up in the "Store emails" section of the platform; the secret key needs the "Send messages manually" permission (messages.send). An email OneTrace does not accept is sent by the store itself.', 'onetrace-for-woocommerce')
+            . '</p><table class="form-table"><tbody>';
+
+        $row = static function (string $title, string $html): void {
+            printf('<tr><th>%s</th><td>%s</td></tr>', esc_html($title), $html); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped by the callers.
+        };
+        $settings = StoreEmails::settings();
+
+        if (!Settings::server()) {
+            $row(__('State', 'onetrace-for-woocommerce'), esc_html__('Enter the platform address and the secret key.', 'onetrace-for-woocommerce'));
+        } elseif ($settings === null) {
+            $error = StoreEmails::error();
+            $row(__('State', 'onetrace-for-woocommerce'), esc_html__('Not available — the store sends its emails itself.', 'onetrace-for-woocommerce') . ($error !== null ? ' <code>' . esc_html($error) . '</code>' : ''));
+        } else {
+            $labels = [
+                'order_placed' => __('Order placed', 'onetrace-for-woocommerce'),
+                'order_paid' => __('Order paid', 'onetrace-for-woocommerce'),
+                'order_shipped' => __('Order shipped', 'onetrace-for-woocommerce'),
+                'order_delivered' => __('Order delivered', 'onetrace-for-woocommerce'),
+                'order_cancelled' => __('Order cancelled', 'onetrace-for-woocommerce'),
+                'order_refunded' => __('Order refunded', 'onetrace-for-woocommerce'),
+            ];
+            $templates = array_values(array_intersect_key($labels, array_filter($settings['templates'])));
+
+            $row(__('All store emails', 'onetrace-for-woocommerce'), esc_html($settings['relay']
+                ? __('Through OneTrace: emails without a OneTrace template go out as the store makes them', 'onetrace-for-woocommerce')
+                : __('Sent by the store', 'onetrace-for-woocommerce')));
+            $row(__('Order emails from OneTrace templates', 'onetrace-for-woocommerce'), esc_html($templates !== [] ? implode(', ', $templates) : __('None', 'onetrace-for-woocommerce')));
+        }
+
+        $project = self::project();
+        $row(__('Settings', 'onetrace-for-woocommerce'), $project !== ''
+            ? sprintf('<a href="%s" target="_blank" rel="noopener">%s</a>', esc_url(Settings::url() . '/p/' . rawurlencode($project) . '/store-emails'), esc_html__('Store emails in OneTrace', 'onetrace-for-woocommerce'))
+            : esc_html__('OneTrace → Store emails', 'onetrace-for-woocommerce'));
+        echo '</tbody></table>';
+    }
+
+    /**
+     * Uid of the project of the secret key, for the link to its sections; cached for a day.
+     */
+    private static function project(): string
+    {
+        if (!Settings::server()) {
+            return '';
+        }
+
+        $cached = get_transient(StoreEmails::PROJECT_TRANSIENT);
+
+        if (\is_string($cached)) {
+            return preg_match('/^[A-Za-z0-9_-]{1,64}$/', $cached) === 1 ? $cached : '';
+        }
+
+        try {
+            $answer = Connection::client('emails')->checkKey('secret');
+            $project = (string) ($answer['project']['uid'] ?? '');
+        } catch (\Throwable $error) {
+            set_transient(StoreEmails::PROJECT_TRANSIENT, '', 10 * MINUTE_IN_SECONDS);
+
+            return '';
+        }
+
+        set_transient(StoreEmails::PROJECT_TRANSIENT, $project, DAY_IN_SECONDS);
+
+        return preg_match('/^[A-Za-z0-9_-]{1,64}$/', $project) === 1 ? $project : '';
     }
 
     /**

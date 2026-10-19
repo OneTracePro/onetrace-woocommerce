@@ -45,6 +45,8 @@ final class Plugin
         Customers::register();
         Orders::register();
         Shipments::register();
+        StoreEmails::register();
+        OrderEmails::register();
         Cart::register();
         Wishlist::register();
         Catalog::register();
@@ -87,7 +89,7 @@ final class Plugin
     public static function deactivate(): void
     {
         if (\function_exists('as_unschedule_all_actions')) {
-            foreach ([Queue::HOOK, 'onetrace_flush_recurring', 'onetrace_daily_catalog', Catalog::SYNC_HOOK] as $hook) {
+            foreach ([Queue::HOOK, 'onetrace_flush_recurring', 'onetrace_daily_catalog', Catalog::SYNC_HOOK, OrderEmails::HOOK] as $hook) {
                 as_unschedule_all_actions($hook, [], Queue::GROUP);
             }
         }

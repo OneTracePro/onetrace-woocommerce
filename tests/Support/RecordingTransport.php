@@ -13,7 +13,7 @@ use OneTrace\Http\Transport;
  */
 final class RecordingTransport implements Transport
 {
-    /** @var list<array{method: string, path: string, body: mixed, auth: string}> */
+    /** @var list<array{method: string, path: string, body: mixed, auth: string, idempotency: string}> */
     public $requests = [];
 
     /** @var list<Response> */
@@ -35,6 +35,7 @@ final class RecordingTransport implements Transport
             'path' => (string) parse_url($request->getUrl(), PHP_URL_PATH),
             'body' => json_decode((string) $request->getBody(), true),
             'auth' => (string) ($headers['authorization'] ?? ''),
+            'idempotency' => (string) ($headers['idempotency-key'] ?? ''),
         ];
 
         if ($this->responder !== null && ($response = ($this->responder)($request)) !== null) {
@@ -42,6 +43,18 @@ final class RecordingTransport implements Transport
         }
 
         return array_shift($this->responses) ?? new Response(202, ['content-type' => 'application/json'], '{"accepted":1,"duplicates":0}');
+    }
+
+    /**
+     * Requests to one path, e.g. POST /api/v1/emails.
+     *
+     * @return list<array{method: string, path: string, body: mixed, auth: string, idempotency: string}>
+     */
+    public function to(string $method, string $path): array
+    {
+        return array_values(array_filter($this->requests, static function (array $request) use ($method, $path): bool {
+            return $request['method'] === $method && $request['path'] === $path;
+        }));
     }
 
     /**

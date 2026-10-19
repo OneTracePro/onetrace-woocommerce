@@ -3,7 +3,7 @@
 [![CI](https://github.com/OneTracePro/onetrace-woocommerce/actions/workflows/ci.yml/badge.svg)](https://github.com/OneTracePro/onetrace-woocommerce/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-GPL--2.0--or--later-blue.svg)](LICENSE)
 
-Connects a WooCommerce store to [OneTrace.pro](https://onetrace.pro), the customer data platform: orders, customers and newsletter consents from the server, the website tracker, the product catalog, recommendation widgets and Web Push. Abandoned cart, browse abandonment, post-purchase and win-back journeys, product recommendations and predictions work right after you connect the store.
+Connects a WooCommerce store to [OneTrace.pro](https://onetrace.pro), the customer data platform: orders, customers and newsletter consents from the server, the website tracker, the product catalog, recommendation widgets, Web Push and the store's emails through OneTrace. Abandoned cart, browse abandonment, post-purchase and win-back journeys, product recommendations and predictions work right after you connect the store.
 
 [Русская версия](README.ru.md)
 
@@ -86,6 +86,33 @@ do_action('onetrace_woocommerce_sync_shipments', $order); // after a parcel is s
 
 Both events follow the **Orders** setting.
 
+## Store emails
+
+The emails of the store — WooCommerce, WordPress (password reset, new user) and other plugins, everything sent with `wp_mail()` — can go out through the email integration of the OneTrace project: with delivery statuses and history in the customer profile and the per-recipient limit of the platform. It is set up in the **Store emails** section of the platform (the plugin reads it with `GET /api/v1/emails/settings` every 5 minutes and right after the plugin settings are saved); the secret key needs the **Send messages manually** permission (`messages.send`). **Settings → OneTrace → Store emails** shows the state read-only.
+
+- **Order emails from OneTrace templates:** for an order email with the template on in the platform, the plugin sends the order data — number, link to the order page (My account → order, the order received page for guests), products with SKU, image, link and options, totals, payment and shipping method, addresses, the customer's note, payment instructions of bank transfer / cheque / cash on delivery, the refund amount and reason, the carrier and tracking — and the customer's language (WPML, Polylang, the storefront or account locale, otherwise the store's) and first name; OneTrace builds the email in that language and the store does not send its own. The store's email goes along, so OneTrace sends it as is if the template was switched off in the meantime.
+- **All store emails through OneTrace ("relay"):** other emails go out as the store made them — subject, HTML, the plain text version, reply-to, sender name and attachments (PDF, PNG, JPEG, GIF, TXT, CSV, ICS; up to 5 files and 5 MB). One request per recipient.
+- **Emails to the shop owner and staff are always sent by the store**, also with relay on — OneTrace would make customer profiles of staff addresses: every `admin_*` kind (WooCommerce new, cancelled and failed order …, WordPress new user and password change notifications), any email to the site admin address or to the recipients of the WooCommerce emails to the store, and Cc / Bcc copies.
+- **Shipped and delivered:** WooCommerce has no such emails. With the `order_shipped` / `order_delivered` template on, every new parcel (see [Shipping and delivery](#shipping-and-delivery)) and the delivery send the template email in the background (Action Scheduler, `onetrace_order_email`) — once per parcel and once per order. The **Completed** email is then the shipped email without tracking (once — the same as the background one would be), or is not sent when the order has parcels: their emails told the customer. Follows the **Orders** setting.
+- **Whenever OneTrace does not accept an email** — no email integration, the message quota is used up (402), too many emails to the recipient (429), an attachment of another type or over the size, the platform does not answer within 5 seconds, no secret key or no permission — **the store sends it itself**, only to the recipients OneTrace did not accept. A failure to read the settings is cached for a minute (10 minutes for a key without the permission), so the platform is not asked on every email.
+
+| WooCommerce email | kind |
+|---|---|
+| Order on-hold | `order_placed` |
+| Processing order | `order_paid` after the on-hold email (bank transfer, cheque), otherwise `order_placed` (paid at once, cash on delivery) |
+| Completed order; AST partially shipped and updated tracking | `order_shipped` (`order_completed` for virtual and downloadable orders) |
+| Refunded and partially refunded order | `order_refunded` |
+| Cancelled order (to the customer) | `order_cancelled` |
+| Failed order (to the customer) | `order_failed` |
+| Order details / invoice | `invoice` |
+| Customer note | `order_note` |
+| Reset password, new account | `password_reset`, `account_new` (access links: no click tracking, OneTrace keeps only the subject) |
+| Emails to the shop owner: new, cancelled, failed order … | `admin_new_order`, `admin_cancelled_order`, `admin_failed_order` … — always sent by the store |
+| WordPress: password reset, new user, password and email changed | `password_reset`, `account_new`, `password_changed`, `email_changed`; to the admin `admin_new_user`, `admin_password_changed` — always sent by the store |
+| Any other email | `other` |
+
+The kind can be changed with the `onetrace_woocommerce_email_kind` filter (e.g. `email_verification` for the email of a verification plugin).
+
 ## Recommendations, search and Web Push
 
 - Widgets from **Site → Widgets** of the platform: set their ids for the product page and the cart in the settings, or put `[onetrace_widget id="k3x9…"]` anywhere. On product, category and cart pages the current products are passed to the widget.
@@ -134,6 +161,7 @@ wp onetrace sync-catalog   # uploads the whole catalog now
 - `onetrace_woocommerce_tracker_options` — options of `cdp.init()` on the storefront.
 - `onetrace_woocommerce_paid_statuses` — order statuses that mean "paid".
 - `onetrace_woocommerce_order_shipments` — parcels of the order for `order_shipped`; `do_action('onetrace_woocommerce_sync_shipments', $order)` sends the new ones.
+- `onetrace_woocommerce_email_kind` — the kind of an email sent through OneTrace (`$kind`, the arguments of `wp_mail()`, the `WC_Email` being sent or null).
 - `onetrace_woocommerce_shipped_statuses` (`completed`, `shipped`) and `onetrace_woocommerce_delivered_statuses` (`delivered`) — order statuses of a shipment without tracking and of the delivery.
 
 ## Development

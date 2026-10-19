@@ -13,8 +13,8 @@ if (!defined('ABSPATH')) {
     require getenv('WP_PATH') ?: '/var/www/html/wp-load.php';
 }
 
-// Order emails of WooCommerce are not sent from the test container.
-add_filter('pre_wp_mail', '__return_false');
+// Emails are not sent from the test container: the ones WordPress would send itself are recorded (after the plugin).
+add_filter('pre_wp_mail', [\OneTrace\WooCommerce\Tests\Support\Mailbox::class, 'capture'], PHP_INT_MAX, 2);
 
 if (!class_exists('WooCommerce') || !class_exists(\OneTrace\WooCommerce\Plugin::class)) {
     fwrite(STDERR, "WooCommerce and the plugin must be active.\n");
