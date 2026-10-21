@@ -37,6 +37,8 @@ final class Settings
         'loyalty' => 'no',
         'referral_field' => 'no',
         'promo_pools' => '',
+        'store_mcp' => 'no',
+        'store_mcp_tools' => StoreMcp::READ_TOOLS,
     ];
 
     /**

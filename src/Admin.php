@@ -110,6 +110,32 @@ final class Admin
             ['type' => 'title', 'id' => 'onetrace_promo', 'title' => __('Promo codes', 'onetrace-for-woocommerce'), 'desc' => __('Unique codes of OneTrace promo code pools become WooCommerce coupons every 5 minutes: with the discount, restrictions and expiry of a template coupon, one use each. Create the template coupon in Marketing → Coupons and bind it to the pool key from the "Promo codes" section of the platform.', 'onetrace-for-woocommerce')],
             $field('promo_pools', ['type' => 'textarea', 'title' => __('Pools and template coupons', 'onetrace-for-woocommerce'), 'placeholder' => 'welcome = WELCOME-TEMPLATE', 'css' => 'min-height:5em;font-family:monospace', 'desc' => __('One per line: pool key = template coupon code. The secret key needs the promo.read permission.', 'onetrace-for-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_promo'],
+
+            ['type' => 'title', 'id' => 'onetrace_store_mcp', 'title' => __('AI chat bot: store MCP', 'onetrace-for-woocommerce'), 'desc' => __('The AI bot of the OneTrace chat answers customers with live data of the store and, if you allow it, acts on orders. Customers signed in on the website are confirmed automatically, others with a code the shop sends by email. The secret key needs the chats.manage permission.', 'onetrace-for-woocommerce')],
+            $field('store_mcp', ['type' => 'checkbox', 'title' => __('Store MCP server', 'onetrace-for-woocommerce'), 'desc' => __('Connect the store to the AI chat bot', 'onetrace-for-woocommerce')]),
+            $field('store_mcp_tools', ['type' => 'multiselect', 'class' => 'wc-enhanced-select', 'title' => __('What the bot may do', 'onetrace-for-woocommerce'), 'options' => self::storeMcpTools(), 'desc_tip' => __('Reading is safe; actions change orders and run only after the customer agreed in the chat.', 'onetrace-for-woocommerce')]),
+            ['type' => 'sectionend', 'id' => 'onetrace_store_mcp'],
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private static function storeMcpTools(): array
+    {
+        return [
+            'store_start_verification' => __('Send a confirmation code', 'onetrace-for-woocommerce'),
+            'store_verify' => __('Check the confirmation code', 'onetrace-for-woocommerce'),
+            'store_get_customer' => __('Read the confirmed customer', 'onetrace-for-woocommerce'),
+            'store_find_orders' => __("Read the customer's orders", 'onetrace-for-woocommerce'),
+            'store_get_order' => __('Read an order', 'onetrace-for-woocommerce'),
+            'store_get_tracking' => __('Read parcel tracking', 'onetrace-for-woocommerce'),
+            'store_check_availability' => __('Read stock and prices', 'onetrace-for-woocommerce'),
+            'store_get_delivery_options' => __('Read delivery methods', 'onetrace-for-woocommerce'),
+            'store_get_return_policy' => __('Read the return policy', 'onetrace-for-woocommerce'),
+            'store_cancel_order' => __('Action: cancel an unpaid order', 'onetrace-for-woocommerce'),
+            'store_create_return' => __('Action: pass a return request to the shop', 'onetrace-for-woocommerce'),
+            'store_change_delivery' => __('Action: pass a delivery change request to the shop', 'onetrace-for-woocommerce'),
         ];
     }
 
@@ -151,6 +177,8 @@ final class Admin
         StoreEmails::forget();
         Queue::schedule();
         PromoSync::schedule();
+        // The rewrite of REST routes is not needed: the route registers on every request when the option is on.
+        StoreMcp::connect();
 
         if (Settings::server() && Settings::enabled('catalog') && !get_option('onetrace_catalog_synced')) {
             update_option('onetrace_catalog_synced', time(), false);
@@ -265,6 +293,19 @@ final class Admin
 
         if ($error !== null) {
             printf('<tr><th>%s</th><td><code>%s</code></td></tr>', esc_html__('Last error', 'onetrace-for-woocommerce'), esc_html($error));
+        }
+
+        $mcp = get_option(StoreMcp::STATUS_OPTION);
+
+        if (Settings::enabled('store_mcp') && \is_array($mcp)) {
+            printf(
+                '<tr><th>%s</th><td>%s</td></tr>',
+                esc_html__('AI chat bot', 'onetrace-for-woocommerce'),
+                ($mcp['status'] ?? '') === 'ok'
+                    /* translators: %s: tools the bot uses */
+                    ? esc_html(sprintf(__('Connected: %s', 'onetrace-for-woocommerce'), implode(', ', (array) ($mcp['tools'] ?? []))))
+                    : '<code>' . esc_html((string) ($mcp['error'] ?? '')) . '</code>'
+            );
         }
 
         echo '</tbody></table><p>';

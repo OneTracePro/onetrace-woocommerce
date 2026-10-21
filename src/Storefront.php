@@ -12,7 +12,7 @@ namespace OneTrace\WooCommerce;
 final class Storefront
 {
     /** Methods the stub queues until cdp.js loads: the same list as in the platform's install code. */
-    private const STUB_METHODS = ['init', 'page', 'track', 'identify', 'alias', 'reset', 'setLanguage', 'widgets', 'renderRecommendations'];
+    private const STUB_METHODS = ['init', 'page', 'track', 'identify', 'alias', 'reset', 'setLanguage', 'widgets', 'renderRecommendations', 'chatCustomer'];
 
     /** @var array<int, true> products whose "Notify when available" place is already on the page */
     private static $notified = [];
@@ -78,6 +78,13 @@ final class Storefront
             wp_json_encode($options, JSON_UNESCAPED_SLASHES),
             wp_json_encode($userId)
         );
+
+        // Store MCP: the signed-in customer is confirmed for the AI chat bot without a code.
+        $chatToken = StoreMcp::customerToken();
+
+        if ($chatToken !== null) {
+            $script .= "\ncdp.chatCustomer(" . wp_json_encode($chatToken) . ');';
+        }
 
         wp_print_inline_script_tag($script, ['id' => 'onetrace-tracker']);
     }

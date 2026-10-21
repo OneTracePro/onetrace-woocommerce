@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.10.0
+Stable tag: 1.11.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,7 +36,7 @@ HPOS and the Cart and Checkout blocks are supported.
 
 = External service =
 
-The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders with their shipments (carrier, tracking number and link), cart and wishlist events and the product catalog with stock from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; when store emails are turned on in the OneTrace project, the emails the store sends (recipient, subject, content, attachments, the order data of order emails, the customer's first name and language); page and product views from the visitor's browser. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
+The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders with their shipments (carrier, tracking number and link), cart and wishlist events and the product catalog with stock from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; when store emails are turned on in the OneTrace project, the emails the store sends (recipient, subject, content, attachments, the order data of order emails, the customer's first name and language); page and product views from the visitor's browser; with the AI chat bot (store MCP) turned on, the platform calls the store for a customer confirmed in the chat — their orders, parcel tracking, stock and prices, delivery methods and the return policy, the actions you allowed — and the store emails confirmation codes to the customer. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
 
 == Installation ==
 
@@ -62,6 +62,10 @@ On the page of a product that is out of stock (a variable product — when no va
 
 Yes, in the "Store emails" section of the OneTrace project: all emails sent with wp_mail() as the store made them, and order emails (placed, paid, shipped, delivered, cancelled, refunded) from OneTrace templates in the customer's language; emails to the shop owner and staff always go out from the store. The secret key needs the "Send messages manually" permission; WooCommerce → Settings → OneTrace shows the state. If OneTrace does not accept an email (no email integration, the quota, the limit per recipient, the platform unavailable), the store sends it itself.
 
+= Can the AI chat bot see orders of other customers? =
+
+No. The bot asks the store only for orders of a confirmed customer: signed in on the website, or confirmed with a code the shop sends to the email of the orders. An order number of someone else answers "not found".
+
 = Do I need an account? =
 
 Yes, a OneTrace.pro project (or a project at a brand that runs the platform).
@@ -78,6 +82,11 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
 
 == Changelog ==
+
+= 1.11.0 =
+* The AI chat bot of OneTrace works with the store over MCP: order status and contents, parcel tracking, stock and prices, delivery methods and the return policy — live from WooCommerce. Turn it on in WooCommerce → Settings → OneTrace → AI chat bot: store MCP.
+* Customers signed in on the website are confirmed for the bot automatically; guests and messenger customers get a code from the shop by email.
+* Actions are off by default: allow the bot to cancel unpaid orders and to pass return and delivery change requests to the shop (an order note and an email), each only after the customer agreed in the chat.
 
 = 1.10.0 =
 * Store emails through OneTrace: with the "Store emails" section of the OneTrace project, emails of WooCommerce, WordPress and other plugins (wp_mail) go out through the project's email integration as the store made them — subject, HTML, text, reply-to, sender name and attachments — one request per recipient; the store sends whatever OneTrace does not accept itself, only to those recipients. Emails to the shop owner and staff (admin emails, copies) are always sent by the store.

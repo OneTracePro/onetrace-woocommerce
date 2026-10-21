@@ -140,6 +140,14 @@ welcome = WELCOME-TEMPLATE
 
 Every 5 minutes new and changed unique codes of the pool become coupons with the settings of the template, one use each and the expiry of the code (Action Scheduler, `onetrace_promo_sync`). Coupons of the store with the same code are not touched; pools with one shared code are not synced — create that coupon yourself. The order events carry the coupon, so the platform counts the use. The secret key needs `promo.read`.
 
+## AI chat bot: store MCP
+
+The AI bot of the OneTrace chat can answer customers with live data of the store and, if you allow it, act on orders. Turn on **AI chat bot: store MCP** in WooCommerce → Settings → OneTrace and save: the plugin connects its MCP server (`POST /wp-json/onetrace/v1/mcp`, store MCP contract v1) to the bot of the project. The secret key needs the `chats.manage` permission.
+
+- **Reading** (on by default): orders of the customer (account and guest orders by email), an order with items, payment, shipping and tracking, stock and prices with variations, delivery methods of the shipping zone, the "Refund and returns policy" page.
+- **Actions** (off by default, allow them in "What the bot may do"): cancel an unpaid order (filter `onetrace_woocommerce_cancellable_statuses`), pass a return or delivery change request to the shop — an order note and an email to the shop owner. The bot acts only after the customer agreed in the chat.
+- **Customers**: signed-in customers are confirmed automatically (the tracker gets a signed token); guests and messenger customers get a 6-digit code from the shop by email (filter `onetrace_woocommerce_send_code` to send it by SMS). Orders of other customers are "not found".
+
 ## Privacy
 
 - With a consent plugin that supports the [WP Consent API](https://wordpress.org/plugins/wp-consent-api/), the tracker loads after the visitor agrees to statistics cookies (can be turned off in the settings).

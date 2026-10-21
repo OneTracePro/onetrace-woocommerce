@@ -54,6 +54,7 @@ final class Plugin
         Search::register();
         Loyalty::register();
         PromoSync::register();
+        StoreMcp::register();
 
         if (is_admin()) {
             Admin::register();
