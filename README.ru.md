@@ -145,7 +145,7 @@ wp onetrace sync-catalog   # выгрузить весь каталог сейч
 ```bash
 composer install
 tests/env/run.sh                                            # интеграционные тесты: свежие WordPress и WooCommerce в Docker
-WP_TAG=6.8-php8.1-apache WC_VERSION=9.9.5 tests/env/run.sh  # старые версии
+WP_TAG=6.8-php8.1-apache WC_VERSION=9.9.5 tests/env/run.sh  # старые версии (в tests/env сначала docker compose down -v)
 vendor/bin/phpstan analyse
 php bin/build.php && tests/env/smoke.sh                     # dist/onetrace-for-woocommerce.zip и проверка через cURL
 ```

@@ -169,7 +169,7 @@ wp onetrace sync-catalog   # uploads the whole catalog now
 ```bash
 composer install
 tests/env/run.sh                                            # integration tests: latest WordPress and WooCommerce in Docker
-WP_TAG=6.8-php8.1-apache WC_VERSION=9.9.5 tests/env/run.sh  # older versions
+WP_TAG=6.8-php8.1-apache WC_VERSION=9.9.5 tests/env/run.sh  # older versions (tests/env: docker compose down -v first)
 vendor/bin/phpstan analyse
 php bin/build.php && tests/env/smoke.sh                     # dist/onetrace-for-woocommerce.zip and a smoke test over cURL
 ```
