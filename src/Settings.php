@@ -28,6 +28,7 @@ final class Settings
         'consent_account' => 'yes',
         'consent_label' => '',
         'consent_topic' => '',
+        'preferences' => 'no',
         'widget_product' => '',
         'widget_cart' => '',
         'push' => 'no',

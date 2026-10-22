@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.11.0
+Stable tag: 1.12.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,7 @@ This plugin connects your WooCommerce store:
 * Product search: the store search results and suggestions while typing come from OneTrace — word forms, typos, the wrong keyboard layout and the visitor's interests; the usual search on any error.
 * Catalog languages from TranslatePress, WPML and Polylang: recommendations, search and emails in the visitor's language.
 * Loyalty program: signed-in customers pay with bonus points in the cart and at checkout and see their points in My account; referral links and the friend's code on registration.
+* Newsletters in My account: customers choose subscription topics by channel, how often marketing messages come, pause them or unsubscribe from everything — the OneTrace preference center inside the store.
 * Promo codes: unique codes of OneTrace pools become WooCommerce coupons of a template coupon.
 * Store emails: the emails of WooCommerce, WordPress and other plugins can go out through the email integration of the OneTrace project, with delivery statuses in the customer profile; order emails — from OneTrace templates in the customer's language, including shipped and delivered emails WooCommerce does not have. Emails to the shop owner and staff and whatever OneTrace does not accept, the store sends itself.
 
@@ -82,6 +83,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
 
 == Changelog ==
+
+= 1.12.0 =
+* My account → Newsletters: subscription topics of the OneTrace project by channel (email, SMS, messengers, browser notifications), how often marketing messages come (as they come, at most once a week or a month), a pause for 30 or 90 days and "Unsubscribe from everything". Turn it on in WooCommerce → Settings → OneTrace → Newsletter consent; the secret key needs the profiles.read and profiles.write permissions.
 
 = 1.11.0 =
 * The AI chat bot of OneTrace works with the store over MCP: order status and contents, parcel tracking, stock and prices, delivery methods and the return policy — live from WooCommerce. Turn it on in WooCommerce → Settings → OneTrace → AI chat bot: store MCP.
@@ -147,6 +151,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 * First release.
 
 == Upgrade Notice ==
+
+= 1.12.0 =
+My account → Newsletters: subscription topics by channel, frequency, a pause and unsubscribing from everything.
 
 = 1.9.0 =
 Shipped and delivered orders with tracking numbers from WooCommerce Shipment Tracking, Advanced Shipment Tracking and TrackShip.

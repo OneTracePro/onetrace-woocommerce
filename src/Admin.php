@@ -92,6 +92,7 @@ final class Admin
             $field('consent_account', ['type' => 'checkbox', 'title' => __('Account', 'onetrace-for-woocommerce'), 'desc' => __('Subscribe and unsubscribe on the account details page', 'onetrace-for-woocommerce')]),
             $field('consent_label', ['type' => 'text', 'title' => __('Checkbox text', 'onetrace-for-woocommerce'), 'placeholder' => __('Send me news and special offers by email', 'onetrace-for-woocommerce')]),
             $field('consent_topic', ['type' => 'text', 'title' => __('Subscription topic', 'onetrace-for-woocommerce'), 'placeholder' => 'news', 'desc_tip' => __('Empty — the whole email channel.', 'onetrace-for-woocommerce')]),
+            $field('preferences', ['type' => 'checkbox', 'title' => __('Newsletters in My account', 'onetrace-for-woocommerce'), 'desc' => __('My account → Newsletters: subscription topics by channel, frequency, a pause and unsubscribing from everything, as in the OneTrace preference center (the secret key needs the profiles.read and profiles.write permissions)', 'onetrace-for-woocommerce'), 'desc_tip' => __('Topics and their names are set up in OneTrace → Messaging rules → Subscription topics.', 'onetrace-for-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_consent'],
 
             ['type' => 'title', 'id' => 'onetrace_widgets', 'title' => __('Recommendations, search and Web Push', 'onetrace-for-woocommerce'), 'desc' => __('Widget ids are in the "Site → Widgets" section of the platform. Anywhere else use the [onetrace_widget id="…"] shortcode.', 'onetrace-for-woocommerce')],
@@ -208,8 +209,9 @@ final class Admin
                 $missing = $key === 'secret' && !\in_array('products.write', $answer['scopes'], true) && Settings::enabled('catalog');
                 $loyalty = $key === 'secret' && Settings::enabled('loyalty') && array_diff(['loyalty.read', 'loyalty.write'], $answer['scopes']) !== [];
                 $promo = $key === 'secret' && PromoSync::pools() !== [] && !\in_array('promo.read', $answer['scopes'], true);
+                $preferences = $key === 'secret' && Settings::enabled('preferences') && array_diff(['profiles.read', 'profiles.write'], $answer['scopes']) !== [];
                 $results[] = [
-                    $answer['type'] === $key && !$missing && !$loyalty && !$promo ? 'success' : 'warning',
+                    $answer['type'] === $key && !$missing && !$loyalty && !$promo && !$preferences ? 'success' : 'warning',
                     sprintf(
                         $key === 'write'
                             /* translators: %s: project name */
@@ -219,7 +221,8 @@ final class Admin
                         (string) ($answer['project']['name'] ?? '')
                     ) . ($missing ? ' ' . __('The key has no products.write permission: the catalog will not be uploaded.', 'onetrace-for-woocommerce') : '')
                     . ($loyalty ? ' ' . __('The key has no loyalty.read and loyalty.write permissions: bonus points will not work.', 'onetrace-for-woocommerce') : '')
-                    . ($promo ? ' ' . __('The key has no promo.read permission: promo codes will not become coupons.', 'onetrace-for-woocommerce') : ''),
+                    . ($promo ? ' ' . __('The key has no promo.read permission: promo codes will not become coupons.', 'onetrace-for-woocommerce') : '')
+                    . ($preferences ? ' ' . __('The key has no profiles.read and profiles.write permissions: the Newsletters tab will not work.', 'onetrace-for-woocommerce') : ''),
                 ];
             } catch (\Throwable $error) {
                 $results[] = ['error', sprintf('%s: %s', $key === 'write' ? __('Write key', 'onetrace-for-woocommerce') : __('Secret key', 'onetrace-for-woocommerce'), $error->getMessage())];

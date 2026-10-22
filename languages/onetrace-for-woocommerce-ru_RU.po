@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: OneTrace for WooCommerce 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/onetrace-for-"
 "woocommerce\n"
-"POT-Creation-Date: 2026-10-21T20:43:39+00:00\n"
+"POT-Creation-Date: 2026-10-22T20:37:27+00:00\n"
 "PO-Revision-Date: 2026-10-08T17:53:43+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -59,7 +59,7 @@ msgstr ""
 "копия в папке %2$s не загружается. Отключите и удалите копию в %2$s — "
 "настройки сохранятся."
 
-#: src/Admin.php:45 src/Admin.php:271 src/Admin.php:356
+#: src/Admin.php:45 src/Admin.php:274 src/Admin.php:359
 msgid "Settings"
 msgstr "Настройки"
 
@@ -83,7 +83,7 @@ msgstr "Адрес платформы"
 msgid "The address you open the platform at: the domain of your brand."
 msgstr "Адрес, по которому вы открываете платформу: домен вашего бренда."
 
-#: src/Admin.php:75 src/Admin.php:225
+#: src/Admin.php:75 src/Admin.php:228
 msgid "Write key"
 msgstr "Ключ записи"
 
@@ -91,7 +91,7 @@ msgstr "Ключ записи"
 msgid "For the tracker on the storefront."
 msgstr "Для трекера на витрине."
 
-#: src/Admin.php:76 src/Admin.php:225
+#: src/Admin.php:76 src/Admin.php:228
 msgid "Secret key"
 msgstr "Секретный ключ"
 
@@ -232,7 +232,7 @@ msgstr "Подписка и отписка на странице данных а
 msgid "Checkbox text"
 msgstr "Текст галочки"
 
-#: src/Admin.php:93 src/Settings.php:94
+#: src/Admin.php:93 src/Settings.php:95
 msgid "Send me news and special offers by email"
 msgstr "Присылать новости и специальные предложения по email"
 
@@ -244,11 +244,33 @@ msgstr "Тема подписки"
 msgid "Empty — the whole email channel."
 msgstr "Пусто — весь канал email."
 
-#: src/Admin.php:97
+#: src/Admin.php:95
+msgid "Newsletters in My account"
+msgstr "Рассылки в личном кабинете"
+
+#: src/Admin.php:95
+msgid ""
+"My account → Newsletters: subscription topics by channel, frequency, a pause "
+"and unsubscribing from everything, as in the OneTrace preference center (the "
+"secret key needs the profiles.read and profiles.write permissions)"
+msgstr ""
+"Мой аккаунт → Рассылки: темы подписки по каналам, частота, пауза и отписка "
+"от всего — как в центре подписок OneTrace (секретному ключу нужны права "
+"profiles.read и profiles.write)"
+
+#: src/Admin.php:95
+msgid ""
+"Topics and their names are set up in OneTrace → Messaging rules → "
+"Subscription topics."
+msgstr ""
+"Темы и их названия настраиваются в OneTrace → «Правила рассылок» → «Темы "
+"подписки»."
+
+#: src/Admin.php:98
 msgid "Recommendations, search and Web Push"
 msgstr "Рекомендации, поиск и Web Push"
 
-#: src/Admin.php:97
+#: src/Admin.php:98
 msgid ""
 "Widget ids are in the \"Site → Widgets\" section of the platform. Anywhere "
 "else use the [onetrace_widget id=\"…\"] shortcode."
@@ -256,19 +278,19 @@ msgstr ""
 "Идентификаторы виджетов — в разделе «Сайт → Виджеты» платформы. В любом "
 "другом месте используйте шорткод [onetrace_widget id=\"…\"]."
 
-#: src/Admin.php:98
+#: src/Admin.php:99
 msgid "Widget on the product page"
 msgstr "Виджет на странице товара"
 
-#: src/Admin.php:99
+#: src/Admin.php:100
 msgid "Widget in the cart"
 msgstr "Виджет в корзине"
 
-#: src/Admin.php:100
+#: src/Admin.php:101
 msgid "Web Push"
 msgstr "Web Push"
 
-#: src/Admin.php:100
+#: src/Admin.php:101
 msgid ""
 "Serve /cdp-sw.js from the store root; put the [onetrace_push_button] "
 "shortcode where visitors subscribe"
@@ -276,11 +298,11 @@ msgstr ""
 "Отдавать /cdp-sw.js с корня магазина; шорткод [onetrace_push_button] "
 "поставьте там, где посетители подписываются"
 
-#: src/Admin.php:101
+#: src/Admin.php:102
 msgid "Product search"
 msgstr "Поиск по товарам"
 
-#: src/Admin.php:101
+#: src/Admin.php:102
 msgid ""
 "Results of the store search and suggestions while typing come from OneTrace "
 "(the plan of the project must include product search); on an error — the "
@@ -289,18 +311,18 @@ msgstr ""
 "Результаты поиска магазина и подсказки при вводе — из OneTrace (поиск по "
 "товарам должен быть в тарифе проекта); при ошибке — обычный поиск WordPress"
 
-#: src/Admin.php:102
+#: src/Admin.php:103
 msgid "Notify when available"
 msgstr "Сообщить о поступлении"
 
-#: src/Admin.php:102
+#: src/Admin.php:103
 msgid ""
 "Show the “Notify when available” form on the page of a product that is out "
 "of stock"
 msgstr ""
 "Показывать форму «Сообщить о поступлении» на странице товара не в наличии"
 
-#: src/Admin.php:102
+#: src/Admin.php:103
 msgid ""
 "The form itself is set up in OneTrace → Site → Forms (kind “Notify when "
 "available”); without an active form of this kind nothing is shown."
@@ -308,11 +330,11 @@ msgstr ""
 "Саму форму настраивают в OneTrace → Сайт → Формы (вид «Сообщить о "
 "поступлении»); без активной формы этого вида ничего не показывается."
 
-#: src/Admin.php:105
+#: src/Admin.php:106
 msgid "Loyalty program"
 msgstr "Программа лояльности"
 
-#: src/Admin.php:105
+#: src/Admin.php:106
 msgid ""
 "The program is set up in the \"Loyalty\" section of the platform. Signed-in "
 "customers pay for part of the order with points in the cart and at checkout "
@@ -322,12 +344,12 @@ msgstr ""
 "покупатели оплачивают часть заказа баллами в корзине и при оформлении и "
 "видят баллы в «Мой аккаунт → Бонусные баллы»."
 
-#: src/Admin.php:106 src/LoyaltyAccount.php:73 src/LoyaltyBlocks.php:78
+#: src/Admin.php:107 src/LoyaltyAccount.php:73 src/LoyaltyBlocks.php:78
 #: src/LoyaltyCart.php:52 src/LoyaltyCart.php:53
 msgid "Bonus points"
 msgstr "Бонусные баллы"
 
-#: src/Admin.php:106
+#: src/Admin.php:107
 msgid ""
 "Show the balance and use points in the cart and at checkout (the secret key "
 "needs the loyalty.read and loyalty.write permissions)"
@@ -335,11 +357,11 @@ msgstr ""
 "Показывать баланс и списывать баллы в корзине и при оформлении (секретному "
 "ключу нужны права loyalty.read и loyalty.write)"
 
-#: src/Admin.php:107
+#: src/Admin.php:108
 msgid "Referrals"
 msgstr "Приглашения"
 
-#: src/Admin.php:107
+#: src/Admin.php:108
 msgid ""
 "The \"Friend's code\" field in the registration form. Without it the code of "
 "a referral link (?ref=) still counts: the tracker keeps it in a cookie."
@@ -347,11 +369,11 @@ msgstr ""
 "Поле «Код друга» в форме регистрации. Без него код из ссылки приглашения (?"
 "ref=) всё равно засчитывается: трекер сохраняет его в cookie."
 
-#: src/Admin.php:110
+#: src/Admin.php:111
 msgid "Promo codes"
 msgstr "Промокоды"
 
-#: src/Admin.php:110
+#: src/Admin.php:111
 msgid ""
 "Unique codes of OneTrace promo code pools become WooCommerce coupons every 5 "
 "minutes: with the discount, restrictions and expiry of a template coupon, "
@@ -363,11 +385,11 @@ msgstr ""
 "использование. Создайте купон-образец в разделе «Маркетинг → Купоны» и "
 "привяжите его к ключу пула из раздела «Промокоды» платформы."
 
-#: src/Admin.php:111
+#: src/Admin.php:112
 msgid "Pools and template coupons"
 msgstr "Пулы и купоны-образцы"
 
-#: src/Admin.php:111
+#: src/Admin.php:112
 msgid ""
 "One per line: pool key = template coupon code. The secret key needs the "
 "promo.read permission."
@@ -375,106 +397,112 @@ msgstr ""
 "По одному в строке: ключ пула = код купона-образца. Секретному ключу нужно "
 "право promo.read."
 
-#: src/Admin.php:114
+#: src/Admin.php:115
 msgid "AI chat bot: store MCP"
 msgstr "ИИ-бот чата: MCP магазина"
 
-#: src/Admin.php:114
+#: src/Admin.php:115
 msgid ""
 "The AI bot of the OneTrace chat answers customers with live data of the "
 "store and, if you allow it, acts on orders. Customers signed in on the "
 "website are confirmed automatically, others with a code the shop sends by "
 "email. The secret key needs the chats.manage permission."
-msgstr "ИИ-бот чата OneTrace отвечает покупателям живыми данными магазина и, если вы разрешите, выполняет действия с заказами. Покупатели, вошедшие на сайт, подтверждаются автоматически, остальные — кодом, который магазин отправляет на email. Секретному ключу нужно право chats.manage."
+msgstr ""
+"ИИ-бот чата OneTrace отвечает покупателям живыми данными магазина и, если вы "
+"разрешите, выполняет действия с заказами. Покупатели, вошедшие на сайт, "
+"подтверждаются автоматически, остальные — кодом, который магазин отправляет "
+"на email. Секретному ключу нужно право chats.manage."
 
-#: src/Admin.php:115
+#: src/Admin.php:116
 msgid "Store MCP server"
 msgstr "MCP-сервер магазина"
 
-#: src/Admin.php:115
+#: src/Admin.php:116
 msgid "Connect the store to the AI chat bot"
 msgstr "Подключить магазин к ИИ-боту чата"
 
-#: src/Admin.php:116
+#: src/Admin.php:117
 msgid "What the bot may do"
 msgstr "Что разрешено боту"
 
-#: src/Admin.php:116
+#: src/Admin.php:117
 msgid ""
 "Reading is safe; actions change orders and run only after the customer "
 "agreed in the chat."
-msgstr "Чтение безопасно; действия меняют заказы и выполняются только после согласия покупателя в чате."
+msgstr ""
+"Чтение безопасно; действия меняют заказы и выполняются только после согласия "
+"покупателя в чате."
 
-#: src/Admin.php:127
+#: src/Admin.php:128
 msgid "Send a confirmation code"
 msgstr "Отправлять код подтверждения"
 
-#: src/Admin.php:128
+#: src/Admin.php:129
 msgid "Check the confirmation code"
 msgstr "Проверять код подтверждения"
 
-#: src/Admin.php:129
+#: src/Admin.php:130
 msgid "Read the confirmed customer"
 msgstr "Читать подтверждённого покупателя"
 
-#: src/Admin.php:130
+#: src/Admin.php:131
 msgid "Read the customer's orders"
 msgstr "Читать заказы покупателя"
 
-#: src/Admin.php:131
+#: src/Admin.php:132
 msgid "Read an order"
 msgstr "Читать заказ"
 
-#: src/Admin.php:132
+#: src/Admin.php:133
 msgid "Read parcel tracking"
 msgstr "Читать отслеживание посылки"
 
-#: src/Admin.php:133
+#: src/Admin.php:134
 msgid "Read stock and prices"
 msgstr "Читать наличие и цены"
 
-#: src/Admin.php:134
+#: src/Admin.php:135
 msgid "Read delivery methods"
 msgstr "Читать способы доставки"
 
-#: src/Admin.php:135
+#: src/Admin.php:136
 msgid "Read the return policy"
 msgstr "Читать условия возврата"
 
-#: src/Admin.php:136
+#: src/Admin.php:137
 msgid "Action: cancel an unpaid order"
 msgstr "Действие: отменять неоплаченный заказ"
 
-#: src/Admin.php:137
+#: src/Admin.php:138
 msgid "Action: pass a return request to the shop"
 msgstr "Действие: передавать магазину заявку на возврат"
 
-#: src/Admin.php:138
+#: src/Admin.php:139
 msgid "Action: pass a delivery change request to the shop"
 msgstr "Действие: передавать магазину запрос на изменение доставки"
 
-#: src/Admin.php:152
+#: src/Admin.php:153
 msgid "Saved — enter a new key to replace it"
 msgstr "Сохранён — введите новый ключ, чтобы заменить"
 
 #. translators: %s: project name
-#: src/Admin.php:216
+#: src/Admin.php:218
 #, php-format
 msgid "Write key: project \"%s\"."
 msgstr "Ключ записи: проект «%s»."
 
 #. translators: %s: project name
-#: src/Admin.php:218
+#: src/Admin.php:220
 #, php-format
 msgid "Secret key: project \"%s\"."
 msgstr "Секретный ключ: проект «%s»."
 
-#: src/Admin.php:220
+#: src/Admin.php:222
 msgid ""
 "The key has no products.write permission: the catalog will not be uploaded."
 msgstr "У ключа нет права products.write: каталог не будет выгружаться."
 
-#: src/Admin.php:221
+#: src/Admin.php:223
 msgid ""
 "The key has no loyalty.read and loyalty.write permissions: bonus points will "
 "not work."
@@ -482,20 +510,28 @@ msgstr ""
 "У ключа нет прав loyalty.read и loyalty.write: бонусные баллы работать не "
 "будут."
 
-#: src/Admin.php:222
+#: src/Admin.php:224
 msgid ""
 "The key has no promo.read permission: promo codes will not become coupons."
 msgstr "У ключа нет права promo.read: промокоды не станут купонами."
 
-#: src/Admin.php:230
+#: src/Admin.php:225
+msgid ""
+"The key has no profiles.read and profiles.write permissions: the Newsletters "
+"tab will not work."
+msgstr ""
+"У ключа нет прав profiles.read и profiles.write: вкладка «Рассылки» работать "
+"не будет."
+
+#: src/Admin.php:233
 msgid "Enter the platform address and the keys first."
 msgstr "Сначала укажите адрес платформы и ключи."
 
-#: src/Admin.php:247
+#: src/Admin.php:250
 msgid "The catalog upload has started; it runs in the background."
 msgstr "Выгрузка каталога началась, она идёт в фоне."
 
-#: src/Admin.php:269
+#: src/Admin.php:272
 msgid ""
 "OneTrace: sending is paused because the platform rejected the key. Check the "
 "keys and save the settings."
@@ -503,47 +539,47 @@ msgstr ""
 "OneTrace: отправка приостановлена — платформа отклонила ключ. Проверьте "
 "ключи и сохраните настройки."
 
-#: src/Admin.php:282
+#: src/Admin.php:285
 msgid "Status"
 msgstr "Состояние"
 
-#: src/Admin.php:285
+#: src/Admin.php:288
 msgid "Queue"
 msgstr "Очередь"
 
 #. translators: 1: items waiting, 2: items waiting for a retry
-#: src/Admin.php:288
+#: src/Admin.php:291
 #, php-format
 msgid "%1$d waiting, %2$d of them after an error"
 msgstr "Ждут отправки: %1$d, из них после ошибки: %2$d"
 
-#: src/Admin.php:295
+#: src/Admin.php:298
 msgid "Last error"
 msgstr "Последняя ошибка"
 
-#: src/Admin.php:303
+#: src/Admin.php:306
 msgid "AI chat bot"
 msgstr "ИИ-бот чата"
 
 #. translators: %s: tools the bot uses
-#: src/Admin.php:306
+#: src/Admin.php:309
 #, php-format
 msgid "Connected: %s"
 msgstr "Подключён: %s"
 
-#: src/Admin.php:312
+#: src/Admin.php:315
 msgid "Test connection"
 msgstr "Проверить подключение"
 
-#: src/Admin.php:314
+#: src/Admin.php:317
 msgid "Upload the whole catalog"
 msgstr "Выгрузить весь каталог"
 
-#: src/Admin.php:324
+#: src/Admin.php:327
 msgid "Store emails"
 msgstr "Письма магазина"
 
-#: src/Admin.php:325
+#: src/Admin.php:328
 msgid ""
 "Emails of WooCommerce, WordPress and other plugins can go out through the "
 "email integration of your OneTrace project, with delivery statuses and "
@@ -560,47 +596,47 @@ msgstr ""
 "секретному ключу нужно право «Отправка сообщений вручную» (messages.send). "
 "Письмо, которое OneTrace не принял, магазин отправляет сам."
 
-#: src/Admin.php:334 src/Admin.php:337
+#: src/Admin.php:337 src/Admin.php:340
 msgid "State"
 msgstr "Состояние"
 
-#: src/Admin.php:334
+#: src/Admin.php:337
 msgid "Enter the platform address and the secret key."
 msgstr "Укажите адрес платформы и секретный ключ."
 
-#: src/Admin.php:337
+#: src/Admin.php:340
 msgid "Not available — the store sends its emails itself."
 msgstr "Недоступно — магазин отправляет письма сам."
 
-#: src/Admin.php:340
+#: src/Admin.php:343
 msgid "Order placed"
 msgstr "Заказ оформлен"
 
-#: src/Admin.php:341
+#: src/Admin.php:344
 msgid "Order paid"
 msgstr "Заказ оплачен"
 
-#: src/Admin.php:342
+#: src/Admin.php:345
 msgid "Order shipped"
 msgstr "Заказ отправлен"
 
-#: src/Admin.php:343
+#: src/Admin.php:346
 msgid "Order delivered"
 msgstr "Заказ доставлен"
 
-#: src/Admin.php:344
+#: src/Admin.php:347
 msgid "Order cancelled"
 msgstr "Заказ отменён"
 
-#: src/Admin.php:345
+#: src/Admin.php:348
 msgid "Order refunded"
 msgstr "Возврат по заказу"
 
-#: src/Admin.php:349
+#: src/Admin.php:352
 msgid "All store emails"
 msgstr "Все письма магазина"
 
-#: src/Admin.php:350
+#: src/Admin.php:353
 msgid ""
 "Through OneTrace: emails without a OneTrace template go out as the store "
 "makes them"
@@ -608,27 +644,27 @@ msgstr ""
 "Через OneTrace: письма без шаблона OneTrace уходят такими, какими их делает "
 "магазин"
 
-#: src/Admin.php:351
+#: src/Admin.php:354
 msgid "Sent by the store"
 msgstr "Отправляет магазин"
 
-#: src/Admin.php:352
+#: src/Admin.php:355
 msgid "Order emails from OneTrace templates"
 msgstr "Письма о заказе по шаблонам OneTrace"
 
-#: src/Admin.php:352
+#: src/Admin.php:355
 msgid "None"
 msgstr "Нет"
 
-#: src/Admin.php:357
+#: src/Admin.php:360
 msgid "Store emails in OneTrace"
 msgstr "Письма магазина в OneTrace"
 
-#: src/Admin.php:358
+#: src/Admin.php:361
 msgid "OneTrace → Store emails"
 msgstr "OneTrace → Письма магазина"
 
-#: src/Admin.php:402
+#: src/Admin.php:405
 msgid "You are not allowed to do this."
 msgstr "У вас нет прав на это действие."
 
@@ -823,6 +859,95 @@ msgstr "Списать баллы"
 #: src/LoyaltyCart.php:34
 msgid "Could not apply the points. Please try again."
 msgstr "Не удалось списать баллы. Попробуйте ещё раз."
+
+#: src/PreferencesAccount.php:85
+msgid "Newsletters"
+msgstr "Рассылки"
+
+#: src/PreferencesAccount.php:93
+msgid ""
+"Newsletter settings are not available right now. Please try again later."
+msgstr "Настройки рассылок сейчас недоступны. Попробуйте позже."
+
+#: src/PreferencesAccount.php:102
+msgid "We do not send you newsletters yet."
+msgstr "Мы пока не присылаем вам рассылки."
+
+#: src/PreferencesAccount.php:110
+msgid ""
+"Choose what we send you and where. Messages about your orders and your "
+"account come anyway."
+msgstr ""
+"Выберите, что и куда вам присылать. Сообщения о заказах и аккаунте приходят "
+"в любом случае."
+
+#: src/PreferencesAccount.php:150
+msgid "Some channels cannot be changed: the address does not receive messages."
+msgstr "Некоторые каналы изменить нельзя: адрес не принимает сообщения."
+
+#: src/PreferencesAccount.php:154
+msgid "How often"
+msgstr "Как часто"
+
+#: src/PreferencesAccount.php:156
+msgid "As they come"
+msgstr "По мере выхода"
+
+#: src/PreferencesAccount.php:156
+msgid "At most once a week"
+msgstr "Не чаще раза в неделю"
+
+#: src/PreferencesAccount.php:156
+msgid "At most once a month"
+msgstr "Не чаще раза в месяц"
+
+#: src/PreferencesAccount.php:163
+msgid "Pause"
+msgstr "Пауза"
+
+#. translators: %s: date
+#: src/PreferencesAccount.php:166
+#, php-format
+msgid "Paused until %s"
+msgstr "Пауза до %s"
+
+#. translators: %s: date
+#: src/PreferencesAccount.php:166
+msgid "Resume now"
+msgstr "Возобновить сейчас"
+
+#: src/PreferencesAccount.php:167
+msgid "No pause"
+msgstr "Без паузы"
+
+#. translators: %d: number of days
+#: src/PreferencesAccount.php:171
+#, php-format
+msgid "Pause for %d day"
+msgid_plural "Pause for %d days"
+msgstr[0] "Пауза на %d день"
+msgstr[1] "Пауза на %d дня"
+msgstr[2] "Пауза на %d дней"
+
+#: src/PreferencesAccount.php:181
+msgid "Save"
+msgstr "Сохранить"
+
+#: src/PreferencesAccount.php:182
+msgid "Unsubscribe from everything"
+msgstr "Отписаться от всего"
+
+#: src/PreferencesAccount.php:202
+msgid "You are unsubscribed from all newsletters."
+msgstr "Вы отписались от всех рассылок."
+
+#: src/PreferencesAccount.php:202
+msgid "Your newsletter settings are saved."
+msgstr "Настройки рассылок сохранены."
+
+#: src/PreferencesAccount.php:204
+msgid "Could not save the settings. Please try again later."
+msgstr "Не удалось сохранить настройки. Попробуйте позже."
 
 #: src/Referrals.php:50
 msgid "Friend's code"

@@ -119,6 +119,10 @@ The kind can be changed with the `onetrace_woocommerce_email_kind` filter (e.g. 
 - Product search: turn on "Product search" (the plan of the OneTrace project must include it). The product search of the store (`?s=…&post_type=product`, the search box of the theme and the product search block) keeps the theme template, but its products, their order and the number of pages come from OneTrace: word forms, typos, the wrong keyboard layout, the visitor's interests. The search boxes get suggestions while typing (products, categories, popular queries). The results page sends the `search` event from the server. On any API error or after 3 seconds the usual WordPress search runs.
 - Web Push: turn it on in the settings — the plugin serves `/cdp-sw.js` from the store root (pretty permalinks are required) — and put `[onetrace_push_button]` where visitors subscribe.
 
+## Newsletters in My account
+
+Turn on "Newsletters in My account" in **Settings → OneTrace → Newsletter consent** (the secret key needs the `profiles.read` and `profiles.write` permissions). The **My account → Newsletters** tab shows the OneTrace preference center inside the store: the subscription topics of the project (set up in **Messaging rules → Subscription topics** of the platform) by the channels the customer gets messages in, how often marketing messages come (as they come, at most once a week or a month), a pause for 30 or 90 days and "Unsubscribe from everything". Messages about orders and the account keep coming. The same choice is available from the unsubscribe link of every OneTrace message.
+
 ## Loyalty program
 
 Turn on "Bonus points" in **Settings → OneTrace → Loyalty program**; the program itself (earning, tiers, the share of an order payable with points) is set up in the **Loyalty** section of the platform, and the secret key needs the `loyalty.read` and `loyalty.write` permissions.

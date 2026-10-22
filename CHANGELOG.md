@@ -2,6 +2,10 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.12.0 — 2026-10-22
+
+- My account → Newsletters (`newsletters` endpoint, setting `preferences`, off by default): the OneTrace preference center inside the store (onetrace-php 1.14) — topics of the project by channel with the channel names in the store language, the frequency of marketing messages (as they come, weekly, monthly), a pause for 30 or 90 days or resuming, "Unsubscribe from everything". Saving sends every topic of the form in every channel that can change, so an unticked box unsubscribes; blocked channels (the address does not receive messages) are read only. A customer the platform does not know yet sees that nothing is sent. The settings check warns when the secret key has no `profiles.read` and `profiles.write`.
+
 ## 1.11.0 — 2026-10-21
 
 - Store MCP server for the OneTrace AI chat bot (store MCP contract v1, onetrace-php 1.13): `POST /wp-json/onetrace/v1/mcp`, the platform key is generated on first use (`onetrace_store_mcp_key`) and the server is connected to the bot when the settings are saved (`chats()->connectStoreMcp()`, the secret key needs `chats.manage`); the state is shown in the plugin settings.
