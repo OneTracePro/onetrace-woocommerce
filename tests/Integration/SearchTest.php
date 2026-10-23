@@ -131,6 +131,19 @@ final class SearchTest extends TestCase
         self::assertSame([$dress->get_id()], wp_list_pluck($query->posts, 'ID'));
     }
 
+    public function testFallsBackToTheWordPressSearchOverTheMonthlySearchLimitWithoutRetrying(): void
+    {
+        $dress = $this->product(['name' => 'Linen Dress']);
+        $this->respond(402, ['code' => 'quota_exceeded', 'message' => 'The monthly limit of search requests is spent.']);
+
+        $query = $this->searchPage(['s' => 'Linen']);
+        $this->flush();
+
+        self::assertSame([$dress->get_id()], wp_list_pluck($query->posts, 'ID'));
+        self::assertCount(1, $this->urls, 'A 402 is not retried.');
+        self::assertSame([], $this->platform->events('search'));
+    }
+
     public function testLeavesOtherQueriesAlone(): void
     {
         $this->respond(200, ['total' => 0, 'items' => []]);

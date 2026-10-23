@@ -33,6 +33,7 @@ final class Settings
         'widget_cart' => '',
         'push' => 'no',
         'search' => 'no',
+        'search_widget' => 'no',
         'notify' => 'yes',
         'product_id' => 'id',
         'loyalty' => 'no',

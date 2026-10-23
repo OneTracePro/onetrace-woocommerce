@@ -100,6 +100,7 @@ final class Admin
             $field('widget_cart', ['type' => 'text', 'title' => __('Widget in the cart', 'onetrace-for-woocommerce'), 'placeholder' => 'k3x9…']),
             $field('push', ['type' => 'checkbox', 'title' => __('Web Push', 'onetrace-for-woocommerce'), 'desc' => __('Serve /cdp-sw.js from the store root; put the [onetrace_push_button] shortcode where visitors subscribe', 'onetrace-for-woocommerce')]),
             $field('search', ['type' => 'checkbox', 'title' => __('Product search', 'onetrace-for-woocommerce'), 'desc' => __('Results of the store search and suggestions while typing come from OneTrace (the plan of the project must include product search); on an error — the usual WordPress search', 'onetrace-for-woocommerce')]),
+            $field('search_widget', ['type' => 'checkbox', 'title' => __('OneTrace search widget', 'onetrace-for-woocommerce'), 'desc' => __('The search page shows the results widget of OneTrace — facets, sorting, infinite scroll and an "Add to cart" button — inside your theme, and a search layer opens under the search fields (needs the tracker)', 'onetrace-for-woocommerce'), 'desc_tip' => __('Turn the widget on and set up its look in OneTrace → Site → Search. While it is off there, or OneTrace is unavailable, the search page stays as it is.', 'onetrace-for-woocommerce')]),
             $field('notify', ['type' => 'checkbox', 'title' => __('Notify when available', 'onetrace-for-woocommerce'), 'desc' => __('Show the “Notify when available” form on the page of a product that is out of stock', 'onetrace-for-woocommerce'), 'desc_tip' => __('The form itself is set up in OneTrace → Site → Forms (kind “Notify when available”); without an active form of this kind nothing is shown.', 'onetrace-for-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_widgets'],
 
@@ -176,6 +177,7 @@ final class Admin
         delete_option(Queue::PAUSED_OPTION);
         Connection::reset();
         StoreEmails::forget();
+        SearchWidget::forget();
         Queue::schedule();
         PromoSync::schedule();
         // The rewrite of REST routes is not needed: the route registers on every request when the option is on.

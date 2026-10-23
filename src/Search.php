@@ -10,7 +10,8 @@ use OneTrace\Commerce\Customer;
  * Product search of the store from OneTrace: the results page keeps the theme template, but its products and their
  * order come from the platform (word forms, typos, the wrong keyboard layout, the visitor's interests); the search
  * box gets suggestions of the tracker (data-cdp-search). Any API error falls back to the usual WordPress search.
- * A query with a redirect rule (Site → Search of the platform) opens its page instead of the results.
+ * A query with a redirect rule (Site → Search of the platform) opens its page instead of the results. With the
+ * OneTrace search widget (SearchWidget) the results page is drawn by the tracker and the server does not search.
  */
 final class Search
 {
@@ -24,16 +25,21 @@ final class Search
 
     public static function register(): void
     {
-        if (!Settings::enabled('search') || Settings::url() === '' || (string) Settings::get('write_key') === '') {
+        $search = Settings::enabled('search');
+
+        if (!($search || SearchWidget::enabled()) || !Settings::storefront()) {
             return;
         }
 
-        add_filter('posts_pre_query', [self::class, 'results'], 10, 2);
+        if ($search) {
+            add_filter('posts_pre_query', [self::class, 'results'], 10, 2);
+            add_action('template_redirect', [self::class, 'redirect']);
+        }
+
         add_filter('get_product_search_form', [self::class, 'form']);
         add_filter('get_search_form', [self::class, 'form']);
         add_filter('render_block', [self::class, 'block'], 10, 2);
         add_action('template_redirect', [self::class, 'category']);
-        add_action('template_redirect', [self::class, 'redirect']);
     }
 
     /**
@@ -82,6 +88,9 @@ final class Search
 
         $query->found_posts = (int) ($result['total'] ?? 0);
         $query->max_num_pages = (int) ceil($query->found_posts / $perPage);
+        // WP_Query caches whatever posts_pre_query returns: with a persistent object cache the platform's answer
+        // would come back as the WordPress search after an error or with the search turned off.
+        $query->set('cache_results', false);
 
         if ($page === 1) {
             self::track($text, $query->found_posts, (string) ($result['request_id'] ?? ''));
@@ -105,6 +114,11 @@ final class Search
      */
     public static function form(string $html): string
     {
+        // Only the search widget: the layer of the tracker joins the fields while the widget is on in OneTrace.
+        if (!Settings::enabled('search') && !SearchWidget::active()) {
+            return $html;
+        }
+
         $attributes = sprintf(' data-cdp-search data-category-url="%s"', esc_attr(add_query_arg(self::CATEGORY_PARAM, '{id}', home_url('/'))));
 
         return (string) preg_replace('/<input(?![^>]*data-cdp-search)([^>]*\bname=(["\'])s\2)/i', '<input' . $attributes . '$1', $html, 1);

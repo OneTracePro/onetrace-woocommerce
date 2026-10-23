@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.12.0
+Stable tag: 1.13.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +27,7 @@ This plugin connects your WooCommerce store:
 * The "Notify when available" form of OneTrace on the page of a product that is out of stock.
 * Recommendation widgets and Web Push.
 * Product search: the store search results and suggestions while typing come from OneTrace — word forms, typos, the wrong keyboard layout and the visitor's interests; the usual search on any error.
+* The OneTrace search widget on the search page of your theme: facets, sorting, infinite scroll and an "Add to cart" button, with a search layer under the search fields.
 * Catalog languages from TranslatePress, WPML and Polylang: recommendations, search and emails in the visitor's language.
 * Loyalty program: signed-in customers pay with bonus points in the cart and at checkout and see their points in My account; referral links and the friend's code on registration.
 * Newsletters in My account: customers choose subscription topics by channel, how often marketing messages come, pause them or unsubscribe from everything — the OneTrace preference center inside the store.
@@ -37,7 +38,7 @@ HPOS and the Cart and Checkout blocks are supported.
 
 = External service =
 
-The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders with their shipments (carrier, tracking number and link), cart and wishlist events and the product catalog with stock from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; when store emails are turned on in the OneTrace project, the emails the store sends (recipient, subject, content, attachments, the order data of order emails, the customer's first name and language); page and product views from the visitor's browser; with the AI chat bot (store MCP) turned on, the platform calls the store for a customer confirmed in the chat — their orders, parcel tracking, stock and prices, delivery methods and the return policy, the actions you allowed — and the store emails confirmation codes to the customer. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
+The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders with their shipments (carrier, tracking number and link), cart and wishlist events and the product catalog with stock from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; when store emails are turned on in the OneTrace project, the emails the store sends (recipient, subject, content, attachments, the order data of order emails, the customer's first name and language); page and product views from the visitor's browser; with product search or the search widget, the search queries of visitors and their tracker id; with the AI chat bot (store MCP) turned on, the platform calls the store for a customer confirmed in the chat — their orders, parcel tracking, stock and prices, delivery methods and the return policy, the actions you allowed — and the store emails confirmation codes to the customer. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
 
 == Installation ==
 
@@ -54,6 +55,10 @@ YITH WooCommerce Wishlist and TI WooCommerce Wishlist: adding and removing produ
 = Which shipment tracking plugins are supported? =
 
 WooCommerce Shipment Tracking, Advanced Shipment Tracking and TrackShip: every tracking item added to the order is sent as order_shipped with the carrier, the tracking number and the link; the "Delivered" status of AST and TrackShip is order_delivered. Without a tracking plugin the "Completed" status is one order_shipped without tracking. Other tracking plugins can pass their parcels with the onetrace_woocommerce_order_shipments filter (see the README on GitHub).
+
+= What does the OneTrace search widget change? =
+
+With the setting "OneTrace search widget" on and the widget turned on in OneTrace → Site → Search, the product search page keeps the header and footer of your theme (classic or block theme) and shows the results widget of OneTrace instead of the store's results: facets, sorting, infinite scroll and an "Add to cart" button that adds to the WooCommerce cart and refreshes the mini-cart. Products with options open their page. The widget needs the tracker; while it is off in OneTrace, OneTrace is unavailable or the visitor has not agreed to statistics cookies (WP Consent API), the search page stays as it is.
 
 = How does "Notify when available" work? =
 
@@ -83,6 +88,11 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
 
 == Changelog ==
+
+= 1.13.0 =
+* The OneTrace search widget (setting "OneTrace search widget", off by default): the product search page shows the results widget of OneTrace inside the theme — classic and block themes — with facets, sorting, infinite scroll and an "Add to cart" button; the search fields open the search layer of the widget. The store does not search on the server in this mode. While the widget is off in OneTrace or OneTrace is unavailable, the search page stays as it is.
+* "Add to cart" of the widget adds to the WooCommerce cart with the usual stock and quantity checks and refreshes the mini-cart (classic cart fragments and the Mini-Cart block); products with options open their page.
+* Product search over the monthly search limit of the plan falls back to the WordPress search right away.
 
 = 1.12.0 =
 * My account → Newsletters: subscription topics of the OneTrace project by channel (email, SMS, messengers, browser notifications), how often marketing messages come (as they come, at most once a week or a month), a pause for 30 or 90 days and "Unsubscribe from everything". Turn it on in WooCommerce → Settings → OneTrace → Newsletter consent; the secret key needs the profiles.read and profiles.write permissions.
@@ -151,6 +161,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 * First release.
 
 == Upgrade Notice ==
+
+= 1.13.0 =
+The OneTrace search widget on the search page of your theme: facets, sorting, infinite scroll and "Add to cart".
 
 = 1.12.0 =
 My account → Newsletters: subscription topics by channel, frequency, a pause and unsubscribing from everything.

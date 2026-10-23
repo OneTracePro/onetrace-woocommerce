@@ -53,7 +53,7 @@ jobs:
       - run: composer install --no-interaction --no-progress
       - run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress
       - name: PHP 7.4 syntax
-        run: docker run --rm -v "$PWD":/app -w /app php:7.4-cli sh -c 'for f in onetrace-woocommerce.php uninstall.php src/*.php; do php -l "$f" >/dev/null || exit 1; done'
+        run: docker run --rm -v "$PWD":/app -w /app php:7.4-cli sh -c 'for f in onetrace-woocommerce.php uninstall.php src/*.php templates/*.php; do php -l "$f" >/dev/null || exit 1; done'
 
   build:
     name: Build and smoke test

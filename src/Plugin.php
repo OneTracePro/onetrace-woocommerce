@@ -52,6 +52,7 @@ final class Plugin
         Catalog::register();
         Storefront::register();
         Search::register();
+        SearchWidget::register();
         Loyalty::register();
         PreferencesAccount::register();
         PromoSync::register();

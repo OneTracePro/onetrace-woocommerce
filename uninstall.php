@@ -12,7 +12,7 @@ foreach (['onetrace_settings', 'onetrace_paused', 'onetrace_db_version', 'onetra
     delete_option($option);
 }
 
-foreach (['onetrace_email_settings', 'onetrace_project_uid'] as $onetrace_transient) {
+foreach (['onetrace_email_settings', 'onetrace_project_uid', 'onetrace_search_widget'] as $onetrace_transient) {
     delete_transient($onetrace_transient);
 }
 
