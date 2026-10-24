@@ -9,7 +9,7 @@ use OneTrace\Commerce\CatalogItem;
 /**
  * Catalog languages of the store from its translation plugin: TranslatePress (one product, a dictionary of strings),
  * WPML and Polylang (a translated copy of the product per language). The platform keeps one product with
- * translations of the name, the link and the attributes, so recommendations, search and emails show the visitor's
+ * translations of the name, the link, the attributes and the description, so recommendations, search and emails show the visitor's
  * language; with WPML and Polylang every copy resolves to the product of the default language — the same id in the
  * catalog and in events.
  */
@@ -121,7 +121,7 @@ final class Translations
                 $translated = $copy > 0 && $copy !== $product->get_id() ? wc_get_product($copy) : null;
 
                 if ($translated instanceof \WC_Product) {
-                    $items[$index] = CatalogItem::translate($items[$index], $locale, html_entity_decode($translated->get_name()), (string) get_permalink($copy));
+                    $items[$index] = CatalogItem::translate($items[$index], $locale, html_entity_decode($translated->get_name()), (string) get_permalink($copy), [], Catalog::description($translated));
                 }
             }
         }
@@ -141,7 +141,8 @@ final class Translations
     }
 
     /**
-     * TranslatePress: names, category names and attribute values from its dictionary, links with the language.
+     * TranslatePress: names, category names, attribute values and descriptions (every string of them) from its
+     * dictionary, links with the language.
      *
      * @param list<array<string, mixed>> $items
      * @param array<string, \WC_Product> $products
@@ -156,10 +157,19 @@ final class Translations
         $query = $trp->get_component('query');
         $urls = $trp->get_component('url_converter');
         $strings = array_merge(array_column($items, 'name'), array_column($categories, 'name'));
+        $descriptions = [];
 
         foreach ($items as $item) {
             foreach ((array) ($item['params'] ?? []) as $value) {
                 $strings[] = (string) $value;
+            }
+
+            $product = $products[(string) $item['id']] ?? null;
+            $description = $product instanceof \WC_Product ? Catalog::description($product) : null;
+
+            if ($description !== null) {
+                $descriptions[(string) $item['id']] = $description;
+                $strings = array_merge($strings, self::segments($description));
             }
         }
 
@@ -184,7 +194,8 @@ final class Translations
                 }
 
                 $url = isset($item['url']) && isset($products[(string) $item['id']]) ? (string) $urls->get_url_for_language($locale, (string) $item['url'], '') : null;
-                $items[$index] = CatalogItem::translate($item, $locale, $dictionary[(string) $item['name']] ?? null, $url !== $item['url'] ? $url : null, $params);
+                $description = isset($descriptions[(string) $item['id']]) ? self::translateHtml($descriptions[(string) $item['id']], $dictionary) : null;
+                $items[$index] = CatalogItem::translate($item, $locale, $dictionary[(string) $item['name']] ?? null, $url !== $item['url'] ? $url : null, $params, $description);
             }
 
             foreach ($categories as $index => $category) {
@@ -195,6 +206,62 @@ final class Translations
         }
 
         return [$items, $categories];
+    }
+
+    /**
+     * Strings of an HTML text as TranslatePress keeps them: every text node (and every line of it — wpautop() makes
+     * lines <br>) trimmed, with entities decoded; strings without letters are not translated.
+     *
+     * @return list<string>
+     */
+    private static function segments(string $html): array
+    {
+        $segments = [];
+
+        foreach (preg_split('~<[^>]*>|\R~u', $html) ?: [] as $text) {
+            $segment = self::segment($text);
+
+            if ($segment !== null) {
+                $segments[] = $segment;
+            }
+        }
+
+        return $segments;
+    }
+
+    private static function segment(string $text): ?string
+    {
+        $segment = (string) preg_replace('~^[\s\x{00A0}]+|[\s\x{00A0}]+$~u', '', html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+
+        return $segment !== '' && preg_match('~\p{L}~u', $segment) === 1 ? $segment : null;
+    }
+
+    /**
+     * The HTML with every string from the TranslatePress dictionary; null when one of them is not translated — a
+     * description half in one language and half in another would mislead more than none.
+     *
+     * @param array<string, string> $dictionary
+     */
+    private static function translateHtml(string $html, array $dictionary): ?string
+    {
+        $parts = preg_split('~(<[^>]*>|\R)~u', $html, -1, PREG_SPLIT_DELIM_CAPTURE) ?: [];
+        $translated = '';
+
+        foreach ($parts as $part) {
+            $segment = $part !== '' && $part[0] !== '<' ? self::segment($part) : null;
+
+            if ($segment === null) {
+                $translated .= $part;
+            } elseif (isset($dictionary[$segment])) {
+                // The spaces around the string stay: "Made of <strong>linen</strong> fabric" is three strings.
+                preg_match('~^(\s*).*?(\s*)$~su', $part, $spaces);
+                $translated .= ($spaces[1] ?? '') . esc_html($dictionary[$segment]) . ($spaces[2] ?? '');
+            } else {
+                return null;
+            }
+        }
+
+        return $translated;
     }
 
     /**

@@ -6,8 +6,8 @@ namespace OneTrace\WooCommerce;
 
 /**
  * The storefront: the tracker (after the analytics consent when the WP Consent API is in use), product views,
- * linking the browser to the signed-in customer, recommendation widgets, the "Notify when available" form and
- * Web Push.
+ * linking the browser to the signed-in customer, recommendation widgets, the "Notify when available" form, the
+ * "Ask AI about this product" block and Web Push.
  */
 final class Storefront
 {
@@ -16,6 +16,9 @@ final class Storefront
 
     /** @var array<int, true> products whose "Notify when available" place is already on the page */
     private static $notified = [];
+
+    /** @var array<int, true> products whose "Ask AI" place is already on the page */
+    private static $asked = [];
 
     public static function register(): void
     {
@@ -30,9 +33,17 @@ final class Storefront
                 add_filter('render_block_woocommerce/add-to-cart-form', [self::class, 'notifyBlock'], 10, 3);
                 add_filter('render_block_woocommerce/add-to-cart-with-options', [self::class, 'notifyBlock'], 10, 3);
             }
+
+            if (Settings::enabled('ask_ai')) {
+                // The same places, after the "Notify when available" form.
+                add_action('woocommerce_single_product_summary', [self::class, 'askForm'], 36);
+                add_filter('render_block_woocommerce/add-to-cart-form', [self::class, 'askBlock'], 11, 3);
+                add_filter('render_block_woocommerce/add-to-cart-with-options', [self::class, 'askBlock'], 11, 3);
+            }
         }
 
         add_shortcode('onetrace_widget', [self::class, 'widgetShortcode']);
+        add_shortcode('onetrace_ask', [self::class, 'askShortcode']);
         add_shortcode('onetrace_push_button', [self::class, 'pushButton']);
 
         if ((string) Settings::get('widget_product') !== '') {
@@ -157,6 +168,79 @@ final class Storefront
         self::$notified[$product->get_id()] = true;
 
         return sprintf('<div class="onetrace-notify" data-cdp-notify="%s"></div>', esc_attr(Products::id($product)));
+    }
+
+    /**
+     * The place of the "Ask AI about this product" block on the product page: the tracker loads the widget of
+     * OneTrace → Site → Product questions into it when the widget is on there; otherwise it stays empty.
+     */
+    public static function askForm(): void
+    {
+        global $product;
+
+        echo self::ask($product instanceof \WC_Product ? $product : wc_get_product(get_the_ID())); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in ask().
+    }
+
+    /**
+     * @param mixed $content HTML of the add to cart block
+     * @param mixed $block parsed block
+     * @param mixed $instance
+     *
+     * @return mixed
+     */
+    public static function askBlock($content, $block = [], $instance = null)
+    {
+        $postId = $instance instanceof \WP_Block && isset($instance->context['postId']) ? (int) $instance->context['postId'] : (int) get_the_ID();
+
+        return \is_string($content) ? $content . self::ask($postId > 0 ? wc_get_product($postId) : null) : $content;
+    }
+
+    /**
+     * [onetrace_ask] — the "Ask AI" block of the current product; [onetrace_ask product="123"] — of the product
+     * with this post ID. Works without the setting: the setting places the block automatically.
+     *
+     * @param array<string, string>|string $attributes
+     */
+    public static function askShortcode($attributes): string
+    {
+        global $product;
+
+        $attributes = shortcode_atts(['product' => ''], \is_array($attributes) ? $attributes : [], 'onetrace_ask');
+        $id = absint($attributes['product']);
+
+        if ($id > 0) {
+            return self::ask(wc_get_product($id));
+        }
+
+        if ($product instanceof \WC_Product) {
+            return self::ask($product);
+        }
+
+        return self::ask(is_product() ? wc_get_product(get_queried_object_id()) : wc_get_product(get_the_ID()));
+    }
+
+    /**
+     * `<div data-cdp-ask data-product-id="{product id}">` — the product id of the events (a variation — its parent
+     * product). Once per product on the page.
+     *
+     * @param mixed $product
+     */
+    public static function ask($product): string
+    {
+        if (!$product instanceof \WC_Product) {
+            return '';
+        }
+
+        $id = Products::id($product);
+        $key = $product->get_parent_id() ?: $product->get_id();
+
+        if ($id === '' || isset(self::$asked[$key])) {
+            return '';
+        }
+
+        self::$asked[$key] = true;
+
+        return sprintf('<div class="onetrace-ask" data-cdp-ask data-product-id="%s"></div>', esc_attr($id));
     }
 
     private static function inStock(\WC_Product $product): bool

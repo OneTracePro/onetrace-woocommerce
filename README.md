@@ -22,7 +22,7 @@ Connects a WooCommerce store to [OneTrace.pro](https://onetrace.pro), the custom
 | `add_to_cart`, `remove_from_cart`, `checkout_started` | cart changes and the checkout page, for visitors with the tracker cookie or signed in | server |
 | `add_to_wishlist`, `remove_from_wishlist` | the wishlist of YITH WooCommerce Wishlist or TI WooCommerce Wishlist, for the same visitors | server |
 | `product_viewed`, page views | the storefront | browser tracker |
-| Product catalog with `stock` | product and stock changes (orders, cancellations, refunds, the admin, REST), daily, and the "Upload the whole catalog" button | server, `products.write` |
+| Product catalog with `stock` and `description` | product and stock changes (orders, cancellations, refunds, the admin, REST), daily, and the "Upload the whole catalog" button | server, `products.write` |
 
 Guest orders without the tracker cookie are linked by email: the identify and the order events of a guest land in one profile.
 
@@ -42,7 +42,7 @@ define('ONETRACE_WRITE_KEY', 'cdp_wk_…');
 define('ONETRACE_SECRET_KEY', 'cdp_sk_…');
 ```
 
-## Stock, wishlist and "Notify when available"
+## Stock, wishlist, "Notify when available" and "Ask AI"
 
 - **Stock:** products that manage stock carry `stock` in the catalog (a variable product — the sum of its variations that manage stock); products without stock management or with backorders allowed are sent without it. The platform uses the stock — a zero stock takes the product off sale, "low stock" and "back in stock" journeys — only with **Use stock levels from the API and plugins** in its catalog settings.
 - **Wishlist:** WooCommerce has no wishlist of its own. With [YITH WooCommerce Wishlist](https://wordpress.org/plugins/yith-woocommerce-wishlist/) or [TI WooCommerce Wishlist](https://wordpress.org/plugins/ti-woocommerce-wishlist/) adding and removing products is sent from the server (setting **Wishlist**). With another wishlist, mark the buttons of the theme for the tracker (1.13.0 and later), which sends the events on click:
@@ -54,6 +54,7 @@ define('ONETRACE_SECRET_KEY', 'cdp_sk_…');
 
   `123` is the product id of the catalog: the post ID, or the SKU with **Product id → SKU**.
 - **Notify when available:** on the page of a product that is out of stock (a variable product — when no variation is in stock) the plugin puts `<div data-cdp-notify="{product id}"></div>` after the add to cart area (classic templates and block themes). The tracker (1.14.0 and later) draws the form there; the form itself is set up in **Site → Forms** of the platform (kind "Notify when available"). The setting **Notify when available** turns it off.
+- **Ask AI about this product:** the catalog carries the product description (the short description when there is none; shortcodes of page builders removed, translated descriptions with WPML, Polylang and TranslatePress), and the plugin puts `<div data-cdp-ask data-product-id="{product id}"></div>` after the add to cart area of the product page (classic templates and block themes). When the widget is turned on in **Site → Product questions** of the platform, the tracker (1.23.0 and later) shows suggested questions and the AI answer from the description and the knowledge base of the store — or, in the chat mode, a button that opens the online chat with the product; otherwise the element stays empty. The setting **Ask AI about a product** (on by default) turns the automatic place off; `[onetrace_ask]` (the current product) or `[onetrace_ask product="123"]` (a post ID) puts the block anywhere.
 
 ## Shipping and delivery
 

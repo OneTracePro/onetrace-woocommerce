@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OneTrace\WooCommerce\Tests\Integration;
 
+use OneTrace\WooCommerce\Catalog;
 use OneTrace\WooCommerce\Tests\TestCase;
 
 final class CatalogTest extends TestCase
@@ -120,6 +121,34 @@ final class CatalogTest extends TestCase
         wc_update_product_stock((int) $variable->get_children()[0], 1, 'set', true);
         $this->flush();
         self::assertSame(5, $this->uploaded()[$variable->get_id()]['stock'], 'A variation uploads its parent.');
+    }
+
+    public function testUploadsTheDescriptionWithoutShortcodesOrTheShortDescription(): void
+    {
+        // wp-load.php required by PHPUnit inside a function: the shortcodes WordPress adds while loading are lost.
+        if (!shortcode_exists('gallery')) {
+            add_shortcode('gallery', 'gallery_shortcode');
+        }
+
+        $builder = $this->product([
+            'description' => '[vc_row][vc_column_text css=".x{}"]<p>Soft <strong>linen</strong> &amp; cotton.</p><ul><li>Machine wash</li></ul>[/vc_column_text][/vc_row][gallery ids="1,2"]',
+            'short_description' => 'Not this one',
+        ]);
+        $short = $this->product(['description' => '[gallery ids="1"]', 'short_description' => '<p>Only the short one.</p>']);
+        $none = $this->product();
+        $variable = $this->variable([[], ['description' => '<p>Own text of the variation.</p>']], ['description' => '<p>Text of the parent.</p>']);
+        $this->flush();
+
+        $items = $this->uploaded();
+
+        self::assertSame("Soft linen & cotton.\n• Machine wash", $items[$builder->get_id()]['description'], 'Page builder tags go, their text stays.');
+        self::assertSame('Only the short one.', $items[$short->get_id()]['description'], 'Only shortcodes in the description — the short description.');
+        self::assertArrayNotHasKey('description', $items[$none->get_id()]);
+        self::assertSame('Text of the parent.', $items[$variable->get_id()]['description']);
+
+        [$first, $second] = array_map('wc_get_product', $variable->get_children());
+        self::assertSame('<p>Text of the parent.</p>', Catalog::description($first), 'A variation without a description — the parent\'s.');
+        self::assertSame('<p>Own text of the variation.</p>', Catalog::description($second));
     }
 
     /**

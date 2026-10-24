@@ -35,6 +35,7 @@ final class Settings
         'search' => 'no',
         'search_widget' => 'no',
         'notify' => 'yes',
+        'ask_ai' => 'yes',
         'product_id' => 'id',
         'loyalty' => 'no',
         'referral_field' => 'no',

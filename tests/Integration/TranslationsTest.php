@@ -64,6 +64,24 @@ final class TranslationsTest extends TestCase
         wp_delete_term($category['term_id'], 'product_cat');
     }
 
+    public function testTranslatesTheDescriptionOnlyWhenEveryStringOfItIsTranslated(): void
+    {
+        $suffix = (string) wp_rand();
+        $product = $this->product(['description' => "<p>Soft {$suffix} <strong>linen {$suffix}</strong> dress.</p>\n<p>Size 42</p>\nMachine wash {$suffix}"]);
+        $partial = $this->product(['description' => "<p>Soft {$suffix}</p><p>Hand wash {$suffix}</p>"]);
+        $this->translate('Soft ' . $suffix, 'Мягкое ' . $suffix);
+        $this->translate('linen ' . $suffix, 'льняное ' . $suffix);
+        $this->translate('dress.', 'платье.');
+        $this->translate('Size 42', 'Размер 42');
+        $this->translate('Machine wash ' . $suffix, 'Машинная стирка ' . $suffix);
+
+        [$items] = Catalog::items([$product->get_id(), $partial->get_id()]);
+
+        self::assertSame("Soft {$suffix} linen {$suffix} dress.\nSize 42\nMachine wash {$suffix}", $items[0]['description']);
+        self::assertSame("Мягкое {$suffix} льняное {$suffix} платье.\nРазмер 42\nМашинная стирка {$suffix}", $items[0]['translations']['ru-RU']['description']);
+        self::assertArrayNotHasKey('description', $items[1]['translations']['ru-RU'] ?? [], 'Half translated — no translated description.');
+    }
+
     public function testSkipsALanguageWithoutTranslatedStrings(): void
     {
         $product = $this->product(['name' => 'Wool Scarf ' . wp_rand()]);

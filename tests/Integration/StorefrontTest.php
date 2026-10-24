@@ -111,6 +111,61 @@ final class StorefrontTest extends TestCase
         self::assertStringContainsString('data-cdp-notify="R&quot;&lt;', $html);
     }
 
+    public function testPlacesTheAskAiBlockOncePerProductWithTheProductIdOfTheEvents(): void
+    {
+        global $product;
+
+        $product = $this->product();
+        ob_start();
+        Storefront::askForm();
+        $html = (string) ob_get_clean();
+
+        self::assertSame('<div class="onetrace-ask" data-cdp-ask data-product-id="' . $product->get_id() . '"></div>', $html);
+        self::assertSame('<form></form>', Storefront::askBlock('<form></form>'), 'The block of the same product adds nothing again.');
+        self::assertSame('', Storefront::askShortcode([]), 'Nor the shortcode.');
+
+        $other = $this->product();
+        self::assertSame('<div class="onetrace-ask" data-cdp-ask data-product-id="' . $other->get_id() . '"></div>', Storefront::askShortcode(['product' => (string) $other->get_id()]));
+        self::assertSame('', Storefront::askShortcode(['product' => '999999999']), 'No such product.');
+
+        $GLOBALS['post'] = get_post($this->product()->get_id());
+        self::assertStringContainsString('data-cdp-ask data-product-id="' . $GLOBALS['post']->ID . '"', (string) Storefront::askBlock('<form></form>'), 'Block themes: after the add to cart block.');
+        unset($GLOBALS['post'], $GLOBALS['product']);
+    }
+
+    public function testTheAskAiBlockOfAVariationIsThePlaceOfItsParentUnderItsSku(): void
+    {
+        update_option(Settings::OPTION, ['product_id' => 'sku'] + (array) get_option(Settings::OPTION));
+        $parent = new \WC_Product_Variable();
+        $parent->set_props(['name' => 'Runner', 'status' => 'publish', 'sku' => 'R"<' . wp_rand()]);
+        $parent->save();
+        $this->remember($parent->get_id());
+        $variation = new \WC_Product_Variation();
+        $variation->set_props(['parent_id' => $parent->get_id(), 'regular_price' => '59.00', 'sku' => 'V-' . wp_rand()]);
+        $variation->save();
+
+        $html = Storefront::ask(wc_get_product($variation->get_id()));
+
+        self::assertSame('<div class="onetrace-ask" data-cdp-ask data-product-id="' . esc_attr($parent->get_sku()) . '"></div>', $html);
+        self::assertSame('', Storefront::ask(wc_get_product($parent->get_id())), 'The parent is already on the page.');
+    }
+
+    public function testTheAskAiSettingTurnsTheBlockOffButNotTheShortcode(): void
+    {
+        $callback = [Storefront::class, 'askForm'];
+        remove_action('woocommerce_single_product_summary', $callback, 36);
+
+        update_option(Settings::OPTION, ['ask_ai' => 'no'] + (array) get_option(Settings::OPTION));
+        Storefront::register();
+        self::assertFalse(has_action('woocommerce_single_product_summary', $callback));
+        self::assertTrue(shortcode_exists('onetrace_ask'));
+
+        update_option(Settings::OPTION, ['ask_ai' => 'yes'] + (array) get_option(Settings::OPTION));
+        Storefront::register();
+        self::assertSame(36, has_action('woocommerce_single_product_summary', $callback), 'After the add to cart form and the notify form.');
+        self::assertSame(11, has_filter('render_block_woocommerce/add-to-cart-with-options', [Storefront::class, 'askBlock']));
+    }
+
     public function testTheNotifySettingTurnsTheFormOff(): void
     {
         $callback = [Storefront::class, 'notifyForm'];

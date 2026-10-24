@@ -194,8 +194,50 @@ final class Catalog
             $regular,
             self::brand($product),
             self::attributes($product),
-            self::stock($product)
+            self::stock($product),
+            self::description($product)
         );
+    }
+
+    /**
+     * Description of the product for the AI answers on the product page («Ask AI»): the description, or the short
+     * description when there is none (a variation without its own — the parent's). HTML as it is, the SDK turns it
+     * into text; shortcodes are removed, so page builders do not leak into the text.
+     */
+    public static function description(\WC_Product $product): ?string
+    {
+        $html = self::descriptionOf($product);
+
+        if ($html === '' && $product->get_parent_id()) {
+            $parent = wc_get_product($product->get_parent_id());
+            $html = $parent instanceof \WC_Product ? self::descriptionOf($parent) : '';
+        }
+
+        return $html !== '' ? $html : null;
+    }
+
+    /**
+     * Shortcodes out of the description: registered ones with strip_shortcodes(), and the tags of page builders that
+     * register theirs only on the storefront ([vc_row], [et_pb_text …], [/fusion_builder_column]) — their content stays.
+     */
+    public static function withoutShortcodes(string $html): string
+    {
+        $html = strip_shortcodes($html);
+
+        return trim((string) preg_replace('~\[/?[a-z][a-z0-9]*[_-][a-z0-9_-]*(?:\s[^\]]*)?/?\]~i', '', $html));
+    }
+
+    private static function descriptionOf(\WC_Product $product): string
+    {
+        foreach ([$product->get_description(), $product->get_short_description()] as $html) {
+            $html = self::withoutShortcodes((string) $html);
+
+            if (trim(wp_strip_all_tags($html)) !== '') {
+                return $html;
+            }
+        }
+
+        return '';
     }
 
     /**

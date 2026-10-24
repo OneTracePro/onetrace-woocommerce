@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.13.0
+Stable tag: 1.14.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,7 @@ This plugin connects your WooCommerce store:
 * The website tracker with product views; waits for the statistics consent with the WP Consent API.
 * The product catalog for recommendations and emails, with the stock of products that track it — for "back in stock" and "low stock" journeys.
 * The "Notify when available" form of OneTrace on the page of a product that is out of stock.
+* "Ask AI about this product" on the product page: OneTrace answers shoppers' questions from the product description and the store's knowledge base, or hands them to the online chat.
 * Recommendation widgets and Web Push.
 * Product search: the store search results and suggestions while typing come from OneTrace — word forms, typos, the wrong keyboard layout and the visitor's interests; the usual search on any error.
 * The OneTrace search widget on the search page of your theme: facets, sorting, infinite scroll and an "Add to cart" button, with a search layer under the search fields.
@@ -38,7 +39,7 @@ HPOS and the Cart and Checkout blocks are supported.
 
 = External service =
 
-The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders with their shipments (carrier, tracking number and link), cart and wishlist events and the product catalog with stock from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; when store emails are turned on in the OneTrace project, the emails the store sends (recipient, subject, content, attachments, the order data of order emails, the customer's first name and language); page and product views from the visitor's browser; with product search or the search widget, the search queries of visitors and their tracker id; with the AI chat bot (store MCP) turned on, the platform calls the store for a customer confirmed in the chat — their orders, parcel tracking, stock and prices, delivery methods and the return policy, the actions you allowed — and the store emails confirmation codes to the customer. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
+The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders with their shipments (carrier, tracking number and link), cart and wishlist events and the product catalog with stock and descriptions from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; when store emails are turned on in the OneTrace project, the emails the store sends (recipient, subject, content, attachments, the order data of order emails, the customer's first name and language); page and product views from the visitor's browser; with product search or the search widget, the search queries of visitors and their tracker id; with the "Ask AI about this product" widget turned on in OneTrace, the questions visitors ask about a product, from their browser; with the AI chat bot (store MCP) turned on, the platform calls the store for a customer confirmed in the chat — their orders, parcel tracking, stock and prices, delivery methods and the return policy, the actions you allowed — and the store emails confirmation codes to the customer. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
 
 == Installation ==
 
@@ -64,6 +65,10 @@ With the setting "OneTrace search widget" on and the widget turned on in OneTrac
 
 On the page of a product that is out of stock (a variable product — when no variation is in stock) the plugin puts `<div data-cdp-notify="{product id}"></div>` after the add to cart area; the tracker draws the form there. The form itself is set up in OneTrace → Site → Forms (kind "Notify when available"); without an active form of this kind nothing is shown. The setting "Notify when available" turns the place off.
 
+= How does "Ask AI about this product" work? =
+
+The catalog carries the product description (or the short description), and the plugin puts `<div data-cdp-ask data-product-id="{product id}"></div>` after the add to cart area of the product page (classic templates and block themes). When the widget is turned on in OneTrace → Site → Product questions, the tracker shows suggested questions and the AI answer there, or a button that opens the online chat with the product; otherwise nothing is shown. The setting "Ask AI about a product" turns the automatic place off; the `[onetrace_ask]` shortcode (or `[onetrace_ask product="123"]`) puts the block anywhere.
+
 = Can the store's emails go through OneTrace? =
 
 Yes, in the "Store emails" section of the OneTrace project: all emails sent with wp_mail() as the store made them, and order emails (placed, paid, shipped, delivered, cancelled, refunded) from OneTrace templates in the customer's language; emails to the shop owner and staff always go out from the store. The secret key needs the "Send messages manually" permission; WooCommerce → Settings → OneTrace shows the state. If OneTrace does not accept an email (no email integration, the quota, the limit per recipient, the platform unavailable), the store sends it itself.
@@ -88,6 +93,10 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
 
 == Changelog ==
+
+= 1.14.0 =
+* "Ask AI about this product": the product page gets the place of the OneTrace widget after the add to cart area (classic and block themes; setting "Ask AI about a product", on by default) — it shows only when the widget is turned on in OneTrace → Site → Product questions. The `[onetrace_ask]` shortcode puts it anywhere.
+* The catalog carries product descriptions (the short description when there is none) for the AI answers, without the shortcodes of page builders; translated descriptions with WPML, Polylang and TranslatePress.
 
 = 1.13.0 =
 * The OneTrace search widget (setting "OneTrace search widget", off by default): the product search page shows the results widget of OneTrace inside the theme — classic and block themes — with facets, sorting, infinite scroll and an "Add to cart" button; the search fields open the search layer of the widget. The store does not search on the server in this mode. While the widget is off in OneTrace or OneTrace is unavailable, the search page stays as it is.
@@ -161,6 +170,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 * First release.
 
 == Upgrade Notice ==
+
+= 1.14.0 =
+"Ask AI about this product" on product pages and product descriptions in the catalog.
 
 = 1.13.0 =
 The OneTrace search widget on the search page of your theme: facets, sorting, infinite scroll and "Add to cart".
