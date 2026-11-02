@@ -29,6 +29,7 @@ final class Connection
             $timeouts = ['search' => [3.0, 1.0], 'emails' => [5.0, 2.0]][$key] ?? [10.0, 5.0];
             $options = [
                 $write ? 'write_key' : 'secret_key' => (string) Settings::get($write ? 'write_key' : 'secret_key') ?: null,
+                'identity_key' => (string) Settings::get('identity_key') ?: null,
                 'timeout' => $timeouts[0],
                 'connect_timeout' => $timeouts[1],
                 // The queue retries with long pauses; the client must not hold the request.
@@ -46,6 +47,14 @@ final class Connection
         }
 
         return self::$clients[$key];
+    }
+
+    /**
+     * The signature of the signed-in customer's id for the tracker (identity key); null without the key.
+     */
+    public static function userHash(string $userId): ?string
+    {
+        return $userId !== '' && (string) Settings::get('identity_key') !== '' ? self::client('write')->userHash($userId) : null;
     }
 
     public static function messages(): Messages

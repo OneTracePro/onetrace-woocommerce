@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb804bae00092d20d4fe8c84dc8f47c6",
+    "content-hash": "d77f0924ec57e1753ae34d2afe6f4299",
     "packages": [
         {
             "name": "onetracepro/onetrace-php",
-            "version": "v1.16.0",
+            "version": "v1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OneTracePro/onetrace-php.git",
-                "reference": "049b1f26309a204fdf2f6391d657ada32f227553"
+                "reference": "3df00c3803be0ef1451beeaaf3fd9b85920017e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OneTracePro/onetrace-php/zipball/049b1f26309a204fdf2f6391d657ada32f227553",
-                "reference": "049b1f26309a204fdf2f6391d657ada32f227553",
+                "url": "https://api.github.com/repos/OneTracePro/onetrace-php/zipball/3df00c3803be0ef1451beeaaf3fd9b85920017e8",
+                "reference": "3df00c3803be0ef1451beeaaf3fd9b85920017e8",
                 "shasum": ""
             },
             "require": {
@@ -64,7 +64,7 @@
                 "issues": "https://github.com/OneTracePro/onetrace-php/issues",
                 "source": "https://github.com/OneTracePro/onetrace-php"
             },
-            "time": "2026-10-24T18:51:37+00:00"
+            "time": "2026-11-02T00:47:31+00:00"
         }
     ],
     "packages-dev": [

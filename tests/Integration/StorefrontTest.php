@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OneTrace\WooCommerce\Tests\Integration;
 
 use OneTrace\WooCommerce\Cart;
+use OneTrace\WooCommerce\Connection;
 use OneTrace\WooCommerce\Customers;
 use OneTrace\WooCommerce\Settings;
 use OneTrace\WooCommerce\Storefront;
@@ -22,6 +23,30 @@ final class StorefrontTest extends TestCase
         self::assertStringContainsString('cdp.init("cdp_wk_test", {"host":"https://cdp.example.com","language":"page"})', $html);
         self::assertStringContainsString('"setLanguage"', $html);
         self::assertStringNotContainsString('cdp_sk_test', $html);
+    }
+
+    public function testSignsTheIdOfTheSignedInCustomerWithTheIdentityKey(): void
+    {
+        $userId = (int) wp_insert_user(['user_login' => 'signed' . wp_generate_password(6, false), 'user_pass' => 'secret', 'user_email' => wp_generate_password(6, false) . '@example.com', 'role' => 'customer']);
+        wp_set_current_user($userId);
+
+        ob_start();
+        Storefront::tracker();
+        $unsigned = (string) ob_get_clean();
+
+        update_option(Settings::OPTION, ['identity_key' => 'cdp_ik_test'] + (array) get_option(Settings::OPTION));
+        Connection::reset();
+        ob_start();
+        Storefront::tracker();
+        $html = (string) ob_get_clean();
+
+        // hash_hmac('sha256', user id, key) — IdentityVerification::hash() of the platform.
+        self::assertStringContainsString(sprintf('})("%d",null);', $userId), $unsigned);
+        self::assertStringContainsString(sprintf('})("%d","%s");', $userId, hash_hmac('sha256', (string) $userId, 'cdp_ik_test')), $html);
+        self::assertStringContainsString("cdp.identify(u,{},h?{userHash:h}:{})", $html);
+        self::assertStringContainsString("g=localStorage.getItem('cdp_uhash')", $html);
+        self::assertStringNotContainsString('cdp_ik_test', $html);
+        wp_delete_user($userId);
     }
 
     public function testSendsCartEventsOnlyForVisitorsTheProfileCanBeLinkedTo(): void

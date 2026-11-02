@@ -2,6 +2,11 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.15.0 — 2026-11-02
+
+- Signed user ids (ADR-158 of the platform): the setting **Identity key** (`identity_key`, password field that keeps the stored key when left empty, or the `ONETRACE_IDENTITY_KEY` constant in `wp-config.php`) — the tracker of the storefront calls `cdp.identify(id, {}, { userHash })` with `userHash` = HMAC-SHA256 of the customer's id with the key (`Client::userHash()`, onetrace-php 1.17), also when the browser already knows the id but not this signature (`cdp_uhash` of the tracker 1.30.0). A project with "Require signature" drops a user id from the browser without it. The key never goes into the page.
+- Requires onetrace-php 1.17.
+
 ## 1.14.0 — 2026-10-24
 
 - "Ask AI about this product" (OneTrace → Site → Product questions): the product page gets `<div class="onetrace-ask" data-cdp-ask data-product-id="{product id}">` — the `product_id` of the events (a variation — its parent, a WPML / Polylang copy — the product of the default language, the SKU with "Product id → SKU"), once per product on the page. Classic templates: `woocommerce_single_product_summary`, priority 36 (after the add to cart form and the "Notify when available" place at 35); block themes: after the `woocommerce/add-to-cart-form` and `woocommerce/add-to-cart-with-options` blocks (`render_block_*`, priority 11). Setting `ask_ai`, on by default, needs the tracker. The tracker (1.23.0 and later) loads the widget only when it is on in OneTrace; otherwise the element stays empty. The `[onetrace_ask]` shortcode — the current product, `[onetrace_ask product="123"]` — a product by post ID — works without the setting.

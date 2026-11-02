@@ -12,6 +12,9 @@ final class Admin
 {
     public const TAB = 'onetrace';
 
+    /** Password fields that are never printed back, with their placeholders. */
+    private const HIDDEN_KEYS = ['secret_key' => 'cdp_sk_…', 'identity_key' => 'cdp_ik_…'];
+
     public static function register(): void
     {
         add_filter('woocommerce_settings_tabs_array', [self::class, 'tab'], 70);
@@ -74,6 +77,7 @@ final class Admin
             $field('url', ['type' => 'url', 'title' => __('Platform address', 'onetrace-for-woocommerce'), 'placeholder' => 'https://cdp.onetrace.pro', 'desc_tip' => __('The address you open the platform at: the domain of your brand.', 'onetrace-for-woocommerce')]),
             $field('write_key', ['type' => 'text', 'title' => __('Write key', 'onetrace-for-woocommerce'), 'placeholder' => 'cdp_wk_…', 'desc_tip' => __('For the tracker on the storefront.', 'onetrace-for-woocommerce')]),
             $field('secret_key', ['type' => 'password', 'title' => __('Secret key', 'onetrace-for-woocommerce'), 'placeholder' => 'cdp_sk_…', 'desc_tip' => __('For orders, customers and the catalog; needs the products.write permission.', 'onetrace-for-woocommerce')]),
+            $field('identity_key', ['type' => 'password', 'title' => __('Identity key', 'onetrace-for-woocommerce'), 'placeholder' => 'cdp_ik_…', 'desc_tip' => __('Signs the id of the signed-in customer for the tracker, so OneTrace trusts it when the project requires signed user ids. It is in OneTrace → Site → Connection → Server.', 'onetrace-for-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_connection'],
 
             ['type' => 'title', 'id' => 'onetrace_parts', 'title' => __('What to send', 'onetrace-for-woocommerce')],
@@ -150,10 +154,12 @@ final class Admin
                 $field['value'] = Settings::fromConstant($match[1]) ? (string) Settings::get($match[1]) : ($values[$match[1]] ?? $field['default']);
             }
 
-            // The secret key is never printed back: an empty field keeps the stored one.
-            if (($field['id'] ?? '') === Settings::OPTION . '[secret_key]') {
-                $field['placeholder'] = (string) $field['value'] !== '' ? __('Saved — enter a new key to replace it', 'onetrace-for-woocommerce') : 'cdp_sk_…';
-                $field['value'] = '';
+            // The secret and identity keys are never printed back: an empty field keeps the stored one.
+            foreach (self::HIDDEN_KEYS as $key => $placeholder) {
+                if (($field['id'] ?? '') === Settings::OPTION . '[' . $key . ']') {
+                    $field['placeholder'] = (string) $field['value'] !== '' ? __('Saved — enter a new key to replace it', 'onetrace-for-woocommerce') : $placeholder;
+                    $field['value'] = '';
+                }
             }
 
             return $field;
@@ -169,10 +175,19 @@ final class Admin
         woocommerce_update_options(self::fields());
         $settings = get_option(Settings::OPTION, []);
 
-        // An empty password field keeps the stored secret key.
-        if (\is_array($settings) && \is_array($previous) && ($settings['secret_key'] ?? '') === '' && ($previous['secret_key'] ?? '') !== '') {
-            $settings['secret_key'] = $previous['secret_key'];
-            update_option(Settings::OPTION, $settings);
+        // An empty password field keeps the stored key.
+        if (\is_array($settings) && \is_array($previous)) {
+            $kept = $settings;
+
+            foreach (array_keys(self::HIDDEN_KEYS) as $key) {
+                if (($settings[$key] ?? '') === '' && ($previous[$key] ?? '') !== '') {
+                    $kept[$key] = $previous[$key];
+                }
+            }
+
+            if ($kept !== $settings) {
+                update_option(Settings::OPTION, $kept);
+            }
         }
 
         delete_option(Queue::PAUSED_OPTION);

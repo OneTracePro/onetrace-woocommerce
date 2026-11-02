@@ -6,17 +6,22 @@ namespace OneTrace\WooCommerce;
 
 /**
  * Plugin settings: the option "onetrace_settings", the keys may also come from wp-config.php constants
- * ONETRACE_URL, ONETRACE_WRITE_KEY and ONETRACE_SECRET_KEY (then they are not stored in the database).
+ * ONETRACE_URL, ONETRACE_WRITE_KEY, ONETRACE_SECRET_KEY and ONETRACE_IDENTITY_KEY (then they are not stored in the
+ * database).
  */
 final class Settings
 {
     public const OPTION = 'onetrace_settings';
+
+    /** Settings that may come from wp-config.php constants. */
+    private const CONSTANTS = ['url' => 'ONETRACE_URL', 'write_key' => 'ONETRACE_WRITE_KEY', 'secret_key' => 'ONETRACE_SECRET_KEY', 'identity_key' => 'ONETRACE_IDENTITY_KEY'];
 
     /** @var array<string, mixed> */
     public const DEFAULTS = [
         'url' => '',
         'write_key' => '',
         'secret_key' => '',
+        'identity_key' => '',
         'tracker' => 'yes',
         'wait_for_consent' => 'yes',
         'orders' => 'yes',
@@ -49,7 +54,7 @@ final class Settings
      */
     public static function get(string $key)
     {
-        $constant = ['url' => 'ONETRACE_URL', 'write_key' => 'ONETRACE_WRITE_KEY', 'secret_key' => 'ONETRACE_SECRET_KEY'][$key] ?? null;
+        $constant = self::CONSTANTS[$key] ?? null;
 
         if ($constant !== null && \defined($constant) && \is_string(\constant($constant)) && \constant($constant) !== '') {
             return \constant($constant);
@@ -67,7 +72,7 @@ final class Settings
 
     public static function fromConstant(string $key): bool
     {
-        $constant = ['url' => 'ONETRACE_URL', 'write_key' => 'ONETRACE_WRITE_KEY', 'secret_key' => 'ONETRACE_SECRET_KEY'][$key] ?? null;
+        $constant = self::CONSTANTS[$key] ?? null;
 
         return $constant !== null && \defined($constant);
     }

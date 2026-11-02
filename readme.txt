@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.14.0
+Stable tag: 1.15.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,7 @@ The plugin sends data to the OneTrace.pro platform at the address you enter in t
 1. In Plugins → Add New Plugin search for "OneTrace for WooCommerce", install and activate it.
 2. In your OneTrace project create a write key and a secret key with the products.write permission (API keys section).
 3. Go to WooCommerce → Settings → OneTrace, enter the platform address and both keys, click "Test connection".
+4. Optionally enter the identity key from Site → Connection → Server of the project: the id of the signed-in customer reaches the tracker signed, and the project can require signed user ids.
 
 == Frequently Asked Questions ==
 
@@ -93,6 +94,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
 
 == Changelog ==
+
+= 1.15.0 =
+* Signed user ids: the "Identity key" setting (or the ONETRACE_IDENTITY_KEY constant) signs the id of the signed-in customer for the OneTrace tracker, so the project can turn on "Require signature" and no visitor can link their browser to someone else's profile.
 
 = 1.14.0 =
 * "Ask AI about this product": the product page gets the place of the OneTrace widget after the add to cart area (classic and block themes; setting "Ask AI about a product", on by default) — it shows only when the widget is turned on in OneTrace → Site → Product questions. The `[onetrace_ask]` shortcode puts it anywhere.
@@ -170,6 +174,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 * First release.
 
 == Upgrade Notice ==
+
+= 1.15.0 =
+The "Identity key" setting: signed user ids for projects that require them.
 
 = 1.14.0 =
 "Ask AI about this product" on product pages and product descriptions in the catalog.

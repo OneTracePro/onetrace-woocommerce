@@ -78,8 +78,9 @@ final class Storefront
             "!function(w,c){c=w.cdp=w.cdp||[];if(c.version)return;%s.forEach(function(m){c[m]=c[m]||function(){c.push([m].concat([].slice.call(arguments)))}})}(window);\n"
             . "(function(d,u,s,load){load=function(){if(s)return;s=d.createElement('script');s.async=1;s.src=u;d.head.appendChild(s)};%s})(document,%s);\n"
             . "cdp.init(%s, %s);\ncdp.page();\n"
-            // The browser follows the signed-in customer: identify after login, reset after logout.
-            . "(function(u,k){try{k=localStorage.getItem('cdp_uid')}catch(e){}if(u&&k!==u)cdp.identify(u);else if(!u&&k)cdp.reset()})(%s);",
+            // The browser follows the signed-in customer: identify after login (and with a new signature of the id),
+            // reset after logout.
+            . "(function(u,h,k,g){try{k=localStorage.getItem('cdp_uid');g=localStorage.getItem('cdp_uhash')}catch(e){}if(u&&(k!==u||h&&g!==h))cdp.identify(u,{},h?{userHash:h}:{});else if(!u&&k)cdp.reset()})(%s,%s);",
             wp_json_encode(self::STUB_METHODS),
             $waits
                 ? "if(typeof wp_has_consent!=='function'||wp_has_consent('statistics'))load();else d.addEventListener('wp_listen_for_consent_change',function(e){if(e.detail&&e.detail.statistics==='allow')load()});"
@@ -87,7 +88,8 @@ final class Storefront
             wp_json_encode($host . '/tracker/cdp.js'),
             wp_json_encode((string) Settings::get('write_key')),
             wp_json_encode($options, JSON_UNESCAPED_SLASHES),
-            wp_json_encode($userId)
+            wp_json_encode($userId),
+            wp_json_encode(Connection::userHash($userId))
         );
 
         // Store MCP: the signed-in customer is confirmed for the AI chat bot without a code.

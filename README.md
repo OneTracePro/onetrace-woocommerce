@@ -33,6 +33,7 @@ By default `product_id` is the post ID. If the catalog and history of your proje
 1. Install **OneTrace for WooCommerce** from the WordPress plugin directory (**Plugins → Add New Plugin**, [wordpress.org/plugins/onetrace-for-woocommerce](https://wordpress.org/plugins/onetrace-for-woocommerce/)), or upload `onetrace-for-woocommerce.zip` from the [latest release](https://github.com/OneTracePro/onetrace-woocommerce/releases/latest) in **Plugins → Add New → Upload Plugin**.
 2. In your OneTrace project, open **API keys** and create a write key (for the storefront) and a secret key with the `products.write` permission (for the server).
 3. In **WooCommerce → Settings → OneTrace** enter the platform address (the domain you open OneTrace at) and both keys, then click **Test connection**.
+4. Optionally, the **Identity key** from **Site → Connection → Server** of the project: the tracker then gets the id of the signed-in customer signed with it (`cdp.identify(id, {}, { userHash })`, HMAC-SHA256 of the id). Once the store and your apps sign user ids, turn on **Require signature** there: OneTrace stops trusting a user id from a browser without the signature, so a visitor cannot link their browser to someone else's profile. The key never goes to the browser.
 
 The keys can be kept out of the database in `wp-config.php`:
 
@@ -40,6 +41,7 @@ The keys can be kept out of the database in `wp-config.php`:
 define('ONETRACE_URL', 'https://cdp.onetrace.pro'); // or the domain of your white-label brand
 define('ONETRACE_WRITE_KEY', 'cdp_wk_…');
 define('ONETRACE_SECRET_KEY', 'cdp_sk_…');
+define('ONETRACE_IDENTITY_KEY', 'cdp_ik_…');
 ```
 
 ## Stock, wishlist, "Notify when available" and "Ask AI"

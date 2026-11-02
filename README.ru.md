@@ -30,6 +30,7 @@
 1. Установите **OneTrace для WooCommerce** из каталога плагинов WordPress (**Плагины → Добавить новый**, [wordpress.org/plugins/onetrace-for-woocommerce](https://wordpress.org/plugins/onetrace-for-woocommerce/)) или загрузите `onetrace-for-woocommerce.zip` из [последнего релиза](https://github.com/OneTracePro/onetrace-woocommerce/releases/latest) в **Плагины → Добавить новый → Загрузить плагин**.
 2. В проекте OneTrace откройте **Ключи API** и создайте ключ записи (для витрины) и секретный ключ с правом `products.write` (для сервера).
 3. В **WooCommerce → Настройки → OneTrace** укажите адрес платформы (домен, по которому вы открываете OneTrace) и оба ключа, нажмите **Проверить подключение**.
+4. По желанию — **Ключ подписи** из раздела **Сайт → Подключение → Сервер** проекта: трекер получит id вошедшего покупателя с подписью этим ключом (`cdp.identify(id, {}, { userHash })`, HMAC-SHA256 от id). Когда магазин и ваши приложения подписывают id, включите там **Требовать подпись**: OneTrace перестанет принимать id пользователя из браузера без подписи, и посетитель не сможет связать свой браузер с чужим профилем. Сам ключ в браузер не попадает.
 
 Ключи можно хранить не в базе, а в `wp-config.php`:
 
@@ -37,6 +38,7 @@
 define('ONETRACE_URL', 'https://cdp.onetrace.pro'); // или домен вашего бренда
 define('ONETRACE_WRITE_KEY', 'cdp_wk_…');
 define('ONETRACE_SECRET_KEY', 'cdp_sk_…');
+define('ONETRACE_IDENTITY_KEY', 'cdp_ik_…');
 ```
 
 ## Остатки, избранное, «Сообщить о поступлении» и «Спросить ИИ»
