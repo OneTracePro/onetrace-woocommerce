@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: OneTrace for WooCommerce 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/onetrace-for-"
 "woocommerce\n"
-"POT-Creation-Date: 2026-11-02T00:39:09+00:00\n"
+"POT-Creation-Date: 2026-11-08T19:46:49+00:00\n"
 "PO-Revision-Date: 2026-10-08T17:53:43+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -59,7 +59,7 @@ msgstr ""
 "копия в папке %2$s не загружается. Отключите и удалите копию в %2$s — "
 "настройки сохранятся."
 
-#: src/Admin.php:48 src/Admin.php:292 src/Admin.php:377
+#: src/Admin.php:48 src/Admin.php:294 src/Admin.php:379
 msgid "Settings"
 msgstr "Настройки"
 
@@ -83,7 +83,7 @@ msgstr "Адрес платформы"
 msgid "The address you open the platform at: the domain of your brand."
 msgstr "Адрес, по которому вы открываете платформу: домен вашего бренда."
 
-#: src/Admin.php:78 src/Admin.php:246
+#: src/Admin.php:78 src/Admin.php:248
 msgid "Write key"
 msgstr "Ключ записи"
 
@@ -91,7 +91,7 @@ msgstr "Ключ записи"
 msgid "For the tracker on the storefront."
 msgstr "Для трекера на витрине."
 
-#: src/Admin.php:79 src/Admin.php:246
+#: src/Admin.php:79 src/Admin.php:248
 msgid "Secret key"
 msgstr "Секретный ключ"
 
@@ -468,6 +468,16 @@ msgstr ""
 "подтверждаются автоматически, остальные — кодом, который магазин отправляет "
 "на email. Секретному ключу нужно право chats.manage."
 
+#: src/Admin.php:121
+msgid ""
+"Allow both order tools, and AI shopping assistants (ChatGPT, Claude …) of "
+"the OneTrace shopping MCP place orders in the store: the customer confirms "
+"the email with a code and pays by the payment link of the order."
+msgstr ""
+"Разрешите оба инструмента заказа, и ИИ-ассистенты покупателей (ChatGPT, "
+"Claude …) через MCP покупок OneTrace будут оформлять заказы в магазине: "
+"покупатель подтверждает email кодом и оплачивает заказ по ссылке."
+
 #: src/Admin.php:122
 msgid "Store MCP server"
 msgstr "MCP-сервер магазина"
@@ -536,28 +546,36 @@ msgstr "Действие: передавать магазину заявку н�
 msgid "Action: pass a delivery change request to the shop"
 msgstr "Действие: передавать магазину запрос на изменение доставки"
 
-#: src/Admin.php:160
+#: src/Admin.php:146
+msgid "AI assistants: price an order (items, delivery, total)"
+msgstr "ИИ-ассистенты: расчёт заказа (товары, доставка, сумма)"
+
+#: src/Admin.php:147
+msgid "Action: place an order from an AI assistant (paid by the payment link)"
+msgstr "Действие: заказ из ИИ-ассистента (оплата по ссылке)"
+
+#: src/Admin.php:162
 msgid "Saved — enter a new key to replace it"
 msgstr "Сохранён — введите новый ключ, чтобы заменить"
 
 #. translators: %s: project name
-#: src/Admin.php:236
+#: src/Admin.php:238
 #, php-format
 msgid "Write key: project \"%s\"."
 msgstr "Ключ записи: проект «%s»."
 
 #. translators: %s: project name
-#: src/Admin.php:238
+#: src/Admin.php:240
 #, php-format
 msgid "Secret key: project \"%s\"."
 msgstr "Секретный ключ: проект «%s»."
 
-#: src/Admin.php:240
+#: src/Admin.php:242
 msgid ""
 "The key has no products.write permission: the catalog will not be uploaded."
 msgstr "У ключа нет права products.write: каталог не будет выгружаться."
 
-#: src/Admin.php:241
+#: src/Admin.php:243
 msgid ""
 "The key has no loyalty.read and loyalty.write permissions: bonus points will "
 "not work."
@@ -565,12 +583,12 @@ msgstr ""
 "У ключа нет прав loyalty.read и loyalty.write: бонусные баллы работать не "
 "будут."
 
-#: src/Admin.php:242
+#: src/Admin.php:244
 msgid ""
 "The key has no promo.read permission: promo codes will not become coupons."
 msgstr "У ключа нет права promo.read: промокоды не станут купонами."
 
-#: src/Admin.php:243
+#: src/Admin.php:245
 msgid ""
 "The key has no profiles.read and profiles.write permissions: the Newsletters "
 "tab will not work."
@@ -578,15 +596,15 @@ msgstr ""
 "У ключа нет прав profiles.read и profiles.write: вкладка «Рассылки» работать "
 "не будет."
 
-#: src/Admin.php:251
+#: src/Admin.php:253
 msgid "Enter the platform address and the keys first."
 msgstr "Сначала укажите адрес платформы и ключи."
 
-#: src/Admin.php:268
+#: src/Admin.php:270
 msgid "The catalog upload has started; it runs in the background."
 msgstr "Выгрузка каталога началась, она идёт в фоне."
 
-#: src/Admin.php:290
+#: src/Admin.php:292
 msgid ""
 "OneTrace: sending is paused because the platform rejected the key. Check the "
 "keys and save the settings."
@@ -594,47 +612,47 @@ msgstr ""
 "OneTrace: отправка приостановлена — платформа отклонила ключ. Проверьте "
 "ключи и сохраните настройки."
 
-#: src/Admin.php:303
+#: src/Admin.php:305
 msgid "Status"
 msgstr "Состояние"
 
-#: src/Admin.php:306
+#: src/Admin.php:308
 msgid "Queue"
 msgstr "Очередь"
 
 #. translators: 1: items waiting, 2: items waiting for a retry
-#: src/Admin.php:309
+#: src/Admin.php:311
 #, php-format
 msgid "%1$d waiting, %2$d of them after an error"
 msgstr "Ждут отправки: %1$d, из них после ошибки: %2$d"
 
-#: src/Admin.php:316
+#: src/Admin.php:318
 msgid "Last error"
 msgstr "Последняя ошибка"
 
-#: src/Admin.php:324
+#: src/Admin.php:326
 msgid "AI chat bot"
 msgstr "ИИ-бот чата"
 
 #. translators: %s: tools the bot uses
-#: src/Admin.php:327
+#: src/Admin.php:329
 #, php-format
 msgid "Connected: %s"
 msgstr "Подключён: %s"
 
-#: src/Admin.php:333
+#: src/Admin.php:335
 msgid "Test connection"
 msgstr "Проверить подключение"
 
-#: src/Admin.php:335
+#: src/Admin.php:337
 msgid "Upload the whole catalog"
 msgstr "Выгрузить весь каталог"
 
-#: src/Admin.php:345
+#: src/Admin.php:347
 msgid "Store emails"
 msgstr "Письма магазина"
 
-#: src/Admin.php:346
+#: src/Admin.php:348
 msgid ""
 "Emails of WooCommerce, WordPress and other plugins can go out through the "
 "email integration of your OneTrace project, with delivery statuses and "
@@ -651,47 +669,47 @@ msgstr ""
 "секретному ключу нужно право «Отправка сообщений вручную» (messages.send). "
 "Письмо, которое OneTrace не принял, магазин отправляет сам."
 
-#: src/Admin.php:355 src/Admin.php:358
+#: src/Admin.php:357 src/Admin.php:360
 msgid "State"
 msgstr "Состояние"
 
-#: src/Admin.php:355
+#: src/Admin.php:357
 msgid "Enter the platform address and the secret key."
 msgstr "Укажите адрес платформы и секретный ключ."
 
-#: src/Admin.php:358
+#: src/Admin.php:360
 msgid "Not available — the store sends its emails itself."
 msgstr "Недоступно — магазин отправляет письма сам."
 
-#: src/Admin.php:361
+#: src/Admin.php:363
 msgid "Order placed"
 msgstr "Заказ оформлен"
 
-#: src/Admin.php:362
+#: src/Admin.php:364
 msgid "Order paid"
 msgstr "Заказ оплачен"
 
-#: src/Admin.php:363
+#: src/Admin.php:365
 msgid "Order shipped"
 msgstr "Заказ отправлен"
 
-#: src/Admin.php:364
+#: src/Admin.php:366
 msgid "Order delivered"
 msgstr "Заказ доставлен"
 
-#: src/Admin.php:365
+#: src/Admin.php:367
 msgid "Order cancelled"
 msgstr "Заказ отменён"
 
-#: src/Admin.php:366
+#: src/Admin.php:368
 msgid "Order refunded"
 msgstr "Возврат по заказу"
 
-#: src/Admin.php:370
+#: src/Admin.php:372
 msgid "All store emails"
 msgstr "Все письма магазина"
 
-#: src/Admin.php:371
+#: src/Admin.php:373
 msgid ""
 "Through OneTrace: emails without a OneTrace template go out as the store "
 "makes them"
@@ -699,27 +717,27 @@ msgstr ""
 "Через OneTrace: письма без шаблона OneTrace уходят такими, какими их делает "
 "магазин"
 
-#: src/Admin.php:372
+#: src/Admin.php:374
 msgid "Sent by the store"
 msgstr "Отправляет магазин"
 
-#: src/Admin.php:373
+#: src/Admin.php:375
 msgid "Order emails from OneTrace templates"
 msgstr "Письма о заказе по шаблонам OneTrace"
 
-#: src/Admin.php:373
+#: src/Admin.php:375
 msgid "None"
 msgstr "Нет"
 
-#: src/Admin.php:378
+#: src/Admin.php:380
 msgid "Store emails in OneTrace"
 msgstr "Письма магазина в OneTrace"
 
-#: src/Admin.php:379
+#: src/Admin.php:381
 msgid "OneTrace → Store emails"
 msgstr "OneTrace → Письма магазина"
 
-#: src/Admin.php:423
+#: src/Admin.php:425
 msgid "You are not allowed to do this."
 msgstr "У вас нет прав на это действие."
 
@@ -1016,104 +1034,171 @@ msgstr "(необязательно)"
 msgid "Get notifications"
 msgstr "Получать уведомления"
 
-#: src/StoreMcp.php:236
+#: src/StoreMcp.php:254
 msgid "The order has not been shipped yet."
 msgstr "Заказ ещё не отправлен."
 
-#: src/StoreMcp.php:347
+#: src/StoreMcp.php:365
 msgid "The shop has not published a return policy."
 msgstr "Магазин не опубликовал условия возврата."
 
-#: src/StoreMcp.php:363 src/StoreMcp.php:372
+#: src/StoreMcp.php:381 src/StoreMcp.php:390
 msgid "The order is cancelled."
 msgstr "Заказ отменён."
 
-#: src/StoreMcp.php:367
+#: src/StoreMcp.php:385
 msgid ""
 "This order can no longer be cancelled in the chat, an operator will help."
 msgstr "Этот заказ уже нельзя отменить в чате, поможет оператор."
 
-#: src/StoreMcp.php:370
+#: src/StoreMcp.php:388
 msgid "Cancelled by the customer in the OneTrace chat."
 msgstr "Отменён покупателем в чате OneTrace."
 
-#: src/StoreMcp.php:387
+#: src/StoreMcp.php:405
 msgid "A return is possible after the order is received."
 msgstr "Вернуть товар можно после получения заказа."
 
 #. translators: 1: returned items (SKU × quantity), 2: the reason the customer gave
-#: src/StoreMcp.php:399
+#: src/StoreMcp.php:417
 #, php-format
 msgid "Return request from the OneTrace chat: %1$s. Reason: %2$s"
 msgstr "Заявка на возврат из чата OneTrace: %1$s. Причина: %2$s"
 
-#: src/StoreMcp.php:414
+#: src/StoreMcp.php:432
 msgid ""
 "The order has already been shipped, the delivery can no longer be changed."
 msgstr "Заказ уже отправлен, доставку изменить нельзя."
 
 #. translators: %s: the new delivery address
-#: src/StoreMcp.php:419
+#: src/StoreMcp.php:437
 #, php-format
 msgid "address: %s"
 msgstr "адрес: %s"
 
 #. translators: %s: the new delivery date
-#: src/StoreMcp.php:421
+#: src/StoreMcp.php:439
 #, php-format
 msgid "date: %s"
 msgstr "дата: %s"
 
 #. translators: %s: the new delivery time window
-#: src/StoreMcp.php:423
+#: src/StoreMcp.php:441
 #, php-format
 msgid "time: %s"
 msgstr "время: %s"
 
 #. translators: %s: what to change (address, date, time)
-#: src/StoreMcp.php:427
+#: src/StoreMcp.php:445
 #, php-format
 msgid "Delivery change request from the OneTrace chat: %s"
 msgstr "Запрос на изменение доставки из чата OneTrace: %s"
 
-#: src/StoreMcp.php:477
+#: src/StoreMcp.php:481
+msgid "Please confirm who you are first."
+msgstr "Сначала подтвердите, кто вы."
+
+#. translators: %s: product ids
+#: src/StoreMcp.php:501
+#, php-format
+msgid "These products can no longer be ordered: %s. Quote the order again."
+msgstr "Эти товары больше нельзя заказать: %s. Рассчитайте заказ заново."
+
+#: src/StoreMcp.php:507
+msgid ""
+"This shipping method is not available for the address: quote the order again."
+msgstr "Этот способ доставки недоступен для адреса: рассчитайте заказ заново."
+
+#: src/StoreMcp.php:514
+msgid ""
+"This payment method is not available for the order: quote the order again."
+msgstr "Этот способ оплаты недоступен для заказа: рассчитайте заказ заново."
+
+#: src/StoreMcp.php:551
+msgid "Some products are no longer in stock: quote the order again."
+msgstr "Некоторых товаров уже нет в наличии: рассчитайте заказ заново."
+
+#: src/StoreMcp.php:568
+msgid "The store could not place the order, try again later."
+msgstr "Магазину не удалось оформить заказ, попробуйте позже."
+
+#: src/StoreMcp.php:623
 msgid "The shop sends codes only by email."
 msgstr "Магазин отправляет коды только на email."
 
-#: src/StoreMcp.php:481
+#: src/StoreMcp.php:627
 msgid "Confirmation code"
 msgstr "Код подтверждения"
 
 #. translators: %s: the confirmation code
-#: src/StoreMcp.php:483
+#: src/StoreMcp.php:629
 #, php-format
 msgid "Your code for the chat: %s. It is valid for 10 minutes."
 msgstr "Ваш код для чата: %s. Он действует 10 минут."
 
-#: src/StoreMcp.php:533
+#: src/StoreMcp.php:815
+msgid "The store does not deliver to this country."
+msgstr "Магазин не доставляет в эту страну."
+
+#: src/StoreMcp.php:821
+msgid "The delivery address needs a postcode."
+msgstr "В адресе доставки нужен почтовый индекс."
+
+#: src/StoreMcp.php:825
+msgid "The postcode is not valid for this country."
+msgstr "Почтовый индекс не подходит для этой страны."
+
+#: src/StoreMcp.php:829
+msgid "The order needs a phone number."
+msgstr "Для заказа нужен номер телефона."
+
+#: src/StoreMcp.php:846
+msgid ""
+"Order placed by the customer in the OneTrace chat; the customer pays by the "
+"payment link of the order."
+msgstr ""
+"Заказ оформлен покупателем в чате OneTrace; покупатель оплачивает его по "
+"ссылке на оплату заказа."
+
+#. translators: %s: the AI assistant (ChatGPT, Claude …)
+#: src/StoreMcp.php:850
+#, php-format
+msgid ""
+"Order placed by the customer through the AI assistant %s (OneTrace); the "
+"customer pays by the payment link of the order."
+msgstr ""
+"Заказ оформлен покупателем через ИИ-ассистента %s (OneTrace); покупатель "
+"оплачивает его по ссылке на оплату заказа."
+
+#. translators: %s: the AI assistant (ChatGPT, Claude …)
+#: src/StoreMcp.php:850
+msgid "another AI assistant"
+msgstr "другой ИИ-ассистент"
+
+#: src/StoreMcp.php:954
 msgid "No such order of yours."
 msgstr "У вас нет такого заказа."
 
 #. translators: 1: order number, 2: "return request" or "delivery change request"
-#: src/StoreMcp.php:572
+#: src/StoreMcp.php:993
 #, php-format
 msgid "Order %1$s: %2$s"
 msgstr "Заказ %1$s: %2$s"
 
 #. translators: 1: order number, 2: "return request" or "delivery change request"
-#: src/StoreMcp.php:572
+#: src/StoreMcp.php:993
 msgid "return request"
 msgstr "заявка на возврат"
 
 #. translators: 1: order number, 2: "return request" or "delivery change request"
-#: src/StoreMcp.php:572
+#: src/StoreMcp.php:993
 msgid "delivery change request"
 msgstr "запрос на изменение доставки"
 
-#: src/StoreMcp.php:574
+#: src/StoreMcp.php:995
 msgid "The shop will contact you about the return."
 msgstr "Магазин свяжется с вами по поводу возврата."
 
-#: src/StoreMcp.php:575
+#: src/StoreMcp.php:996
 msgid "The request is passed to the shop; it will confirm the change."
 msgstr "Запрос передан магазину, он подтвердит изменение."

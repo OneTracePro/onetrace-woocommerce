@@ -8,8 +8,8 @@ use OneTrace\Commerce\LineItem;
 use OneTrace\Commerce\Order;
 
 /**
- * Orders from the server: placed (classic and block checkout), paid, cancelled and refunded. Each event has a
- * deterministic messageId, so the same order event is never counted twice.
+ * Orders from the server: placed (classic and block checkout, AI shopping assistants through the store MCP), paid,
+ * cancelled and refunded. Each event has a deterministic messageId, so the same order event is never counted twice.
  */
 final class Orders
 {
@@ -63,11 +63,11 @@ final class Orders
         }
 
         Queue::event($messages->identify($model->customer, Customers::orderConsents($order), $model->placedAt));
-        Queue::event($messages->orderCompleted($model));
+        Queue::event(self::tagged($messages->orderCompleted($model), $order));
 
         // Paid right away (instant payment) — the status change came before the order was processed.
         if (\in_array($order->get_status(), self::paidStatuses($order), true)) {
-            Queue::event($messages->orderPaid($model, self::paidAt($order)));
+            Queue::event(self::tagged($messages->orderPaid($model, self::paidAt($order)), $order));
         }
     }
 
@@ -98,9 +98,9 @@ final class Orders
         }
 
         if (\in_array($to, $paid, true) && !\in_array($from, $paid, true)) {
-            Queue::event(Connection::messages()->orderPaid($model, self::paidAt($order)));
+            Queue::event(self::tagged(Connection::messages()->orderPaid($model, self::paidAt($order)), $order));
         } elseif ($to === 'cancelled' && $from !== 'cancelled') {
-            Queue::event(Connection::messages()->orderCancelled($model, new \DateTimeImmutable('now', new \DateTimeZone('UTC'))));
+            Queue::event(self::tagged(Connection::messages()->orderCancelled($model, new \DateTimeImmutable('now', new \DateTimeZone('UTC'))), $order));
         }
     }
 
@@ -124,13 +124,13 @@ final class Orders
         }
 
         $created = $refund->get_date_created();
-        Queue::event(Connection::messages()->orderRefunded(
+        Queue::event(self::tagged(Connection::messages()->orderRefunded(
             $model,
             (float) $refund->get_amount(),
             $refund->get_id(),
             $created ? new \DateTimeImmutable('@' . $created->getTimestamp()) : null,
             self::lines($refund, true)
-        ));
+        ), $order));
     }
 
     public static function model(\WC_Order $order): Order
@@ -156,6 +156,25 @@ final class Orders
                 return $item instanceof \WC_Order_Item_Shipping ? (string) $item->get_method_id() : '';
             }, array_values($order->get_items('shipping')))),
         ]);
+    }
+
+    /**
+     * An order event of an order placed by an AI shopping assistant (StoreMcp::createOrder()) carries the assistant:
+     * properties.ai_assistant — chatgpt, claude, perplexity, gemini, copilot or other.
+     *
+     * @param array<string, mixed> $message
+     *
+     * @return array<string, mixed>
+     */
+    private static function tagged(array $message, \WC_Order $order): array
+    {
+        $assistant = $order->get_meta(StoreMcp::ASSISTANT_META);
+
+        if (\is_string($assistant) && $assistant !== '' && \is_array($message['properties'] ?? null)) {
+            $message['properties']['ai_assistant'] = $assistant;
+        }
+
+        return $message;
     }
 
     /**

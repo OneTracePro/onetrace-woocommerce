@@ -11,11 +11,13 @@ use OneTrace\StoreMcp\ToolError;
 use OneTrace\StoreMcp\Verification;
 
 /**
- * MCP server of the store for the OneTrace AI chat bot (store MCP contract v1): POST /wp-json/onetrace/v1/mcp. The bot
- * reads orders, tracking, stock, delivery and the return policy, and — when the owner allows it in the settings —
- * cancels unpaid orders and passes return and delivery change requests to the shop. Customers are confirmed by the
- * login on the website (cdp.chatCustomer()) or by a code the shop sends by email. Customer ids: "user:<id>" or
- * "email:<address>" (guest orders).
+ * MCP server of the store for the OneTrace AI chat bot and AI shopping assistants (store MCP contract v2):
+ * POST /wp-json/onetrace/v1/mcp. The bot reads orders, tracking, stock, delivery and the return policy, and — when
+ * the owner allows it in the settings — cancels unpaid orders and passes return and delivery change requests to the
+ * shop. AI shopping assistants (ChatGPT, Claude …) price an order and place it for the customer, who pays by the
+ * payment link of the order. Customers are confirmed by the login on the website (cdp.chatCustomer()) or by a code
+ * the shop sends by email; for an order also a new customer (a guest token of the email or phone). Customer ids:
+ * "user:<id>" or "email:<address>" (guest orders).
  */
 final class StoreMcp
 {
@@ -25,6 +27,18 @@ final class StoreMcp
 
     public const READ_TOOLS = ['store_start_verification', 'store_verify', 'store_get_customer', 'store_find_orders', 'store_get_order', 'store_get_tracking', 'store_check_availability', 'store_get_delivery_options', 'store_get_return_policy'];
     public const ACTIONS = ['store_cancel_order', 'store_create_return', 'store_change_delivery'];
+
+    /** Orders from AI shopping assistants (contract v2): off by default, the owner allows both. */
+    public const ORDER_TOOLS = ['store_quote_order', 'store_create_order'];
+
+    /** Order meta of an order placed through the store MCP: "assistant" or "chat", and the assistant. */
+    public const SOURCE_META = '_onetrace_source';
+    public const ASSISTANT_META = '_onetrace_assistant';
+
+    /** Order meta: the hash of the customer and the idempotency key of store_create_order — a repeat finds the order. */
+    public const IDEMPOTENCY_META = '_onetrace_idempotency';
+
+    private const ASSISTANT_NAMES = ['chatgpt' => 'ChatGPT', 'claude' => 'Claude', 'perplexity' => 'Perplexity', 'gemini' => 'Gemini', 'copilot' => 'Copilot'];
 
     private const CONTRACT_STATUSES = ['pending' => 'pending', 'processing' => 'processing', 'on-hold' => 'on_hold', 'completed' => 'completed', 'cancelled' => 'cancelled', 'refunded' => 'refunded', 'failed' => 'failed', 'shipped' => 'shipped', 'delivered' => 'delivered'];
 
@@ -121,6 +135,8 @@ final class StoreMcp
             'store_cancel_order' => [self::class, 'cancel'],
             'store_create_return' => [self::class, 'createReturn'],
             'store_change_delivery' => [self::class, 'changeDelivery'],
+            'store_quote_order' => [self::class, 'quote'],
+            'store_create_order' => [self::class, 'createOrder'],
         ];
         $enabled = Settings::get('store_mcp_tools');
 
@@ -129,6 +145,8 @@ final class StoreMcp
             'version' => ONETRACE_WC_VERSION,
             'enabled' => \is_array($enabled) ? array_values(array_filter($enabled, 'is_string')) : self::READ_TOOLS,
             'verification' => new Verification(new TransientCodeStore(), [self::class, 'findCustomer'], [self::class, 'sendCode']),
+            // Action results for a day by the idempotency key; a repeat while the order is being placed waits.
+            'idempotency' => new TransientCodeStore(),
         ]);
     }
 
@@ -427,6 +445,135 @@ final class StoreMcp
         return self::request($order, $ctx, sprintf(__('Delivery change request from the OneTrace chat: %s', 'onetrace-for-woocommerce'), implode(', ', $parts)), 'delivery');
     }
 
+    /**
+     * The price of an order in a temporary cart of WooCommerce, as the checkout would count it: the products
+     * (unavailable ones listed apart), shipping methods of the address, taxes by the store settings, the total and
+     * the payment methods.
+     *
+     * @param array<string, mixed> $args checked by OrderInput::quote()
+     * @param Context $ctx
+     *
+     * @return array<string, mixed>
+     */
+    public static function quote(array $args, Context $ctx): array
+    {
+        return self::inCart(self::items($args), self::shipping($args), self::text($args['shipping_method'] ?? null), static function (array $lines, array $unavailable): array {
+            return self::priced($lines, $unavailable);
+        });
+    }
+
+    /**
+     * Places the order of the confirmed customer or guest: products, prices, stock and the shipping method are
+     * counted again, an unavailable product or method is invalid_input (quote again) and not an order at old
+     * prices. The order waits for the payment by its payment link (pending), pay on delivery (cod) goes on as at the
+     * checkout. A repeat with the same idempotency key returns the same order.
+     *
+     * @param array<string, mixed> $args checked by OrderInput::create()
+     * @param Context $ctx
+     *
+     * @return array<string, mixed>
+     */
+    public static function createOrder(array $args, Context $ctx): array
+    {
+        [$user, $email] = $ctx->customerId !== null ? self::who($ctx->customerId) : [null, $ctx->guestEmail()];
+
+        if ($user === null && $email === null && $ctx->guestPhone() === null) {
+            throw new ToolError(ToolError::AUTH_REQUIRED, __('Please confirm who you are first.', 'onetrace-for-woocommerce'));
+        }
+
+        $key = hash('sha256', ($ctx->customerId ?? 'guest:' . $ctx->guestContact) . '|' . $ctx->idempotencyKey);
+        // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key, WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- one order by an exact meta value, only when an assistant places an order.
+        $placed = wc_get_orders(['limit' => 1, 'type' => 'shop_order', 'meta_key' => self::IDEMPOTENCY_META, 'meta_value' => $key]);
+
+        if (\is_array($placed) && ($placed[0] ?? null) instanceof \WC_Order) {
+            return self::placed($placed[0]);
+        }
+
+        $shipping = self::shipping($args);
+        $address = self::address($shipping, $user !== null ? (string) get_user_meta($user->ID, 'billing_phone', true) : (string) $ctx->guestPhone());
+        $method = (string) self::text($args['shipping_method'] ?? null);
+        $payment = self::text($args['payment_method'] ?? null);
+
+        $order = self::inCart(self::items($args), $shipping, $method, static function (array $lines, array $unavailable) use ($ctx, $user, $email, $address, $method, $payment, $key, $args): \WC_Order {
+            $cart = WC()->cart;
+
+            if ($unavailable !== [] || $cart->is_empty()) {
+                /* translators: %s: product ids */
+                throw new ToolError(ToolError::INVALID_INPUT, sprintf(__('These products can no longer be ordered: %s. Quote the order again.', 'onetrace-for-woocommerce'), implode(', ', $unavailable)));
+            }
+
+            $chosen = (array) WC()->session->get('chosen_shipping_methods');
+
+            if ($cart->needs_shipping() && ($chosen[0] ?? null) !== $method) {
+                throw new ToolError(ToolError::INVALID_INPUT, __('This shipping method is not available for the address: quote the order again.', 'onetrace-for-woocommerce'));
+            }
+
+            $gateways = WC()->payment_gateways()->get_available_payment_gateways();
+            $gateway = $payment !== null ? ($gateways[$payment] ?? null) : null;
+
+            if ($payment !== null && !$gateway instanceof \WC_Payment_Gateway) {
+                throw new ToolError(ToolError::INVALID_INPUT, __('This payment method is not available for the order: quote the order again.', 'onetrace-for-woocommerce'));
+            }
+
+            $order = new \WC_Order();
+            $order->set_created_via('onetrace');
+            $order->set_currency(get_woocommerce_currency());
+            $order->set_prices_include_tax(wc_prices_include_tax());
+            $order->set_customer_id($user !== null ? $user->ID : 0);
+            $order->set_address($address, 'shipping');
+            $order->set_address($address + ['email' => $email ?? ''], 'billing');
+            $order->set_customer_note((string) self::text($args['comment'] ?? null));
+
+            if ($gateway instanceof \WC_Payment_Gateway) {
+                $order->set_payment_method($gateway->id);
+                $order->set_payment_method_title($gateway->get_title());
+            }
+
+            WC()->checkout()->set_data_from_cart($order);
+            $order->update_meta_data(self::IDEMPOTENCY_META, $key);
+            $order->update_meta_data(self::SOURCE_META, $ctx->source);
+
+            if ($ctx->assistant !== null) {
+                $order->update_meta_data(self::ASSISTANT_META, $ctx->assistant);
+                // The origin column of WooCommerce orders, as for a visit by the assistant's link (utm tags of OneTrace).
+                $order->update_meta_data('_wc_order_attribution_source_type', 'utm');
+                $order->update_meta_data('_wc_order_attribution_utm_source', $ctx->assistant);
+                $order->update_meta_data('_wc_order_attribution_utm_medium', 'ai_assistant');
+            }
+
+            $order->save();
+
+            try {
+                // Stock held for the unpaid order as at the checkout (the "Hold stock" setting).
+                wc_reserve_stock_for_order($order);
+            } catch (\Exception $e) {
+                $order->delete(true);
+
+                throw new ToolError(ToolError::INVALID_INPUT, __('Some products are no longer in stock: quote the order again.', 'onetrace-for-woocommerce'));
+            }
+
+            $order->add_order_note(self::note($ctx));
+
+            return $order;
+        });
+
+        $gateway = WC()->payment_gateways()->payment_gateways()[$order->get_payment_method()] ?? null;
+
+        if ($gateway instanceof \WC_Payment_Gateway && \in_array($gateway->id, self::payOnDelivery($order), true)) {
+            // Cash on delivery: processing (on-hold with downloads) as at the checkout, the stock is reduced.
+            $gateway->process_payment($order->get_id());
+            $order = wc_get_order($order->get_id());
+        }
+
+        if (!$order instanceof \WC_Order) {
+            throw new ToolError(ToolError::UNAVAILABLE, __('The store could not place the order, try again later.', 'onetrace-for-woocommerce'));
+        }
+
+        Orders::placed($order);
+
+        return self::placed($order);
+    }
+
     public static function findCustomer(string $contact, ?string $order): ?string
     {
         $email = strpos($contact, '@') !== false ? sanitize_email($contact) : '';
@@ -481,6 +628,281 @@ final class StoreMcp
         $heading = __('Confirmation code', 'onetrace-for-woocommerce');
         /* translators: %s: the confirmation code */
         $mailer->send($contact, $heading, $mailer->wrap_message($heading, '<p>' . sprintf(esc_html__('Your code for the chat: %s. It is valid for 10 minutes.', 'onetrace-for-woocommerce'), '<strong>' . esc_html($code) . '</strong>') . '</p>'));
+    }
+
+    /**
+     * Runs $then on the products in the cart of WooCommerce with the delivery address and the shipping method, as
+     * at the checkout. The cart is temporary: it is emptied after, and a request without a session of a visitor
+     * (the platform) leaves no session and no cookies.
+     *
+     * @template T
+     *
+     * @param list<array{product_id: string, quantity: int}> $items
+     * @param array<string, string> $shipping
+     * @param callable(array<string, string>, list<string>): T $then the catalog id of each cart line by its key and the unavailable ids
+     *
+     * @return T
+     */
+    private static function inCart(array $items, array $shipping, ?string $method, callable $then)
+    {
+        if (WC()->cart === null) {
+            wc_load_cart();
+        }
+
+        $cart = WC()->cart;
+        $session = WC()->session;
+        $customer = WC()->customer;
+        $visitor = $session instanceof \WC_Session_Handler && $session->has_session();
+        // The cart sets its cookies in $_COOKIE too: restored after, or the shutdown of WooCommerce would delete them.
+        $cookies = $_COOKIE;
+        add_filter('woocommerce_set_cookie_enabled', '__return_false');
+        $cart->empty_cart();
+        wc_clear_notices();
+
+        try {
+            $country = $shipping['country'] ?? WC()->countries->get_base_country();
+            $customer->set_billing_location($country, '', $shipping['postcode'] ?? '', $shipping['city'] ?? '');
+            $customer->set_shipping_location($country, '', $shipping['postcode'] ?? '', $shipping['city'] ?? '');
+            $customer->set_shipping_address_1($shipping['address'] ?? '');
+            $customer->set_calculated_shipping(true);
+            $lines = [];
+            $unavailable = [];
+
+            foreach ($items as $item) {
+                $product = CartLinks::product($item['product_id']);
+                $line = $product !== null ? CartLinks::addProduct($cart, $product, $item['quantity']) : null;
+
+                if ($line === null) {
+                    $unavailable[] = $item['product_id'];
+                } else {
+                    $lines[$line] = $lines[$line] ?? $item['product_id'];
+                }
+            }
+
+            wc_clear_notices();
+
+            if ($method !== null && $method !== '') {
+                $session->set('chosen_shipping_methods', [$method]);
+            }
+
+            $cart->calculate_totals();
+
+            return $then($lines, $unavailable);
+        } finally {
+            $cart->empty_cart();
+            wc_clear_notices();
+
+            if (!$visitor && $session instanceof \WC_Session_Handler) {
+                $session->forget_session();
+            }
+
+            $_COOKIE = $cookies;
+            remove_filter('woocommerce_set_cookie_enabled', '__return_false');
+        }
+    }
+
+    /**
+     * The quote of the calculated cart. Prices as the store shows them (with or without taxes); without taxes in
+     * the prices the taxes are a separate "tax".
+     *
+     * @param array<string, string> $lines
+     * @param list<string> $unavailable
+     *
+     * @return array<string, mixed>
+     */
+    private static function priced(array $lines, array $unavailable): array
+    {
+        $cart = WC()->cart;
+        $currency = get_woocommerce_currency();
+        $withTax = $cart->display_prices_including_tax();
+        $items = [];
+
+        foreach ($cart->get_cart() as $key => $line) {
+            $product = $line['data'] ?? null;
+            $quantity = max(1, (int) ($line['quantity'] ?? 1));
+            $subtotal = (float) ($line['line_subtotal'] ?? 0) + ($withTax ? (float) ($line['line_subtotal_tax'] ?? 0) : 0.0);
+            $total = (float) ($line['line_total'] ?? 0) + ($withTax ? (float) ($line['line_tax'] ?? 0) : 0.0);
+            $items[] = [
+                'product_id' => $lines[$key] ?? ($product instanceof \WC_Product ? Products::id($product) : ''),
+                'name' => $product instanceof \WC_Product ? $product->get_name() : '',
+                'quantity' => $quantity,
+                'price' => self::money($subtotal / $quantity, $currency),
+                'total' => self::money($total, $currency),
+            ];
+        }
+
+        $methods = [];
+        $chosen = null;
+        $shippingPrice = $cart->needs_shipping() ? null : self::money(0.0, $currency);
+        $selected = (array) WC()->session->get('chosen_shipping_methods');
+
+        if ($cart->needs_shipping()) {
+            $packages = WC()->shipping()->get_packages();
+
+            foreach ((array) ($packages[0]['rates'] ?? []) as $rate) {
+                if (!$rate instanceof \WC_Shipping_Rate) {
+                    continue;
+                }
+
+                $price = self::money((float) $rate->get_cost() + ($withTax ? array_sum(array_map('floatval', (array) $rate->get_taxes())) : 0.0), $currency);
+                $methods[] = ['id' => $rate->get_id(), 'name' => wp_strip_all_tags($rate->get_label()), 'price' => $price];
+
+                if ($rate->get_id() === ($selected[0] ?? null)) {
+                    $chosen = $rate->get_id();
+                    $shippingPrice = $price;
+                }
+            }
+        }
+
+        $payment = [];
+
+        foreach (WC()->payment_gateways()->get_available_payment_gateways() as $id => $gateway) {
+            $payment[] = ['id' => (string) $id, 'name' => wp_strip_all_tags($gateway->get_title())];
+        }
+
+        $quote = [
+            'items' => $items,
+            'unavailable' => $unavailable,
+            'subtotal' => self::money((float) $cart->get_subtotal() + ($withTax ? (float) $cart->get_subtotal_tax() : 0.0), $currency),
+            'discount' => self::money((float) $cart->get_discount_total() + ($withTax ? (float) $cart->get_discount_tax() : 0.0), $currency),
+            'shipping_methods' => $methods,
+            'shipping_method' => $chosen,
+            'shipping_price' => $shippingPrice,
+            'total' => self::money((float) $cart->get_total('edit'), $currency),
+            'payment_methods' => $payment,
+        ];
+
+        if (!$withTax && (float) $cart->get_total_tax() > 0) {
+            $quote['tax'] = self::money((float) $cart->get_total_tax(), $currency);
+        }
+
+        return $quote;
+    }
+
+    /**
+     * The answer of store_create_order (also for a repeat with the same idempotency key).
+     *
+     * @return array<string, mixed>
+     */
+    private static function placed(\WC_Order $order): array
+    {
+        $paid = \in_array($order->get_status(), Orders::paidStatuses($order), true);
+        $onDelivery = !$paid && \in_array($order->get_payment_method(), self::payOnDelivery($order), true) && !$order->has_status(['pending', 'failed', 'cancelled']);
+
+        return [
+            'order' => $order->get_order_number(),
+            'status' => self::status($order),
+            'total' => self::money((float) $order->get_total(), $order->get_currency()),
+            'payment_status' => $paid ? 'paid' : ($onDelivery ? 'on_delivery' : 'pending'),
+            'payment_url' => $order->needs_payment() ? $order->get_checkout_payment_url() : null,
+        ];
+    }
+
+    /**
+     * The delivery address of an order by the rules of the checkout: a country the store ships to, a postcode where
+     * the country needs one (valid), a phone when the checkout requires it.
+     *
+     * @param array<string, string> $shipping
+     *
+     * @return array<string, string>
+     */
+    private static function address(array $shipping, string $phone): array
+    {
+        $country = $shipping['country'] ?? '';
+        $postcode = isset($shipping['postcode']) ? wc_format_postcode($shipping['postcode'], $country) : '';
+        $phone = $shipping['phone'] ?? $phone;
+
+        if (!\array_key_exists($country, WC()->countries->get_shipping_countries())) {
+            throw new ToolError(ToolError::INVALID_INPUT, __('The store does not deliver to this country.', 'onetrace-for-woocommerce'));
+        }
+
+        $fields = WC()->countries->get_address_fields($country, 'shipping_');
+
+        if ($postcode === '' && !empty($fields['shipping_postcode']['required'])) {
+            throw new ToolError(ToolError::INVALID_INPUT, __('The delivery address needs a postcode.', 'onetrace-for-woocommerce'));
+        }
+
+        if ($postcode !== '' && !\WC_Validation::is_postcode($postcode, $country)) {
+            throw new ToolError(ToolError::INVALID_INPUT, __('The postcode is not valid for this country.', 'onetrace-for-woocommerce'));
+        }
+
+        if ($phone === '' && get_option('woocommerce_checkout_phone_field', 'required') === 'required') {
+            throw new ToolError(ToolError::INVALID_INPUT, __('The order needs a phone number.', 'onetrace-for-woocommerce'));
+        }
+
+        return [
+            'first_name' => $shipping['first_name'] ?? '',
+            'last_name' => $shipping['last_name'] ?? '',
+            'country' => $country,
+            'city' => $shipping['city'] ?? '',
+            'postcode' => $postcode,
+            'address_1' => $shipping['address'] ?? '',
+            'phone' => $phone,
+        ];
+    }
+
+    private static function note(Context $ctx): string
+    {
+        if ($ctx->assistant === null) {
+            return __('Order placed by the customer in the OneTrace chat; the customer pays by the payment link of the order.', 'onetrace-for-woocommerce');
+        }
+
+        /* translators: %s: the AI assistant (ChatGPT, Claude …) */
+        return sprintf(__('Order placed by the customer through the AI assistant %s (OneTrace); the customer pays by the payment link of the order.', 'onetrace-for-woocommerce'), self::ASSISTANT_NAMES[$ctx->assistant] ?? __('another AI assistant', 'onetrace-for-woocommerce'));
+    }
+
+    /**
+     * Payment methods of payment on delivery: the order goes on without the payment link.
+     *
+     * @return list<string>
+     */
+    private static function payOnDelivery(\WC_Order $order): array
+    {
+        /**
+         * Payment methods paid on delivery for orders from AI assistants: process_payment() runs right away.
+         *
+         * @param list<string> $methods
+         * @param \WC_Order $order
+         */
+        return array_values(array_filter((array) apply_filters('onetrace_woocommerce_pay_on_delivery_methods', ['cod'], $order), 'is_string'));
+    }
+
+    /**
+     * @param array<string, mixed> $args
+     *
+     * @return list<array{product_id: string, quantity: int}>
+     */
+    private static function items(array $args): array
+    {
+        $items = [];
+
+        foreach (\is_array($args['items'] ?? null) ? $args['items'] : [] as $item) {
+            if (\is_array($item) && is_scalar($item['product_id'] ?? null) && is_numeric($item['quantity'] ?? null)) {
+                $items[] = ['product_id' => (string) $item['product_id'], 'quantity' => (int) $item['quantity']];
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param array<string, mixed> $args
+     *
+     * @return array<string, string>
+     */
+    private static function shipping(array $args): array
+    {
+        return array_filter(\is_array($args['shipping'] ?? null) ? $args['shipping'] : [], static function ($value, $key): bool {
+            return \is_string($key) && \is_string($value) && $value !== '';
+        }, ARRAY_FILTER_USE_BOTH);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private static function text($value): ?string
+    {
+        return \is_string($value) && $value !== '' ? $value : null;
     }
 
     /**

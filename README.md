@@ -150,11 +150,12 @@ Every 5 minutes new and changed unique codes of the pool become coupons with the
 
 ## AI chat bot: store MCP
 
-The AI bot of the OneTrace chat can answer customers with live data of the store and, if you allow it, act on orders. Turn on **AI chat bot: store MCP** in WooCommerce → Settings → OneTrace and save: the plugin connects its MCP server (`POST /wp-json/onetrace/v1/mcp`, store MCP contract v1) to the bot of the project. The secret key needs the `chats.manage` permission.
+The AI bot of the OneTrace chat can answer customers with live data of the store and, if you allow it, act on orders. Turn on **AI chat bot: store MCP** in WooCommerce → Settings → OneTrace and save: the plugin connects its MCP server (`POST /wp-json/onetrace/v1/mcp`, store MCP contract v2) to the bot of the project. The secret key needs the `chats.manage` permission.
 
 - **Reading** (on by default): orders of the customer (account and guest orders by email), an order with items, payment, shipping and tracking, stock and prices with variations, delivery methods of the shipping zone, the "Refund and returns policy" page.
 - **Actions** (off by default, allow them in "What the bot may do"): cancel an unpaid order (filter `onetrace_woocommerce_cancellable_statuses`), pass a return or delivery change request to the shop — an order note and an email to the shop owner. The bot acts only after the customer agreed in the chat.
 - **Customers**: signed-in customers are confirmed automatically (the tracker gets a signed token); guests and messenger customers get a 6-digit code from the shop by email (filter `onetrace_woocommerce_send_code` to send it by SMS). Orders of other customers are "not found".
+- **Orders from AI shopping assistants** (off by default, allow both "AI assistants: price an order" and "Action: place an order from an AI assistant"): an assistant of OneTrace (ChatGPT, Claude …) prices the order in a temporary WooCommerce cart — products by the catalog id (post ID or SKU, a variation is itself), taxes by the store settings, shipping methods of the zone for the address, payment methods — and, after the shopper confirmed the email or phone with a code (also without an account: a guest order) and agreed to the order, places it. Prices, stock and the shipping method are checked again (a changed one answers "quote the order again"); the order waits for the payment by its payment link (`get_checkout_payment_url()`), cash on delivery goes on as at the checkout (filter `onetrace_woocommerce_pay_on_delivery_methods`). A repeat with the same idempotency key returns the same order (order meta `_onetrace_idempotency`). The order has the assistant in the meta `_onetrace_assistant`, an order note and the "Origin" column, and its order events in OneTrace carry `ai_assistant`.
 
 ## Cart links of AI assistants
 
@@ -189,6 +190,7 @@ wp onetrace sync-catalog   # uploads the whole catalog now
 - `onetrace_woocommerce_client_options` — options of the [onetrace-php](https://github.com/OneTracePro/onetrace-php) client (e.g. timeouts or a custom transport).
 - `onetrace_woocommerce_tracker_options` — options of `cdp.init()` on the storefront.
 - `onetrace_woocommerce_paid_statuses` — order statuses that mean "paid".
+- `onetrace_woocommerce_pay_on_delivery_methods` — payment methods of orders from AI assistants that are paid on delivery (`cod`): the order goes on without the payment link.
 - `onetrace_woocommerce_order_shipments` — parcels of the order for `order_shipped`; `do_action('onetrace_woocommerce_sync_shipments', $order)` sends the new ones.
 - `onetrace_woocommerce_email_kind` — the kind of an email sent through OneTrace (`$kind`, the arguments of `wp_mail()`, the `WC_Email` being sent or null).
 - `onetrace_woocommerce_shipped_statuses` (`completed`, `shipped`) and `onetrace_woocommerce_delivered_statuses` (`delivered`) — order statuses of a shipment without tracking and of the delivery.

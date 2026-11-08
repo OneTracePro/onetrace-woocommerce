@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.16.0
+Stable tag: 1.17.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,6 +28,7 @@ This plugin connects your WooCommerce store:
 * "Ask AI about this product" on the product page: OneTrace answers shoppers' questions from the product description and the store's knowledge base, or hands them to the online chat.
 * Recommendation widgets and Web Push.
 * Cart links of the OneTrace AI assistants: a shopper's assistant (ChatGPT, Claude) puts products into the WooCommerce cart with one link and the shopper lands on the cart page.
+* Orders from AI shopping assistants: when you allow it, the assistant prices the order with the delivery of the store and places it for the shopper (a customer or a guest confirmed with a code), who pays by the payment link of the order on your website.
 * Product search: the store search results and suggestions while typing come from OneTrace — word forms, typos, the wrong keyboard layout and the visitor's interests; the usual search on any error.
 * The OneTrace search widget on the search page of your theme: facets, sorting, infinite scroll and an "Add to cart" button, with a search layer under the search fields.
 * Catalog languages from TranslatePress, WPML and Polylang: recommendations, search and emails in the visitor's language.
@@ -40,7 +41,7 @@ HPOS and the Cart and Checkout blocks are supported.
 
 = External service =
 
-The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders with their shipments (carrier, tracking number and link), cart and wishlist events and the product catalog with stock and descriptions from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; when store emails are turned on in the OneTrace project, the emails the store sends (recipient, subject, content, attachments, the order data of order emails, the customer's first name and language); page and product views from the visitor's browser; with product search or the search widget, the search queries of visitors and their tracker id; with the "Ask AI about this product" widget turned on in OneTrace, the questions visitors ask about a product, from their browser; with the AI chat bot (store MCP) turned on, the platform calls the store for a customer confirmed in the chat — their orders, parcel tracking, stock and prices, delivery methods and the return policy, the actions you allowed — and the store emails confirmation codes to the customer. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
+The plugin sends data to the OneTrace.pro platform at the address you enter in the settings (your own brand domain or cdp.onetrace.pro): customer data (email, phone, name, city, country, language), consents, orders with their shipments (carrier, tracking number and link), cart and wishlist events and the product catalog with stock and descriptions from the server; with the loyalty program — the customer id and the cart amount to show and hold bonus points, the friend's referral code on registration; with promo codes the plugin reads the codes of the bound pools; when store emails are turned on in the OneTrace project, the emails the store sends (recipient, subject, content, attachments, the order data of order emails, the customer's first name and language); page and product views from the visitor's browser; with product search or the search widget, the search queries of visitors and their tracker id; with the "Ask AI about this product" widget turned on in OneTrace, the questions visitors ask about a product, from their browser; with the AI chat bot (store MCP) turned on, the platform calls the store for a customer confirmed in the chat — their orders, parcel tracking, stock and prices, delivery methods and the return policy, the actions you allowed — and the store emails confirmation codes to the customer; with orders from AI assistants allowed, the platform passes the products, the delivery address and the confirmed email or phone of the shopper to the store to price and place the order, and the order goes to OneTrace with the name of the assistant. Terms of service: https://onetrace.pro/en/legal/terms, privacy policy: https://onetrace.pro/en/legal/privacy.
 
 == Installation ==
 
@@ -79,6 +80,10 @@ Yes, in the "Store emails" section of the OneTrace project: all emails sent with
 
 No. The bot asks the store only for orders of a confirmed customer: signed in on the website, or confirmed with a code the shop sends to the email of the orders. An order number of someone else answers "not found".
 
+= Can an AI assistant place an order in my store? =
+
+Yes, when you allow both "AI assistants: price an order" and "Action: place an order from an AI assistant" under WooCommerce → Settings → OneTrace → AI chat bot: store MCP. A shopper's assistant connected to OneTrace (ChatGPT, Claude …) prices the order in a temporary WooCommerce cart — your prices, taxes, shipping zones and methods for the address, payment methods — and after the shopper confirms the email or phone with a code from the store and agrees to the items, address, delivery and total, places a real WooCommerce order: unpaid ("Pending payment") with the payment link of the order, or processing with cash on delivery. Prices and stock are checked again; a product that cannot be ordered any more is an error, not an order at an old price. A repeat of the same request never creates a second order. The order is marked with the assistant (order note, "Origin" column) and goes to OneTrace with it.
+
 = What is a cart link? =
 
 The OneTrace AI assistants of shoppers (ChatGPT, Claude) give the shopper a link to the store such as `https://shop.example/?onetrace_cart=123:2,456:1&utm_source=chatgpt&utm_medium=ai_assistant&utm_campaign=shopper_mcp`. The plugin puts the products into the WooCommerce cart (also for guests) and redirects to the cart page with the other parameters of the link, so the visit is recorded with its utm tags. `onetrace_cart` holds up to 20 comma-separated pairs `id:quantity`: the product id of the catalog (the post ID, or the SKU with "Product id → SKU"; a variation's id or SKU adds that variation) and a quantity of 1 to 99. Products that are unknown, not published, out of stock or not for sale are skipped; when nothing could be added, the same page opens without the parameter. Works on any page of the storefront, nothing to set up.
@@ -99,6 +104,11 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
 
 == Changelog ==
+
+= 1.17.0 =
+* Orders from AI shopping assistants (store MCP contract v2): with "AI assistants: price an order" and "Action: place an order from an AI assistant" allowed in the store MCP settings, an assistant of OneTrace (ChatGPT, Claude …) prices an order — items, shipping methods for the address, taxes by the store settings, total, payment methods — and places it for a customer or a guest confirmed with a code by email (or SMS through the `onetrace_woocommerce_send_code` filter). The order waits for the payment by its payment link; cash on delivery goes on as at the checkout. Prices, stock and the shipping method are checked again, and a repeated request returns the same order.
+* Orders of assistants carry the assistant in an order note, in the "Origin" column of WooCommerce (utm source of the assistant, medium ai_assistant) and in the order events sent to OneTrace (`ai_assistant`).
+* Requires onetrace-php 1.18.
 
 = 1.16.0 =
 * Cart links of the OneTrace AI assistants: `?onetrace_cart=ID:QTY,ID:QTY` on any page of the store puts the products and variations into the cart (also for guests; unknown, out of stock and not purchasable products are skipped) and opens the cart page with the utm tags of the link.
@@ -182,6 +192,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 * First release.
 
 == Upgrade Notice ==
+
+= 1.17.0 =
+Orders from AI shopping assistants: allow the two order tools of the store MCP and assistants place orders paid by the payment link.
 
 = 1.15.0 =
 The "Identity key" setting: signed user ids for projects that require them.

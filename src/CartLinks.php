@@ -95,7 +95,7 @@ final class CartLinks
         foreach (self::parse($value) as [$id, $quantity]) {
             $product = self::product($id);
 
-            if ($product !== null && self::addProduct($cart, $product, $quantity)) {
+            if ($product !== null && self::addProduct($cart, $product, $quantity) !== null) {
                 $added++;
             }
         }
@@ -128,9 +128,9 @@ final class CartLinks
 
     /**
      * The product or variation of a catalog id: the SKU in the SKU mode (a variation SKU is the variation), a
-     * numeric id without a matching SKU — the post id.
+     * numeric id without a matching SKU — the post id. Also the product ids of orders from AI assistants (StoreMcp).
      */
-    private static function product(string $id): ?\WC_Product
+    public static function product(string $id): ?\WC_Product
     {
         $postId = Products::bySku() ? (int) wc_get_product_id_by_sku($id) : 0;
 
@@ -144,18 +144,21 @@ final class CartLinks
         return $product instanceof \WC_Product ? $product : null;
     }
 
-    private static function addProduct(\WC_Cart $cart, \WC_Product $product, int $quantity): bool
+    /**
+     * Adds a product or variation for sale to the cart: the key of the cart line, null when it is skipped.
+     */
+    public static function addProduct(\WC_Cart $cart, \WC_Product $product, int $quantity): ?string
     {
         $variation = $product instanceof \WC_Product_Variation;
         $parent = $variation ? wc_get_product($product->get_parent_id()) : $product;
 
         if (!$parent instanceof \WC_Product || $parent->get_status() !== 'publish' || $product->get_status() !== 'publish') {
-            return false;
+            return null;
         }
 
         // Simple-like products only: a variable, grouped or external product needs its page.
         if ((!$variation && !$product->supports('ajax_add_to_cart')) || !$product->is_purchasable() || !$product->is_in_stock()) {
-            return false;
+            return null;
         }
 
         $productId = $parent->get_id();
@@ -164,10 +167,12 @@ final class CartLinks
         $attributes = $variation ? wc_get_product_variation_attributes($variationId) : [];
 
         if (!apply_filters('woocommerce_add_to_cart_validation', true, $productId, $quantity, $variationId, $attributes)) {
-            return false;
+            return null;
         }
 
-        return $cart->add_to_cart($productId, $quantity, $variationId, $attributes) !== false;
+        $key = $cart->add_to_cart($productId, $quantity, $variationId, $attributes);
+
+        return \is_string($key) && $key !== '' ? $key : null;
     }
 
     /**

@@ -118,7 +118,7 @@ final class Admin
             $field('promo_pools', ['type' => 'textarea', 'title' => __('Pools and template coupons', 'onetrace-for-woocommerce'), 'placeholder' => 'welcome = WELCOME-TEMPLATE', 'css' => 'min-height:5em;font-family:monospace', 'desc' => __('One per line: pool key = template coupon code. The secret key needs the promo.read permission.', 'onetrace-for-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_promo'],
 
-            ['type' => 'title', 'id' => 'onetrace_store_mcp', 'title' => __('AI chat bot: store MCP', 'onetrace-for-woocommerce'), 'desc' => __('The AI bot of the OneTrace chat answers customers with live data of the store and, if you allow it, acts on orders. Customers signed in on the website are confirmed automatically, others with a code the shop sends by email. The secret key needs the chats.manage permission.', 'onetrace-for-woocommerce')],
+            ['type' => 'title', 'id' => 'onetrace_store_mcp', 'title' => __('AI chat bot: store MCP', 'onetrace-for-woocommerce'), 'desc' => __('The AI bot of the OneTrace chat answers customers with live data of the store and, if you allow it, acts on orders. Customers signed in on the website are confirmed automatically, others with a code the shop sends by email. The secret key needs the chats.manage permission.', 'onetrace-for-woocommerce') . ' ' . __('Allow both order tools, and AI shopping assistants (ChatGPT, Claude …) of the OneTrace shopping MCP place orders in the store: the customer confirms the email with a code and pays by the payment link of the order.', 'onetrace-for-woocommerce')],
             $field('store_mcp', ['type' => 'checkbox', 'title' => __('Store MCP server', 'onetrace-for-woocommerce'), 'desc' => __('Connect the store to the AI chat bot', 'onetrace-for-woocommerce')]),
             $field('store_mcp_tools', ['type' => 'multiselect', 'class' => 'wc-enhanced-select', 'title' => __('What the bot may do', 'onetrace-for-woocommerce'), 'options' => self::storeMcpTools(), 'desc_tip' => __('Reading is safe; actions change orders and run only after the customer agreed in the chat.', 'onetrace-for-woocommerce')]),
             ['type' => 'sectionend', 'id' => 'onetrace_store_mcp'],
@@ -143,6 +143,8 @@ final class Admin
             'store_cancel_order' => __('Action: cancel an unpaid order', 'onetrace-for-woocommerce'),
             'store_create_return' => __('Action: pass a return request to the shop', 'onetrace-for-woocommerce'),
             'store_change_delivery' => __('Action: pass a delivery change request to the shop', 'onetrace-for-woocommerce'),
+            'store_quote_order' => __('AI assistants: price an order (items, delivery, total)', 'onetrace-for-woocommerce'),
+            'store_create_order' => __('Action: place an order from an AI assistant (paid by the payment link)', 'onetrace-for-woocommerce'),
         ];
     }
 
