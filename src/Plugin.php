@@ -48,6 +48,7 @@ final class Plugin
         StoreEmails::register();
         OrderEmails::register();
         Cart::register();
+        CartLinks::register();
         Wishlist::register();
         Catalog::register();
         Storefront::register();

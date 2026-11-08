@@ -156,6 +156,19 @@ The AI bot of the OneTrace chat can answer customers with live data of the store
 - **Actions** (off by default, allow them in "What the bot may do"): cancel an unpaid order (filter `onetrace_woocommerce_cancellable_statuses`), pass a return or delivery change request to the shop — an order note and an email to the shop owner. The bot acts only after the customer agreed in the chat.
 - **Customers**: signed-in customers are confirmed automatically (the tracker gets a signed token); guests and messenger customers get a 6-digit code from the shop by email (filter `onetrace_woocommerce_send_code` to send it by SMS). Orders of other customers are "not found".
 
+## Cart links of AI assistants
+
+The OneTrace AI assistants of shoppers (ChatGPT, Claude) can put together a cart and give the shopper a link. The link goes through the domain of the platform to any page of the store with the `onetrace_cart` parameter:
+
+```
+https://shop.example/?onetrace_cart=123:2,456:1&utm_source=chatgpt&utm_medium=ai_assistant&utm_campaign=shopper_mcp
+```
+
+- `onetrace_cart` — up to 20 comma-separated pairs `id:quantity`; the id is the product id of the catalog (the post ID, or the SKU with **Product id → SKU**; the id or SKU of a variation adds that variation with its attributes), the quantity is 1 to 99. Invalid pairs and pairs past the 20th are ignored.
+- The products go into the WooCommerce cart, also for guests. Unknown, unpublished, out of stock and not purchasable products, a variable product without a variation and adds WooCommerce rejects (stock limits, the add to cart validation of plugins) are skipped.
+- Then a 302 (not cached) to the cart page with every other parameter of the link (`utm_*` and others), so the tracker records the visit with them; when nothing could be added — to the same address without `onetrace_cart`.
+- Front-end GET requests only (not the admin, AJAX, REST or cron). Always on while the plugin is active, nothing to set up.
+
 ## Privacy
 
 - With a consent plugin that supports the [WP Consent API](https://wordpress.org/plugins/wp-consent-api/), the tracker loads after the visitor agrees to statistics cookies (can be turned off in the settings).

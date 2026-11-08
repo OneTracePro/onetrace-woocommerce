@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.15.0
+Stable tag: 1.16.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +27,7 @@ This plugin connects your WooCommerce store:
 * The "Notify when available" form of OneTrace on the page of a product that is out of stock.
 * "Ask AI about this product" on the product page: OneTrace answers shoppers' questions from the product description and the store's knowledge base, or hands them to the online chat.
 * Recommendation widgets and Web Push.
+* Cart links of the OneTrace AI assistants: a shopper's assistant (ChatGPT, Claude) puts products into the WooCommerce cart with one link and the shopper lands on the cart page.
 * Product search: the store search results and suggestions while typing come from OneTrace — word forms, typos, the wrong keyboard layout and the visitor's interests; the usual search on any error.
 * The OneTrace search widget on the search page of your theme: facets, sorting, infinite scroll and an "Add to cart" button, with a search layer under the search fields.
 * Catalog languages from TranslatePress, WPML and Polylang: recommendations, search and emails in the visitor's language.
@@ -78,6 +79,10 @@ Yes, in the "Store emails" section of the OneTrace project: all emails sent with
 
 No. The bot asks the store only for orders of a confirmed customer: signed in on the website, or confirmed with a code the shop sends to the email of the orders. An order number of someone else answers "not found".
 
+= What is a cart link? =
+
+The OneTrace AI assistants of shoppers (ChatGPT, Claude) give the shopper a link to the store such as `https://shop.example/?onetrace_cart=123:2,456:1&utm_source=chatgpt&utm_medium=ai_assistant&utm_campaign=shopper_mcp`. The plugin puts the products into the WooCommerce cart (also for guests) and redirects to the cart page with the other parameters of the link, so the visit is recorded with its utm tags. `onetrace_cart` holds up to 20 comma-separated pairs `id:quantity`: the product id of the catalog (the post ID, or the SKU with "Product id → SKU"; a variation's id or SKU adds that variation) and a quantity of 1 to 99. Products that are unknown, not published, out of stock or not for sale are skipped; when nothing could be added, the same page opens without the parameter. Works on any page of the storefront, nothing to set up.
+
 = Do I need an account? =
 
 Yes, a OneTrace.pro project (or a project at a brand that runs the platform).
@@ -94,6 +99,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
 
 == Changelog ==
+
+= 1.16.0 =
+* Cart links of the OneTrace AI assistants: `?onetrace_cart=ID:QTY,ID:QTY` on any page of the store puts the products and variations into the cart (also for guests; unknown, out of stock and not purchasable products are skipped) and opens the cart page with the utm tags of the link.
 
 = 1.15.0 =
 * Signed user ids: the "Identity key" setting (or the ONETRACE_IDENTITY_KEY constant) signs the id of the signed-in customer for the OneTrace tracker, so the project can turn on "Require signature" and no visitor can link their browser to someone else's profile.
