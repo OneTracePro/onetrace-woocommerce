@@ -2,6 +2,13 @@
 
 All notable changes are documented here. The project follows [Semantic Versioning](https://semver.org/).
 
+## 1.18.0 — 2026-11-11
+
+- AI search (stage 95 of the platform, onetrace-php 1.19): with AI search on in **Site → Search** of OneTrace, the product search of the store (the "Product search" setting) asks AI first (`search()->ai()`): it reads the query as catalog filters — category, brands, characteristics, price, words to exclude — and the results page shows the products it found in its order. The parse is waited for up to 2.5 seconds (`Search::AI_WAIT`); a query the mode does not want, an AI error or no answer in time — the usual results. A query with filters the visitor chose keeps the usual search too.
+- Above the products of the first page — `<div data-cdp-search-ai>` (classic themes: `woocommerce_before_shop_loop`; block themes: before the product collection block): the tracker writes the short AI answer there and draws the chips of what AI understood, the refinements and "Regular search". They open the results again with `ai_state` (the parse without a removed chip), `ai_refine` + `ai_previous` (a refinement) or `ai=0`.
+- The AI search mode comes with the search widget settings (`GET /search/widget`, cached for 10 minutes): a project without AI search makes no extra request per search.
+- With the OneTrace search widget, AI search works in the widget of the tracker, without the plugin.
+
 ## 1.17.0 — 2026-11-08
 
 - Store MCP contract v2 — orders from AI shopping assistants (stage 92 of the platform, ADR-190; the "Order" purchase mode of the shopper MCP): the server announces `onetrace/store` version 2 with the handlers `store_quote_order` and `store_create_order` (onetrace-php 1.18). Both are off by default: the owner allows them in "What the bot may do" ("AI assistants: price an order", "Action: place an order from an AI assistant"); with both allowed, `store_start_verification` with `purpose: "order"` also sends a code to an email (or phone through `onetrace_woocommerce_send_code`) without an account, and `store_verify` issues a guest token for it.

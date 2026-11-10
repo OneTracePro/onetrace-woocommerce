@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 WC requires at least: 9.0
 WC tested up to: 11.2
-Stable tag: 1.17.0
+Stable tag: 1.18.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,7 +29,7 @@ This plugin connects your WooCommerce store:
 * Recommendation widgets and Web Push.
 * Cart links of the OneTrace AI assistants: a shopper's assistant (ChatGPT, Claude) puts products into the WooCommerce cart with one link and the shopper lands on the cart page.
 * Orders from AI shopping assistants: when you allow it, the assistant prices the order with the delivery of the store and places it for the shopper (a customer or a guest confirmed with a code), who pays by the payment link of the order on your website.
-* Product search: the store search results and suggestions while typing come from OneTrace — word forms, typos, the wrong keyboard layout and the visitor's interests; the usual search on any error.
+* Product search: the store search results and suggestions while typing come from OneTrace (with AI search — the query in plain words read as catalog filters, a short AI answer above the products) — word forms, typos, the wrong keyboard layout and the visitor's interests; the usual search on any error.
 * The OneTrace search widget on the search page of your theme: facets, sorting, infinite scroll and an "Add to cart" button, with a search layer under the search fields.
 * Catalog languages from TranslatePress, WPML and Polylang: recommendations, search and emails in the visitor's language.
 * Loyalty program: signed-in customers pay with bonus points in the cart and at checkout and see their points in My account; referral links and the friend's code on registration.
@@ -104,6 +104,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 4. The customer profile in OneTrace: identities, traits and predictions, segments, messages and the event history from the store.
 
 == Changelog ==
+
+= 1.18.0 =
+* AI search: with AI search on in OneTrace → Site → Search, the product search asks AI first — it reads the query as catalog filters (category, brand, characteristics, price, words to exclude) — and the results page shows the products it found, waiting for the parse up to 2.5 seconds; otherwise the usual results. Above the products: the short AI answer, the chips of what AI understood (removable), refinements and "Regular search", drawn by the tracker. With the OneTrace search widget AI works in the widget itself.
 
 = 1.17.0 =
 * Orders from AI shopping assistants (store MCP contract v2): with "AI assistants: price an order" and "Action: place an order from an AI assistant" allowed in the store MCP settings, an assistant of OneTrace (ChatGPT, Claude …) prices an order — items, shipping methods for the address, taxes by the store settings, total, payment methods — and places it for a customer or a guest confirmed with a code by email (or SMS through the `onetrace_woocommerce_send_code` filter). The order waits for the payment by its payment link; cash on delivery goes on as at the checkout. Prices, stock and the shipping method are checked again, and a repeated request returns the same order.
@@ -192,6 +195,9 @@ Messages wait in the plugin's queue and are sent later; checkout is never slowed
 * First release.
 
 == Upgrade Notice ==
+
+= 1.18.0 =
+AI search in the product search of the store: turn it on in OneTrace → Site → Search.
 
 = 1.17.0 =
 Orders from AI shopping assistants: allow the two order tools of the store MCP and assistants place orders paid by the payment link.

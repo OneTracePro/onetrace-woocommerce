@@ -249,25 +249,50 @@ final class SearchWidget
 
     private static function onPlatform(): bool
     {
+        return self::platform()['enabled'];
+    }
+
+    /**
+     * The AI search mode of the project ({mode, answer}) — for the AI results of the store search (Search); null — off.
+     *
+     * @return array{mode: string, answer: bool}|null
+     */
+    public static function aiMode(): ?array
+    {
+        $ai = self::platform()['ai'] ?? null;
+
+        return \is_array($ai) && \in_array($ai['mode'] ?? null, ['auto', 'toggle', 'always'], true) ? ['mode' => (string) $ai['mode'], 'answer' => (bool) ($ai['answer'] ?? true)] : null;
+    }
+
+    /**
+     * GET /search/widget: the widget on in OneTrace and the AI search mode; cached for 10 minutes (an error — off for
+     * a minute).
+     *
+     * @return array{enabled: bool, ai: array<string, mixed>|null}
+     */
+    private static function platform(): array
+    {
         $cached = get_transient(self::TRANSIENT);
 
-        if (\is_array($cached)) {
-            return ($cached['enabled'] ?? false) === true;
+        // A cache without "ai" was written by an older version of the plugin: asked again.
+        if (\is_array($cached) && \array_key_exists('ai', $cached)) {
+            return ['enabled' => ($cached['enabled'] ?? false) === true, 'ai' => \is_array($cached['ai']) ? $cached['ai'] : null];
         }
 
         try {
             $widget = Connection::client('search')->search()->widget(get_locale());
-            $enabled = $widget['enabled'] === true;
-            set_transient(self::TRANSIENT, ['enabled' => $enabled], 10 * MINUTE_IN_SECONDS);
+            $platform = ['enabled' => $widget['enabled'] === true, 'ai' => \is_array($widget['ai'] ?? null) ? $widget['ai'] : null];
+            set_transient(self::TRANSIENT, $platform, 10 * MINUTE_IN_SECONDS);
 
-            return $enabled;
+            return $platform;
         } catch (\Throwable $error) {
             // The plan without search or a wrong key does not change in a minute.
             $lasting = $error instanceof PaymentRequiredException || $error instanceof AuthenticationException || $error instanceof PermissionException || $error instanceof NotFoundException;
             Queue::log('The search widget is off: ' . $error->getMessage());
-            set_transient(self::TRANSIENT, ['enabled' => false], $lasting ? 10 * MINUTE_IN_SECONDS : MINUTE_IN_SECONDS);
+            $platform = ['enabled' => false, 'ai' => null];
+            set_transient(self::TRANSIENT, $platform, $lasting ? 10 * MINUTE_IN_SECONDS : MINUTE_IN_SECONDS);
 
-            return false;
+            return $platform;
         }
     }
 }
